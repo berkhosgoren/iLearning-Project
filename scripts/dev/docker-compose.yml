@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: iLearning-postgres
+    environment:
+      POSTGRES_USER: iLearning
+      POSTGRES_PASSWORD: iLearning_Project
+      POSTGRES_DB: iLearning_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - iLearning_pgdata:/var/lib/posgresql/data
+
+volumes:
+  iLearning_pgdata:
+
