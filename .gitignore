@@ -25,7 +25,7 @@ Thumbs.db
 **/x86/
 **/TestResults/
 
-**/appsettings.*.json.user
+**/appsettings.Development.json
 **/secrets.json
 **/.env
 **/*.snk
