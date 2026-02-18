@@ -9,7 +9,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - iLearning_pgdata:/var/lib/posgresql/data
+      - iLearning_pgdata:/var/lib/postgresql/data
 
 volumes:
   iLearning_pgdata:

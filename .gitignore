@@ -43,3 +43,6 @@ logs/
 **/docker-data/
 **/pgdata/
 **/data/
+
+!backend/**/Data/AppDbContext.cs
+!backend/**/Data/**/*.cs
