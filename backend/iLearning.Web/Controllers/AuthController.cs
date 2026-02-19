@@ -41,7 +41,8 @@ namespace iLearning.Web.Controllers
                 .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Email == email);
 
-            if (user is null || string.IsNullOrWhiteSpace(user.PasswordHash) || !PasswordHasher.Verify(password, user.PasswordHash))
+            if (user is null || user.PasswordHash is null || string.IsNullOrWhiteSpace(vm.Password) 
+                || !PasswordHasher.Verify(vm.Password, user.PasswordHash))
             {
                 ModelState.AddModelError("", "Invalid credentials.");
                 return View(vm);

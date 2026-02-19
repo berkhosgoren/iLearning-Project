@@ -1,5 +1,4 @@
 ﻿using System.Security.Cryptography;
-using System.Text;
 
 namespace iLearning.Web.Security
 {
@@ -24,7 +23,7 @@ namespace iLearning.Web.Security
                 outputLength: KeySize
                 );
 
-            return $"{Iterations}.{Convert.ToBase64String(salt)}.{Convert.ToBase64String(key)}";
+            return $"PBKDF2${Iterations}${Convert.ToBase64String(salt)}${Convert.ToBase64String(key)}";
         }
 
         public static bool Verify(string password, string storedHash)
@@ -37,6 +36,9 @@ namespace iLearning.Web.Security
                 return false;
 
             if (!int.TryParse(parts[1], out var iterations))
+                return false;
+
+            if (!string.Equals(parts[0], "PBKDF2", StringComparison.Ordinal))
                 return false;
 
             byte[] salt;
