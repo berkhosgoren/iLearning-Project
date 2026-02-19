@@ -1,0 +1,60 @@
+﻿@model iLearning.Web.Models.ViewModels.Auth.LoginVm
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-7 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h4 mb-3">Login</h1>
+
+                    @if (TempData["Message"] is string msg && !string.IsNullOrWhiteSpace(msg))
+                    {
+                        <div class="alert alert-info">@msg</div>
+                    }
+
+                    <form asp-action="Login" asp-controller="Auth" method="post" novalidate>
+                        @Html.AntiForgeryToken()
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" autocomplete="email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-control" type="password" autocomplete="current-password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                    </form>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <p class="mt-3">
+                            No account?
+                            <a asp-action="Register">Register</a>
+                        </p>
+                        <a asp-action="Index" asp-controller="Home" class="link-secondary text-decoration-none">
+                            Back to home
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-center text-muted mt-3 mb-0 small">
+                By signing in you accept the basic usage rules.
+            </p>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
