@@ -25,6 +25,8 @@ namespace iLearning.Web.Models.Domain
 
         public int Version { get; set; } = 1;
 
+        public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
+
         public bool CustomString1Enabled { get; set; }
         [MaxLength(100)] public string? CustomString1Name {  get; set; }
 

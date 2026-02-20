@@ -37,6 +37,10 @@
                                 @inv.Category.Name • by @inv.Creator.Name
                             </p>
 
+                            <p class="text-muted small mb-2">
+                                Created: @inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                            </p>
+
                             <p class="card-text">
                                 @(inv.Description?.Length > 120 
                                     ? inv.Description.Substring(0,120) + "..."
@@ -46,7 +50,10 @@
                         </div>
 
                         <div class="card-footer bg-white border-0">
-                            <a href="#" class="btn btn-outline-primary btn-sm w-100">
+                            <a class="btn btn-outline-primary btn-sm w-100"
+                            asp-controller="Inventories"
+                            asp-action="Details"
+                            asp-route-id="@inv.Id">
                                 View Inventory
                             </a>
                         </div>

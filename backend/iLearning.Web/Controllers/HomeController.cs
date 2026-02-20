@@ -32,7 +32,7 @@ namespace iLearning.Web.Controllers
             }
 
             var inventories = await query
-                .OrderByDescending(i => i.Id)
+                .OrderByDescending(i => i.CreatedAtUtc)
                 .Take(50)
                 .ToListAsync();
 

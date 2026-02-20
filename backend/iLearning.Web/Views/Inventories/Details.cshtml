@@ -1,0 +1,120 @@
+﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryDetailsVm
+@{
+    ViewData["Title"] = Model.Title;
+    var tab = (Model.ActiveTab ?? "items").ToLowerInvariant();
+}
+
+<div class="container py-4">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3">
+        <div>
+            <h2 class="mb-1">@Model.Title</h2>
+            <div class="text-muted">
+                @Model.CategoryName · by @Model.CreatorName
+                @if (Model.IsPublic)
+                {
+                    <span class="badge text-bg-success ms-2">Public</span>
+                }
+                else
+                {
+                    <span class="badge text-bg-secondary ms-2">Private</span>
+                }
+            </div>
+
+            @if (Model.Tags.Count > 0)
+            {
+                <div class="mt-2 d-flex flex-wrap gap-2">
+                    @foreach (var t in Model.Tags)
+                    {
+                        <span class="badge text-bg-light border">@t</span>
+                    }
+                </div>
+
+            }
+        </div>
+
+        <div class="d-flex gap-2">
+            <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Back</a>
+        </div>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Description))
+    {
+        <div class="card mt-3">
+            <div class="card-body">
+                <div class="text-muted small mb-2">Description</div>
+                <div>@Model.Description</div>
+            </div>
+        </div>
+    }
+
+    <ul class="nav nav-tabs mt-4">
+        <li class="nav-item">
+            <a class="nav-link @(tab=="items" ? "active" : "")"
+               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="items">Items</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(tab=="discussion" ? "active" : "")"
+               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="discussion">Chat</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(tab == "settings" ? "active" : "")"
+               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="settings">Settings</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(tab == "customid" ? "active" : "")"
+               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="customid">Custom ID</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(tab == "fields" ? "active" : "")"
+               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="fields">Fields</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(tab == "access" ? "active" : "")"
+               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="access">Access</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(tab == "stats" ? "active" : "")"
+               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="stats">Stats</a>
+        </li>
+        <li class="nav-item ms-auto">
+            <span class="nav-link disabled">Auto-save: (for later)</span>
+        </li>
+        </ul>
+
+        <div class="card border-top-0 rounded-top-0">
+            <div class="card-body">
+                @if (tab == "items")
+                {
+                    <div class="text-muted">Items table will be implemented.</div>
+                }
+                else if (tab == "discussion")
+                {
+                    <div class="text-muted">Chat/discussion will be implemented.</div>
+                }
+                else if (tab == "settings")
+                {
+                    <div class="text-muted">Settings editor will be implemented(title/desc/category/public/tags/image.</div>
+                }
+                else if (tab == "customid")
+                {
+                    <div class="text-muted">Custom ID builder will be implemented(preview +drag/drop).</div>
+                }
+                else if (tab == "fields")
+                {
+                    <div class="text-muted">Custom fields will be implemented(up to 3 per type).</div>
+                }
+                else if (tab == "access")
+                {
+                    <div class="text-muted">Access management will be implemented(autocomplete by name/email).</div>
+                }
+                else if (tab == "stats")
+                {
+                    <div class="text-muted">Stats will be implemented(aggregation for numeric/string fields).</div>
+                }
+                else
+                {
+                    <div class="text-muted">Unknown tab.</div>
+                }
+           </div>
+        </div>
+</div>
