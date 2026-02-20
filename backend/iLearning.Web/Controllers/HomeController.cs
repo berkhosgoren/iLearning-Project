@@ -1,25 +1,42 @@
-using iLearning.Web.Models;
+using iLearning.Web.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace iLearning.Web.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly AppDbContext _db;
+
+        public HomeController(AppDbContext db)
         {
-            return View();
+            _db = db;
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Index(string? q)
         {
-            return View();
-        }
+            var query = _db.Inventories
+                .Include(i => i.Creator)
+                .Include(i => i.Category)
+                .Where(i => i.IsPublic)
+                .AsQueryable();
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (!string.IsNullOrWhiteSpace(q))
+            {
+                var search = q.Trim().ToLower();
+                query = query.Where(i =>
+                    i.Title.ToLower().Contains(search) ||
+                    (i.Description ?? "").ToLower().Contains(search)
+                );
+            }
+
+            var inventories = await query
+                .OrderByDescending(i => i.Id)
+                .Take(50)
+                .ToListAsync();
+
+            return View(inventories);
         }
     }
 }

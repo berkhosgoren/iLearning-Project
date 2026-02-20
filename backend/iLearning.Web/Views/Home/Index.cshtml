@@ -1,8 +1,61 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model List<iLearning.Web.Models.Domain.Inventory>
+
+@{
+    ViewData["Title"] = "Inventories";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <h3 class="mb-4">Public Inventories</h3>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-secondary">
+            No inventories found.
+        </div>
+    }
+    else
+    {
+        <div class="row g-3">
+
+            @foreach ( var inv in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm">
+
+                        @if (!string.IsNullOrWhiteSpace(inv.ImageUrl))
+                        {
+                            <img src="@inv.ImageUrl" class="card-img-top" />
+                        }
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">
+                                @inv.Title
+                            </h5>
+
+                            <p class="text-muted small mb-2">
+                                @inv.Category.Name • by @inv.Creator.Name
+                            </p>
+
+                            <p class="card-text">
+                                @(inv.Description?.Length > 120 
+                                    ? inv.Description.Substring(0,120) + "..."
+                                    : inv.Description)
+                            </p>
+
+                        </div>
+
+                        <div class="card-footer bg-white border-0">
+                            <a href="#" class="btn btn-outline-primary btn-sm w-100">
+                                View Inventory
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            }
+
+        </div>
+        }
+
 </div>
