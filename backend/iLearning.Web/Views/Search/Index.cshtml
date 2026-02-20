@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Search";
+    var q = (string)(ViewBag.Query ?? "");
+}
+
+<div class="container py-4">
+    <h1 class="h4 mb-3">Search</h1>
+
+    @if (string.IsNullOrWhiteSpace(q))
+    {
+        <div class="alert alert-secondary mb-0">
+            Type something in the search box above to search inventories and items.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-secondary">
+            Search query: <strong>@q</strong>
+        </div>
+
+        <div class="text-muted">
+            Search results after inventories/items.
+        </div>
+    }
+</div>
