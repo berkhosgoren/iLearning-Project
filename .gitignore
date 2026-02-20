@@ -44,5 +44,6 @@ logs/
 **/pgdata/
 **/data/
 
-!backend/**/Data/AppDbContext.cs
+
+!backend/**/Data/
 !backend/**/Data/**/*.cs
