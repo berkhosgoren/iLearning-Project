@@ -37,7 +37,7 @@
 
             @if (Model.CanEdit)
             {
-                <a class="btn btn-outline-primary">
+                <a class="btn btn-outline-primary" asp-controller="Inventories" asp-action="Edit" asp-route-id="@Model.Id">
                     Edit Inventory
                 </a>
             }
@@ -63,36 +63,47 @@
             <a class="nav-link @(tab=="discussion" ? "active" : "")"
                asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="discussion">Chat</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link @(tab == "settings" ? "active" : "")"
-               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="settings">Settings</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link @(tab == "customid" ? "active" : "")"
-               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="customid">Custom ID</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link @(tab == "fields" ? "active" : "")"
-               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="fields">Fields</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link @(tab == "access" ? "active" : "")"
-               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="access">Access</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link @(tab == "stats" ? "active" : "")"
-               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="stats">Stats</a>
-        </li>
+
+        @* Edit-only tabs: owner/admin*@
+        @if (Model.CanEdit)
+        {
+            <li class="nav-item">
+                <a class="nav-link @(tab == "settings" ? "active" : "")"
+                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="settings">Settings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(tab == "customid" ? "active" : "")"
+                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="customid">Custom ID</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(tab == "fields" ? "active" : "")"
+                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="fields">Fields</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(tab == "access" ? "active" : "")"
+                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="access">Access</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link @(tab == "stats" ? "active" : "")"
+                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="stats">Stats</a>
+            </li>
+        }
+       
         <li class="nav-item ms-auto">
             <span class="nav-link disabled">Auto-save: (for later)</span>
         </li>
-        </ul>
+     </ul>
 
-        <div class="card border-top-0 rounded-top-0">
-            <div class="card-body">
+     <div class="card border-top-0 rounded-top-0">
+         <div class="card-body">
                 @if (tab == "items")
                 {
-                    <div class="text-muted">Items table will be implemented.</div>
+                    <div class="text-muted">Items table will be implemented. 
+                    @if (!Model.CanWrite)
+                    {
+                        <div class="small mt-2">You have read-only access</div>
+                    }
+                </div>
                 }
                 else if (tab == "discussion")
                 {
