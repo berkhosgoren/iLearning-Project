@@ -3,7 +3,7 @@ using iLearning.Web.Data;
 using iLearning.Web.Models.ViewModels.Inventories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
+using iLearning.Web.Services;
 
 namespace iLearning.Web.Controllers
 {
@@ -11,10 +11,12 @@ namespace iLearning.Web.Controllers
     public class InventoriesController : Controller
     {
         private readonly AppDbContext _db;
+        private readonly CurrentUserService _currentUser;
 
-        public InventoriesController(AppDbContext db)
+        public InventoriesController(AppDbContext db, CurrentUserService currentUser)
         {
             _db = db; 
+            _currentUser = currentUser;
         }
 
         [AllowAnonymous]
@@ -31,12 +33,24 @@ namespace iLearning.Web.Controllers
             if (inv == null)
                 return NotFound();
 
-            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Guid.TryParse(userIdClaim, out var currentUserId);
+            var userId = _currentUser.GetUserId(User);
+            var isAuthenticated = _currentUser.IsAuthenticated(User);
+            var isAdmin = _currentUser.IsAdmin(User);
 
-            var isAuthenticated = User?.Identity?.IsAuthenticated == true;
-            var isAdmin = User.IsInRole("Admin");
-            var isOwner = isAuthenticated && inv.CreatorId == currentUserId;
+            var isOwner = isAuthenticated && userId.HasValue && userId.Value == inv.CreatorId;
+
+            var canEdit = isAdmin || isOwner;
+
+            bool hasExplicitWriteAccess = false;
+
+            if (!canEdit && isAuthenticated && userId.HasValue)
+            {
+                hasExplicitWriteAccess = await _db.InventoryAccesses
+                    .AsNoTracking()
+                    .AnyAsync(a => a.InventoryId == inv.Id && a.UserId == userId.Value && a.CanWrite);
+            }
+
+            var canWrite = canEdit || (isAuthenticated && inv.IsPublic) || hasExplicitWriteAccess;
 
             var vm = new InventoryDetailsVm
             {
@@ -50,10 +64,8 @@ namespace iLearning.Web.Controllers
                 CreatedAtUtc = inv.CreatedAtUtc,
                 Tags = inv.InventoryTags.Select(x => x.Tag.Name).OrderBy(x => x).ToList(),
                 ActiveTab = string.IsNullOrWhiteSpace(tab) ? "items" : tab.Trim().ToLowerInvariant(),
-
-                IsAdmin = isAdmin,
-                IsOwner = isOwner,
-                CanEdit = isAdmin || isOwner
+                CanEdit = canEdit,
+                CanWrite = canWrite,
             };
 
             return View(vm);
