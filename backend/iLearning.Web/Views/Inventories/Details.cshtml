@@ -34,6 +34,13 @@
 
         <div class="d-flex gap-2">
             <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Back</a>
+
+            @if (Model.CanEdit)
+            {
+                <a class="btn btn-outline-primary">
+                    Edit Inventory
+                </a>
+            }
         </div>
     </div>
 

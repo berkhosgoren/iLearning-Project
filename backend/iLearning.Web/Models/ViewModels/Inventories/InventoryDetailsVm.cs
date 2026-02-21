@@ -18,6 +18,10 @@ namespace iLearning.Web.Models.ViewModels.Inventories
 
         public bool IsPublic { get; set; }
 
+        public bool CanEdit { get; set; }
+        public bool IsOwner { get; set; }
+        public bool IsAdmin { get; set; }
+
         public string CreatorName { get; set; } = string.Empty;
 
         public DateTime CreatedAtUtc { get; set; }

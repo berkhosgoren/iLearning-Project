@@ -3,6 +3,7 @@ using iLearning.Web.Data;
 using iLearning.Web.Models.ViewModels.Inventories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace iLearning.Web.Controllers
 {
@@ -30,6 +31,13 @@ namespace iLearning.Web.Controllers
             if (inv == null)
                 return NotFound();
 
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid.TryParse(userIdClaim, out var currentUserId);
+
+            var isAuthenticated = User?.Identity?.IsAuthenticated == true;
+            var isAdmin = User.IsInRole("Admin");
+            var isOwner = isAuthenticated && inv.CreatorId == currentUserId;
+
             var vm = new InventoryDetailsVm
             {
                 Id = inv.Id,
@@ -41,7 +49,11 @@ namespace iLearning.Web.Controllers
                 CreatorName = inv.Creator?.Name ?? "Unknown",
                 CreatedAtUtc = inv.CreatedAtUtc,
                 Tags = inv.InventoryTags.Select(x => x.Tag.Name).OrderBy(x => x).ToList(),
-                ActiveTab = string.IsNullOrWhiteSpace(tab) ? "items" : tab.Trim().ToLowerInvariant()
+                ActiveTab = string.IsNullOrWhiteSpace(tab) ? "items" : tab.Trim().ToLowerInvariant(),
+
+                IsAdmin = isAdmin,
+                IsOwner = isOwner,
+                CanEdit = isAdmin || isOwner
             };
 
             return View(vm);
