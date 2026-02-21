@@ -1,0 +1,109 @@
+﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryUpsertVm
+@using iLearning.Web.Models.Domain
+
+@{
+    var categories = ViewBag.Categories as List<Category> ?? new();
+}
+
+<div class="mb-3">
+    <label asp-for="Title" class="form-label"></label>
+    <input asp-for="Title" class="form-control" />
+    <span asp-validation-for="Title" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    <div class="form-text">Markdown for later; plain text for beginning</div>
+    <span asp-validation-for="Description" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="ImageUrl" class="form-label"></label>
+    <input asp-for="ImageUrl" class="form-control" />
+    <div class="form-text">Use a public URL</div>
+    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="CategoryId" class="form-label"></label>
+        <select asp-for="CategoryId" class="form-select">
+            @foreach (var c in categories)
+                {
+                    <option value="@c.Id">@c.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="col-md-6 d-flex align-items-end">
+        <div class="form-check">
+            <input asp-for="IsPublic" class="form-check-input" />
+            <label asp-for="IsPublic" class="form-check-label"></label>
+            <div class="form-text">If public, all authenticated users can add items later.</div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-4" />
+
+<div class="mb-3">
+    <label asp-for="TagsCsv" class="form-label"></label>
+    <input asp-for="TagsCsv" class="form-control" />
+    <div class="form-text">Example: equipment, laptops, office</div>
+    <span asp-validation-for="TagsCsv" class="text-danger"></span>
+</div>
+
+<hr class="my-4" />
+
+<h5 class="mb-3">Custom Fields (limits: up to 3 per type)</h5>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="form-check">
+            <input asp-for="CustomString1Enabled" class="form-check-input" />
+            <label asp-for="CustomString1Enabled" class="form-check-label">String Field 1</label>
+        </div>
+        <input asp-for="CustomString1Name" class="form-control mt-2" placeholder="Title (e.g., Model)" />
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-check">
+            <input asp-for="CustomNumber1Enabled" class="form-check-input" />
+            <label asp-for="CustomNumber1Enabled" class="form-check-label">Number Field 1</label>
+        </div>
+        <input asp-for="CustomNumber1Name" class="form-control mt-2" placeholder="Title (e.g., Price)" />
+    </div>
+</div>
+<div class ="row g-3 mt-1"> 
+    <div class="col-md-6">
+        <div class="form-check">
+            <input asp-for="CustomText1Enabled" class="form-check-input" />
+            <label asp-for="CustomText1Enabled" class="form-check-label">Multiline text Field 1</label>
+        </div>
+        <input asp-for="CustomText1Name" class="form-control mt-2" placeholder="Title (e.g., Notes)" />
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-check">
+            <input asp-for="CustomBool1Enabled" class="form-check-input" />
+            <label asp-for="CustomBool1Enabled" class="form-check-label">True/false Field 1</label>
+        </div>
+        <input asp-for="CustomBool1Name" class="form-control mt-2" placeholder="Title (e.g., Working?)" />
+    </div>
+</div>
+
+<div class="row g-3 mt-1">
+    <div class="cold-md-6">
+        <div class="form-check">
+            <input asp-for="CustomLink1Enabled" class="form-check-input" />
+            <label asp-for="CustomLink1Enabled" class="form-check-label">Link Field 1</label>
+        </div>
+        <input asp-for="CustomLink1Name" class="form-control mt-2" placeholder="Title (e.g, Datasheet URL)" />
+    </div>
+</div>
+
+<div class="alert alert-secondary mt-4">
+    Will add remaining field slots in the next step, short version to be deployable and for tests.
+</div>

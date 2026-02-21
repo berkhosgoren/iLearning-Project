@@ -1,0 +1,38 @@
+﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryUpsertVm
+@{
+    ViewData["Title"] = "Edit Inventory";
+}
+
+<div class="container py-4" style="max-width: 900px;">
+    <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
+        <h2 class="mb-0">Edit Inventory</h2>
+        <a class="btn btn-outline-secondary" asp-controller="Inventories" asp-action="Details" asp-route-id="Model.Id">Back to Details</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post" asp-action="Edit" asp-route-id="@Model.Id">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Version" />
+
+                <partial name="_UpsertForm" model="Model" />
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a class="btn btn-outline-secondary" asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id">Cancel</a>
+                </div>
+
+                <div class="form-text mt-3">
+                    If someone else edits the inventory at the same time, you will be asked to reload.
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

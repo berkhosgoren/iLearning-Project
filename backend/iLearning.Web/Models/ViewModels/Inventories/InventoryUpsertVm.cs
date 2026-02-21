@@ -44,6 +44,13 @@ namespace iLearning.Web.Models.ViewModels.Inventories
         public bool CustomText3Enabled { get; set; }
         [MaxLength(100)] public string? CustomText3Name { get; set; }
 
+        public bool CustomNumber1Enabled { get; set; }
+        [MaxLength(100)] public string? CustomNumber1Name { get; set; }
+        public bool CustomNumber2Enabled { get; set; }
+        [MaxLength(100)] public string? CustomNumber2Name { get; set; }
+        public bool CustomNumber3Enabled { get; set; }
+        [MaxLength(100)] public string? CustomNumber3Name { get; set; }
+
         public bool CustomBool1Enabled { get; set; }
         [MaxLength(100)] public string? CustomBool1Name { get; set; }
         public bool CustomBool2Enabled { get; set; }
