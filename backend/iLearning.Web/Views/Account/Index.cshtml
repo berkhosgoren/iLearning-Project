@@ -1,0 +1,254 @@
+﻿@model iLearning.Web.Models.ViewModels.Account.AccountIndexVm
+
+@{
+    ViewData["Title"] = "My Account";
+    var msg = TempData["AccountMessage"] as string;
+}
+
+<div class="container py-4">
+    
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <h2 class="mb-0">My Account</h2>
+        <a class="btn btn-primary" asp-controller="Inventories" asp-action="Create">Create Inventory</a>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(msg))
+    {
+        <div class="alert alert-success">@msg</div>
+    }
+    <!--Owned-->
+    <div class="card mb-4">
+        <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="fw-semibold">Inventories I Own</div>
+
+            <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
+                <input class="form-control form-control-sm" style="width: 260px"
+                       name="oq" value="@Model.OwnedQuery" placeholder="Filter (title/description)" />
+
+                 <select class="form-select form-select-sm" name="os" style="width: 160px">
+                     <option value="created" selected="@(Model.OwnedSort=="created")">Sort: Created </option>
+                    <option value="title" selected="@(Model.OwnedSort == "title")">Sort: Title </option>
+                    <option value="category" selected="@(Model.OwnedSort == "category")">Sort: Category </option>
+                    <option value="public" selected="@(Model.OwnedSort == "public")">Sort: Public </option>
+                 </select>
+
+                 <select class="form-select form-select-sm" name="od" style="width: 120px">
+                     <option value="desc" selected="@(Model.OwnedDir=="desc")">Desc</option>
+                    <option value="asc" selected="@(Model.OwnedDir == "asc")">Asc</option>
+                 </select>
+
+                 <input type="hidden" name="aq" value="@Model.AccessQuery" />
+                 <input type="hidden" name="as" value="@Model.AccessSort" />
+                 <input type="hidden" name="ad" value="@Model.AccessDir" />
+
+                 <button class="btn btn-outline-secondary btn-sm" type="submit">Apply</button>
+            </form>
+        </div>
+
+        <div class="card-body">
+
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <div class="text-muted small" id="ownedSelectedLabel">Selected: 0</div>
+
+                <form method="post" asp-action="DeleteOwned" asp-controller="Account" id="ownedDeleteForm" class="d-flex gap-2">
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-danger btn-sm" type="submit" id="ownedDeleteBtn" disabled>
+                        Delete Selected
+                    </button>
+                </form>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:44px;">
+                                <input type="checkbox" id="ownedAll" aria-label="Select all owned" />
+                            </th>
+                            <th>Title</th>
+                            <th style="width:180px;">Category</th>
+                            <th style="width:120px;">Visibility</th>
+                            <th style="width:170px;">Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Owned.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="5" class="text-muted text-center py-4">No inventories found.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var inv in Model.Owned)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="ownedRow" name="ids" form="ownedDeleteForm" value="@inv.Id" />
+                                    </td>
+                                    <td>
+                                        <a asp-controller="Inventories" asp-action="Details" asp-route-id="@inv.Id" class="text-decoration-none">
+                                            @inv.Title
+                                        </a>
+                                    </td>
+                                    <td>@inv.CategoryName</td>
+                                    <td>
+                                        @if (inv.IsPublic)
+                                        {
+                                            <span class="badge text-bg-success">Public</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-bg-secondary">Private</span>
+                                        }
+                                    </td>
+                                    <td>@inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-muted small mt-2">
+                Click any title to open the inventory page.
+            </div>
+        </div>
+    </div>
+    <!--Write Access-->
+    <div class="card">
+        <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="fw-semibold">Inventories I can Edit</div>
+
+            <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
+                <input class="form-control form-control-sm" style="width: 260px"
+                       name="aq" value="@Model.AccessQuery" placeholder="Filter (title/owner/desc)" />
+
+                       <select class="form-select form-select-sm" name="as" style="width: 160px">
+                           <option value="created" selected="@(Model.AccessSort=="created")">Sort: Created</option>
+                           <option value="title" selected="@(Model.AccessSort == "title")">Sort: Title</option>
+                           <option value="category" selected="@(Model.AccessSort == "category")">Sort: Category</option>
+                           <option value="public" selected="@(Model.AccessSort == "public")">Sort: Public</option>
+                       </select>
+
+                       <select class="form-select form-select-sm" name="ad" style="width: 120px">
+                           <option value="desc" selected="@(Model.AccessDir=="desc")">Desc</option>
+                           <option value="asc" selected="@(Model.AccessDir == "asc")">Asc</option>
+                       </select>
+
+                       <input type="hidden" name="oq" value="@Model.OwnedQuery" />
+                       <input type="hidden" name="os" value="@Model.OwnedSort" />
+                       <input type="hidden" name="od" value="@Model.OwnedDir" />
+
+                       <button class="btn btn-outline-secondary btn-sm" type="submit">Apply</button>
+            </form>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Title</th>
+                            <th style="width:220px;">Owner</th>
+                            <th style="width:180px;">Category</th>
+                            <th style="width:120px;">Visibility</th>
+                            <th style="width:170px;">Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Access.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="5" class="text-muted text-center py-4">No inventories found.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var inv in Model.Access)
+                            {
+                                <tr>
+                                    <td>
+                                        <a asp-controller="Inventories" asp-action="Details" asp-route-id="@inv.Id" class="text-decoration-none">
+                                            @inv.Title
+                                        </a>
+                                    </td>
+                                    <td>@inv.OwnerName</td>
+                                    <td>@inv.CategoryName</td>
+                                    <td>
+                                        @if (inv.IsPublic)
+                                        {
+                                            <span class="badge text-bg-success">Public</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-bg-secondary">Private</span>
+                                        }
+                                    </td>
+                                    <td>@inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="text-muted small mt-2">
+                This list shows inventories where you were granted explicit write access.
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        (function () {
+            const all = document.getElementById('ownedAll');
+            const rows = () => Array.from(document.querySelectorAll('.ownedRow'));
+            const label = document.getElementById('ownedSelectedLabel');
+            const delBtn = document.getElementById('ownedDeleteBtn');
+            const form = document.getElementById('ownedDeleteForm');
+
+            function update(){
+                const checked = rows().filter(x => x.checked).length;
+                label.textContent = 'Selected: ' + checked;
+                delBtn.disabled = checked === 0;
+
+                if (!all) return;
+
+                const total = rows().length;
+                if (total === 0){
+                    all.checked = false;
+                    all.indeterminate = false;
+                    return;
+                }
+
+                if (checked === 0){
+                    all.checked = false;
+                    all.indeterminate = false;
+                } else if (checked === total){
+                    all.checked = true;
+                    all.indeterminate = false;
+                } else{
+                    all.checked = false;
+                    all.indeterminate = true;
+                }
+            }
+
+            if (all) {
+                all.addEventListener('change', function(){
+                    rows().forEach(x => x.checked = all.checked);
+                    update();
+                });
+            }
+
+            document.addEventListener('change', function (e){
+                if (e.target && e.target.classList && e.target.classList.contains('ownedRow')){
+                    update();
+                }
+            });
+
+        update();
+     })();
+</script>
+}
