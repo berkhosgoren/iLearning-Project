@@ -38,6 +38,8 @@
                                     @User.Identity!.Name
                                 </span>
 
+                                <a class="btn btn-outline-primary" href="/inventories/create">Create Inventory</a>
+
                                 <form method="post" action="/auth/logout" class="m-0">
                                      @Html.AntiForgeryToken()
                                      <button class="btn btn-outline-secondary" type="submit">Logout</button>
