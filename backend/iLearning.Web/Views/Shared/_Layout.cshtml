@@ -38,9 +38,14 @@
                                     Create Inventory
                                 </a>
 
-                                <span class="btn btn-secondary disabled me-2">
+                                <a class="btn btn-secondary" asp-controller="Account" asp-action="Index">
                                     @User.Identity!.Name
-                                </span>
+                                </a>
+
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a class="btn btn-outline-secondary" asp-controller="Admin" asp-action="Index">Admin Panel</a>
+                                }
 
                                 <form method="post" action="/auth/logout" class="m-0">
                                      @Html.AntiForgeryToken()

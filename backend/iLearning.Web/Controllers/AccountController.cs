@@ -4,7 +4,6 @@ using iLearning.Web.Models.ViewModels.Account;
 using iLearning.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 
 namespace iLearning.Web.Controllers
@@ -34,8 +33,12 @@ namespace iLearning.Web.Controllers
             var userId = _current.GetUserId(User);
             if (!userId.HasValue) return RedirectToAction("Login", "Auth");
 
+            var isAdmin = _current.IsAdmin(User);
+
             var vm = new AccountIndexVm
             {
+                IsAdmin = isAdmin,
+
                 OwnedQuery = oq,
                 OwnedSort = NormalizeSort(os),
                 OwnedDir = NormalizeDir(od),
@@ -45,16 +48,26 @@ namespace iLearning.Web.Controllers
                 AccessDir = NormalizeDir(ad),
             };
 
-            var ownedQuery = _db.Inventories
+            IQueryable<Models.Domain.Inventory> ownedQuery = _db.Inventories
                 .AsNoTracking()
-                .Include(i => i.Category)
-                .Where(i => i.CreatorId == userId.Value);
+                .Include(i => i.Category);
+
+
+            if (isAdmin)
+            {
+                ownedQuery = ownedQuery.Include(i => i.Creator);
+            }
+            else
+            {
+                ownedQuery = ownedQuery.Where(i => i.CreatorId == userId.Value);
+            }
 
             if (!string.IsNullOrWhiteSpace(vm.OwnedQuery))
             {
                 var s = vm.OwnedQuery.Trim().ToLowerInvariant();
                 ownedQuery = ownedQuery.Where(i => 
-                    i.Title.ToLower().Contains(s) || (i.Description ?? "").ToLower().Contains(s)
+                    i.Title.ToLower().Contains(s) || (i.Description ?? "").ToLower().Contains(s) ||
+                    (isAdmin && i.Creator != null ? i.Creator.Name.ToLower().Contains(s) : false)
                     );
             }
 
@@ -68,45 +81,50 @@ namespace iLearning.Web.Controllers
                     Title = i.Title,
                     CategoryName = i.Category != null ? i.Category.Name : "Other",
                     IsPublic = i.IsPublic,
-                    CreatedAtUtc = i.CreatedAtUtc
+                    CreatedAtUtc = i.CreatedAtUtc,
+                    OwnerName = isAdmin ? (i.Creator != null ? i.Creator.Name : "Unknown")
+                    : ""
                 })
                 .ToListAsync();
 
-            var accessBase = _db.InventoryAccesses
+            if (!isAdmin)
+            {
+                var accessBase = _db.InventoryAccesses
                 .AsNoTracking()
                 .Where(a => a.UserId == userId.Value && a.CanWrite)
                 .Select(a => a.InventoryId);
 
-            var accessQuery = _db.Inventories
-                .AsNoTracking()
-                .Include(i => i.Category)
-                .Include(i => i.Creator)
-                .Where(i => accessBase.Contains(i.Id) && i.CreatorId != userId.Value);
-            
-            if (!string.IsNullOrWhiteSpace(vm.AccessQuery))
-            {
-                var s = vm.AccessQuery.Trim().ToLowerInvariant();
-                accessQuery = accessQuery.Where(i =>
-                    i.Title.ToLower().Contains(s) ||
-                    (i.Description ?? "").ToLower().Contains(s) ||
-                    (i.Creator != null ? i.Creator.Name.ToLower().Contains(s) : false)
-                    );
-            }
+                var accessQuery = _db.Inventories
+                    .AsNoTracking()
+                    .Include(i => i.Category)
+                    .Include(i => i.Creator)
+                    .Where(i => accessBase.Contains(i.Id) && i.CreatorId != userId.Value);
 
-            accessQuery = ApplySort(accessQuery, vm.AccessSort, vm.AccessDir);
-
-            vm.Access = await accessQuery
-                .Take(200)
-                .Select(i => new AccessInventoryRowVm
+                if (!string.IsNullOrWhiteSpace(vm.AccessQuery))
                 {
-                    Id = i.Id,
-                    Title = i.Title,
-                    CategoryName = i.Category != null ? i.Category.Name : "Other",
-                    IsPublic = i.IsPublic,
-                    CreatedAtUtc = i.CreatedAtUtc,
-                    OwnerName = i.Creator != null ? i.Creator.Name : "Unknown"
-                })
-                .ToListAsync();
+                    var s = vm.AccessQuery.Trim().ToLowerInvariant();
+                    accessQuery = accessQuery.Where(i =>
+                        i.Title.ToLower().Contains(s) ||
+                        (i.Description ?? "").ToLower().Contains(s) ||
+                        (i.Creator != null ? i.Creator.Name.ToLower().Contains(s) : false)
+                        );
+                }
+                
+                accessQuery = ApplySort(accessQuery, vm.AccessSort, vm.AccessDir);
+
+                vm.Access = await accessQuery
+                    .Take(200)
+                    .Select(i => new AccessInventoryRowVm
+                    {
+                        Id = i.Id,
+                        Title = i.Title,
+                        CategoryName = i.Category != null ? i.Category.Name : "Other",
+                        IsPublic = i.IsPublic,
+                        CreatedAtUtc = i.CreatedAtUtc,
+                        OwnerName = i.Creator != null ? i.Creator.Name : "Unknown"
+                    })
+                    .ToListAsync();
+            }      
 
             return View(vm);
         }
