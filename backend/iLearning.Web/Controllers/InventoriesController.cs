@@ -372,6 +372,13 @@ namespace iLearning.Web.Controllers
 
             var canWrite = canEdit || (isAuthenticated && inv.IsPublic) || hasExplicitWriteAccess;
 
+            var requestedTab = string.IsNullOrWhiteSpace(tab) ? "items" : tab.Trim().ToLowerInvariant();
+            var allowedTabs = canEdit
+                ? new[] { "items", "discussion", "settings", "customid", "fields", "access", "stats" }
+                : new[] { "items", "discussion" };
+
+            var activeTab = allowedTabs.Contains(requestedTab) ? requestedTab : "items";
+
             var vm = new InventoryDetailsVm
             {
                 Id = inv.Id,
@@ -383,7 +390,7 @@ namespace iLearning.Web.Controllers
                 CreatorName = inv.Creator?.Name ?? "Unknown",
                 CreatedAtUtc = inv.CreatedAtUtc,
                 Tags = inv.InventoryTags.Select(x => x.Tag.Name).OrderBy(x => x).ToList(),
-                ActiveTab = string.IsNullOrWhiteSpace(tab) ? "items" : tab.Trim().ToLowerInvariant(),
+                ActiveTab = activeTab,
                 CanEdit = canEdit,
                 CanWrite = canWrite,
             };

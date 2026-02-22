@@ -98,36 +98,31 @@
          <div class="card-body">
                 @if (tab == "items")
                 {
-                    <div class="text-muted">Items table will be implemented. 
-                    @if (!Model.CanWrite)
-                    {
-                        <div class="small mt-2">You have read-only access</div>
-                    }
-                </div>
+                    <partial name="Tabs/_ItemsTab" model="Model" />
                 }
                 else if (tab == "discussion")
                 {
-                    <div class="text-muted">Chat/discussion will be implemented.</div>
+                    <partial name="Tabs/_DiscussionTab" model="Model" />
                 }
                 else if (tab == "settings")
                 {
-                    <div class="text-muted">Settings editor will be implemented(title/desc/category/public/tags/image.</div>
+                    <partial name="Tabs/_SettingsTab" model="Model" />
                 }
                 else if (tab == "customid")
                 {
-                    <div class="text-muted">Custom ID builder will be implemented(preview +drag/drop).</div>
+                    <partial name="Tabs/_CustomIdTab" model="Model" />
                 }
                 else if (tab == "fields")
                 {
-                    <div class="text-muted">Custom fields will be implemented(up to 3 per type).</div>
+                    <partial name="Tabs/_FieldsTab" model="Model" />
                 }
                 else if (tab == "access")
                 {
-                    <div class="text-muted">Access management will be implemented(autocomplete by name/email).</div>
+                    <partial name="Tabs/_AccessTab" model="Model" />
                 }
                 else if (tab == "stats")
                 {
-                    <div class="text-muted">Stats will be implemented(aggregation for numeric/string fields).</div>
+                    <partial name="Tabs/_StatsTab" model="Model" />
                 }
                 else
                 {
