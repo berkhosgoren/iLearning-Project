@@ -1,0 +1,215 @@
+﻿@model iLearning.Web.Models.ViewModels.Admin.AdminUsersIndexVm
+
+@{
+    ViewData["Title"] = "Admin - Users";
+}
+
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <h2 class="mb-0">User Management</h2>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Message))
+    {
+        <div class="alert alert-success">@Model.Message</div>
+    }
+
+    <div class="card">
+        <div class="card-header d-flex flex-wrap aling-items-center justify-content-between gap-2">
+            <div class="fw-semibold">Users</div>
+
+            <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
+                <input class="form-control form-control-sm" style="width: 280px"
+                       name="q" value="@Model.Q" placeholder="Filter (name/email)" />
+                
+                <select class="form-select form-select-sm" name="s" style="width: 160px">
+                    <option value="created" selected="@(Model.Sort=="created")">Sort: Created</option>
+                    <option value="name" selected="@(Model.Sort == "name")">Sort: Name</option>
+                    <option value="email" selected="@(Model.Sort == "email")">Sort: Email</option>
+                    <option value="blocked" selected="@(Model.Sort == "blocked")">Sort: Blocked</option>
+                </select>
+
+                <select class="form-select form-select-sm" name="d" style="width: 120px">
+                    <option value="desc" selected="@(Model.Dir == "desc")">Desc</option>
+                    <option value="asc" selected="@(Model.Dir == "asc")">Asc</option>
+                </select>
+
+                <button class="btn btn-outline-secondary btn-sm" type="submit">Apply</button>              
+            </form>
+        </div>
+
+        <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                <div class="text-muted small" id="selLabel">Selected: 0</div>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <form method="post" asp-controller="AdminUsers" asp-action="Block" id="blockForm">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-warning btn-sm" type="submit" id="blockBtn" disabled>Block</button>
+                    </form>
+
+                    <form method="post" asp-controller="AdminUsers" asp-action="Unblock" id="unblockForm">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-success btn-sm" type="submit" id="unblockBtn" disabled>Unblock</button>
+                    </form>
+
+                    <form method="post" asp-controller="AdminUsers" asp-action="ToggleAdmin" id="toggleAdminForm">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-outline-primary btn-sm" type="submit" id="toggleAdminBtn" disabled>Toggle Admin</button>
+                    </form>
+
+                    <form method="post" asp-controller="AdminUsers" asp-action="Delete" id="deleteForm">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-danger btn-sm" type="submit" id="deleteBtn" disabled>Delete</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:44px;">
+                                <input type="checkbox" id="all" aria-label="Select all users" />
+                            </th>
+                            <th>Name</th>
+                            <th style="width:260px;">Email</th>
+                            <th style="width:120px;">Blocked</th>
+                            <th style="width:120px;">Admin</th>
+                            <th style="width:140px;">Owned</th>
+                            <th style="width:170px;">Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Users.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="7" class="text-muted text-center py-4">No users found.</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var u in Model.Users)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="row" name="ids" value="@u.Id" form="blockForm" />
+                                        <input type="hidden" name="ids" value="@u.Id" form="unblockForm" disabled />
+                                        <input type="hidden" name="ids" value="@u.Id" form="toggleAdminForm" disabled />
+                                        <input type="hidden" name="ids" value="@u.Id" form="deleteForm" disabled />
+                                    </td>
+                                    <td>@u.Name</td>
+                                    <td>@u.Email</td>
+                                    <td>
+                                        @if (u.IsBlocked)
+                                        {
+                                            <span class="badge text-bg-warning">Yes</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-bg-secondary">No</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (u.IsAdmin)
+                                        {
+                                            <span class="badge text-bg-primary">Admin</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge text-bg-light border">User</span>
+                                        }
+                                    </td>
+                                    <td>@u.OwnedInventoriesCount</td>
+                                    <td>@u.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const all = document.getElementById('all');
+            const rows = () => Array.from(document.querySelectorAll('.row'));
+            const label = document.getElementById('selLabel');
+
+            const blockBtn = document.getElementById('blockBtn');
+            const unblockBtn = document.getElementById('unblockBtn');
+            const toggleAdminBtn = document.getElementById('toggleAdminBtn');
+            const deleteBtn = document.getElementById('deleteBtn');
+
+            const forms = [
+                {id: 'blockForm', btn: blockBtn },
+                {id: 'unblockForm', btn: unblockBtn },
+                {id: 'toggleAdminForm', btn: toggleAdminBtn },
+                {id: 'deleteForm', btn: deleteBtn }
+            ];
+
+            function syncHiddenInputs() {
+                const checkedIds = rows().filter(r => r.checked).map(r => r.value);
+                forms.forEach(forms => {
+                    const form = document.getElementById(f.id);
+
+                    Array.from(form.querySelectorAll('input[type="hidden"][name="ids"]')).forEach(x => x.Remove());
+
+                    checkedIds.forEach(id => {
+                        const inp = document.createElement('input');
+                        inp.type = 'hidden';
+                        inp.name = 'ids';
+                        inp.value = 'id';
+                        form.appendChild(inp);
+                    });
+                });
+            }
+
+            function update() {
+                const checked = rows().filter(x => x.checked).length;
+                label.textContent = 'Selected: ' + checked;
+
+                const enable = checked > 0;
+                blockBtn.disabled = !enable;
+                unblockBtn.disabled = !enable;
+                toggleAdminBtn.disabled = !enable;
+                deleteBtn.disabled = !enable;
+
+                const total = rows().length;
+                if (total === 0) {
+                    all.checked = false;
+                    all.indeterminate = false;
+                } else if (checked === 0) {
+                    all.checked = false;
+                    all.indeterminate = false;
+                } else if (checked === total) {
+                    all.checked = true;
+                    all.indeterminate = false;
+                } else {
+                    all.checked = false;
+                    all.indeterminate = true;
+                }
+
+                syncHiddenInputs();
+            }
+
+            if (all) {
+                all.addEventListener('change', function () {
+                    rows().forEach(x => x.checked = all.checked);
+                    update();
+                });
+            }
+
+            document.addEventListener('change', function(e) {
+                if (e.target && e.target.classList && e.target.classList.contains('row')) {
+                    update();
+                }
+            });
+
+            update();
+        })();
+    </script>
+}
