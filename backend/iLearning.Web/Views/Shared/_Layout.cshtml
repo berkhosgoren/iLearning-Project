@@ -34,11 +34,13 @@
                         <div class="d-flex align-items-center gap-2 ms-5">
                         @if (User?.Identity?.IsAuthenticated == true)
                             {
+                                <a class="btn btn-success" asp-controller="Inventories" asp-action="Create">
+                                    Create Inventory
+                                </a>
+
                                 <span class="btn btn-secondary disabled me-2">
                                     @User.Identity!.Name
                                 </span>
-
-                                <a class="btn btn-outline-primary" href="/inventories/create">Create Inventory</a>
 
                                 <form method="post" action="/auth/logout" class="m-0">
                                      @Html.AntiForgeryToken()
