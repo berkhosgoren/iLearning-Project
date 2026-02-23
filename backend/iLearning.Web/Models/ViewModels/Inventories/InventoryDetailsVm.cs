@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using iLearning.Web.Models.ViewModels.Items;
 
 namespace iLearning.Web.Models.ViewModels.Inventories
 {
@@ -28,5 +29,7 @@ namespace iLearning.Web.Models.ViewModels.Inventories
         public List<string> Tags { get; set; } = new();
 
         public string ActiveTab { get; set; } = "items";
+
+        public List<ItemRowVm> Items { get; set; } = new();
     }
 }

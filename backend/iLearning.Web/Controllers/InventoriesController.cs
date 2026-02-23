@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using iLearning.Web.Services;
 using iLearning.Web.Models.Domain;
+using iLearning.Web.Models.ViewModels.Items;
 
 namespace iLearning.Web.Controllers
 {
@@ -394,6 +395,26 @@ namespace iLearning.Web.Controllers
                 CanEdit = canEdit,
                 CanWrite = canWrite,
             };
+
+            if (activeTab == "items")
+            {
+                vm.Items = await _db.Items
+                    .AsNoTracking()
+                    .Where(x => x.InventoryId == inv.Id)
+                    .OrderByDescending(x => x.CreatedAtUtc)
+                    .Take(500)
+                    .Select(x => new ItemRowVm
+                    {
+                        Id = x.Id,
+                        CustomId = x.CustomId,
+                        Title = x.Title,
+                        CreatedAtUtc = x.CreatedAtUtc,
+                        UpdatedAtUtc = x.UpdatedAtUtc,
+                        LikesCount = x.Likes.Count,
+                        CommentsCount = x.Comments.Count
+                    })
+                    .ToListAsync();
+            }
 
             return View(vm);
         }

@@ -1,8 +1,155 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryDetailsVm
 
-<div class="text-muted">Items will be implemented</div>
-
-@if (!Model.CanWrite)
-{
-    <div class="small text-muted mt-2">You have read-only access.</div>
+@{
+    var msg = TempData["InventoryMessage"] as string;
 }
+
+@if (!string.IsNullOrWhiteSpace(msg))
+{
+    <div class="alert alert-success mb-3">@msg</div>
+}
+
+<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+    <div class="text-muted small">
+        Items: @Model.Items.Count
+        @if (!Model.CanWrite)
+        {
+            <span class="m-sm-2">Read-only access</span>
+        }
+    </div>
+
+    @if (Model.CanWrite)
+    {
+        <div class="d-flex gap-2">
+            <a class="btn btn-primary btn-sm" asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="items">
+                Add Item (will do)
+            </a>
+
+            <form method="post" asp-controller="Items" asp-action="BulkDelete" asp-route-inventoryId="@Model.Id" id="itemsDeleteForm">
+                @Html.AntiForgeryToken()
+                <button class="btn btn-danger btn-sm" type="submit" id="itemsDeleteBtn" disabled>
+                    Delete Selected
+                </button>
+            </form>
+        </div>
+    }
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm align-middle mb-0">
+        <thead class="table-light">
+            <tr>
+                <th style="width:44px;" class="text-center align-middle p-0">
+                    @if (Model.CanWrite)
+                    {
+                        <input type="checkbox" id="itemsAll" class="form-check-input d-block mx-auto my-2" aria-label="Select All" />
+                    }
+                </th>
+                <th style="width:160px;">Custom ID</th>
+                <th>Title</th>
+                <th style="width:120px;">Likes</th>
+                <th style="width:120px;">Comments</th>
+                <th style="width:170px;">Created</th>
+                <th style="width:170px;">Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Items.Count == 0)
+            {
+                <tr>
+                    <td colspan="7" class="text-muted text-center py-4">No items found.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var it in Model.Items)
+                {
+                    <tr>
+                        <td class="text-center align-middle p-0">
+                            @if (Model.CanWrite)
+                            {
+                                <input type="checkbox" class="form-check-input d-block mx-auto my-2 itemRow" name="ids" value="@it.Id" form="itemsDeleteForm" />
+                            }
+                        </td>
+                        <td>
+                            <a class="text-decoration-none" asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="items">
+                                @it.CustomId
+                            </a>
+                        </td>
+                        <td>@it.Title</td>
+                        <td>@it.LikesCount</td>
+                        <td>@it.CommentsCount</td>
+                        <td>@it.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>
+                            @if (it.UpdatedAtUtc.HasValue)
+                            {
+                                @it.UpdatedAtUtc.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.CanWrite)
+{
+    <div class="text-muted small mt-2" id="itemsSelectedLabel">Selected: 0</div>
+}
+<script>
+    (function () {
+        const all = document.getElementById('itemsAll');
+        const label = document.getElementById('itemsSelectedLabel');
+        const delBtn = document.getElementById('itemsDeleteBtn');
+
+        const rows = () => Array.from(document.querySelectorAll('input.itemRow'));
+
+        function setDeleteEnabled(enabled) {
+            if (delBtn) delBtn.disabled = !enabled;
+        }
+
+        function update() {
+            const rowCbs = rows();
+            const checkedCount = rowCbs.filter(x => x.checked).length;
+
+            if (label) label.textContent = 'Selected: ' + checkedCount;
+            setDeleteEnabled(checkedCount > 0);
+
+            if (!all) return;
+
+            const totalCount = rowCbs.length;
+
+            if (totalCount === 0) {
+                all.checked = false;
+                all.indeterminate = false;
+            } else if (checkedCount === 0) {
+                all.checked = false;
+                all.indeterminate = false;
+            } else if (checkedCount === totalCount) {
+                all.checked = true;
+                all.indeterminate = false;
+            } else {
+                all.checked = false;
+                all.indeterminate = true;
+            }
+        }
+
+        all?.addEventListener('change', function() {
+            rows().forEach(x => x.checked = all.checked);
+            update();
+        });
+
+        document.addEventListener('change', function (e) {
+            if (e.target && e.target.matches('input.itemRow')) {
+                update();
+            }
+        });
+
+        update();
+    })();
+</script>
