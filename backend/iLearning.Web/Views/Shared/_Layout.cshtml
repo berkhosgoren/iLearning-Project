@@ -44,7 +44,7 @@
 
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <a class="btn btn-outline-secondary" asp-controller="Admin" asp-action="Index">Admin Panel</a>
+                                    <a class="btn btn-outline-secondary" asp-controller="Admin" asp-action="Users">Admin Panel</a>
                                 }
 
                                 <form method="post" action="/auth/logout" class="m-0">

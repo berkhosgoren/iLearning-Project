@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using iLearning.Web.Models.Domain;
 using iLearning.Web.Data;
 using iLearning.Web.Models.ViewModels.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 
 namespace iLearning.Web.Controllers
@@ -15,7 +17,7 @@ namespace iLearning.Web.Controllers
 
         public AdminUsersController(AppDbContext db)
         {
-            _db = db;  
+            _db = db;
         }
 
         [HttpGet("")]
@@ -32,18 +34,18 @@ namespace iLearning.Web.Controllers
                 Message = TempData["AdminUsersMessage"] as string
             };
 
-            var query = _db.Users.AsNoTracking().AsQueryable();
+            var baseQuery = _db.Users.AsNoTracking().AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(vm.Q))
             {
                 var search = vm.Q.Trim().ToLowerInvariant();
-                query = query.Where(u => 
+                baseQuery = baseQuery.Where(u =>
                     u.Name.ToLower().Contains(search) || u.Email.ToLower().Contains(search));
             }
 
-            query = ApplySort(query, vm.Sort, vm.Dir);
+            baseQuery = ApplySort(baseQuery, vm.Sort, vm.Dir);
 
-            var usersPage = await query
+            var usersPage = await baseQuery
                 .Take(300)
                 .Select(u => new
                 {
@@ -63,12 +65,14 @@ namespace iLearning.Web.Controllers
                 .Select(r => r.Id)
                 .FirstOrDefaultAsync();
 
-            var adminUserIds = adminRoleId == 0 ? new HashSet<Guid>()
+            var adminUserIds = adminRoleId == 0
+                ? new HashSet<Guid>()
                 : (await _db.UserRoles
                     .AsNoTracking()
                     .Where(ur => ur.RoleId == adminRoleId && userIds.Contains(ur.UserId))
                     .Select(ur => ur.UserId)
-                    .ToListAsync()).ToHashSet();
+                    .ToListAsync())
+                  .ToHashSet();
 
             var ownedCounts = await _db.Inventories
                 .AsNoTracking()
@@ -92,22 +96,35 @@ namespace iLearning.Web.Controllers
         }
 
         [ValidateAntiForgeryToken]
-        [HttpPost("block")]
-        public async Task<IActionResult> Block([FromForm] Guid[] ids)
-            => await SetBlocked(ids, true);
-
-        [ValidateAntiForgeryToken]
-        [HttpPost("unlock")]
-        public async Task<IActionResult> Unblock([FromForm] Guid[] ids)
-            => await SetBlocked(ids, false);
-
-        [ValidateAntiForgeryToken]
-        [HttpPost("delete")]
-        public async Task<IActionResult> Delete([FromForm] Guid[] ids)
+        [HttpPost("bulk")]
+        public async Task<IActionResult> Bulk([FromForm] string cmd, [FromForm] Guid[] ids)
         {
             if (ids == null || ids.Length == 0)
                 return RedirectToAction(nameof(Index));
 
+            cmd = (cmd ?? "").Trim().ToLowerInvariant();
+
+            switch (cmd){
+                case "block":
+                    return await SetBlocked(ids, true);
+
+                case "unblock":
+                    return await SetBlocked(ids, false);
+
+                case "toggle-admin":
+                    return await ToggleAdminInternal(ids);
+
+                case "delete":
+                    return await DeleteInternal(ids);
+
+                default:
+                    TempData["AdminUsersMessage"] = "Unknown action.";
+                    return RedirectToAction(nameof(Index));
+            }
+        }
+
+        private async Task<IActionResult> DeleteInternal(Guid[] ids)
+        {
             var users = await _db.Users
                 .Where(u => ids.Contains(u.Id))
                 .ToListAsync();
@@ -118,19 +135,14 @@ namespace iLearning.Web.Controllers
             _db.Users.RemoveRange(users);
             await _db.SaveChangesAsync();
 
-            TempData["AdminUsersMessage"] = $"Deleted {users.Count} users(s).";
+            TempData["AdminUsersMessage"] = $"Deleted {users.Count} user(s).";
             return RedirectToAction(nameof(Index));
         }
 
-        [ValidateAntiForgeryToken]
-        [HttpPost("toggle-admin")]
-        public async Task<IActionResult> ToggleAdmin([FromForm] Guid[] ids)
+        private async Task<IActionResult> ToggleAdminInternal(Guid[] ids)
         {
-            if (ids == null || ids.Length == 0)
-                return RedirectToAction(nameof(Index));
-
             var adminRole = await _db.Roles.FirstOrDefaultAsync(r => r.Name == "Admin");
-            if (adminRole is null)
+            if (adminRole == null)
             {
                 TempData["AdminUsersMessage"] = "Admin role not found.";
                 return RedirectToAction(nameof(Index));
@@ -142,25 +154,21 @@ namespace iLearning.Web.Controllers
 
             var existingSet = existing.Select(x => x.UserId).ToHashSet();
 
-            var toRemove = existing;
-            if (toRemove.Count > 0)
-                _db.UserRoles.RemoveRange(toRemove);
+            if (existing.Count > 0)
+                _db.UserRoles.RemoveRange(existing);
 
             var toAddIds = ids.Where(id => !existingSet.Contains(id)).Distinct().ToList();
             foreach (var id in toAddIds)
-                _db.UserRoles.Add(new iLearning.Web.Models.Domain.UserRole { UserId = id, RoleId = adminRole.Id });
+                _db.UserRoles.Add(new Models.Domain.UserRole { UserId = id, RoleId = adminRole.Id });
 
             await _db.SaveChangesAsync();
 
-            TempData["AdminUsersMessage"] = $"Admin role updated. Added: {toAddIds.Count}, removed {toRemove.Count}";
+            TempData["AdminUsersMessage"] = $"Admin role updated. Added: {toAddIds.Count}, removed {existing.Count}.";
             return RedirectToAction(nameof(Index));
         }
 
         private async Task<IActionResult> SetBlocked(Guid[] ids, bool blocked)
         {
-            if (ids == null || ids.Length == 0)
-                return RedirectToAction(nameof(Index));
-
             var users = await _db.Users
                 .Where(u => ids.Contains(u.Id))
                 .ToListAsync();
@@ -173,12 +181,13 @@ namespace iLearning.Web.Controllers
 
             await _db.SaveChangesAsync();
 
-            TempData["AdminUsersMessage"] = blocked
-                ? $"Blocked {users.Count} user(s)." : $"Unblocked {users.Count} user(s).";
+            TempData["AdminUsersMessage"] = blocked ? $"Blocked {users.Count} user(s)."
+                                                    : $"Unblocked {users.Count} user(s).";
 
             return RedirectToAction(nameof(Index));
         }
 
+    
         private static string NormalizeSort(string? s)
         {
             s = (s ?? "").Trim().ToLowerInvariant();
@@ -198,8 +207,7 @@ namespace iLearning.Web.Controllers
             return d == "asc" ? "asc" : "desc";
         }
 
-        private static IQueryable<iLearning.Web.Models.Domain.AppUser> ApplySort(
-            IQueryable<iLearning.Web.Models.Domain.AppUser> q, string sort, string dir)
+        private static IQueryable<AppUser> ApplySort(IQueryable<AppUser> q, string sort, string dir)
         {
             var asc = dir == "asc";
 

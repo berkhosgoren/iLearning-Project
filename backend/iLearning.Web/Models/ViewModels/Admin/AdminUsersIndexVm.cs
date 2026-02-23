@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace iLearning.Web.Models.ViewModels.Admin
 {
     public class AdminUsersIndexVm
     {
-        public string? Q { get; set; }
-
+        public string? Q{ get; set; }
         public string Sort { get; set; } = "created";
         public string Dir { get; set; } = "desc";
 
