@@ -11,6 +11,8 @@ namespace iLearning.Web.Models.Domain
 
         [Required, MaxLength(200)]
         public string CustomId { get; set; } = string.Empty;
+        [Required, MaxLength(200)]
+        public string Title { get; set; } = string.Empty;
 
         public Guid CreatedById { get; set; }
         public AppUser CreatedBy { get; set; } = null!;
