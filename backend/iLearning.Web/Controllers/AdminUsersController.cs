@@ -163,7 +163,26 @@ namespace iLearning.Web.Controllers
 
             await _db.SaveChangesAsync();
 
-            TempData["AdminUsersMessage"] = $"Admin role updated. Added: {toAddIds.Count}, removed {existing.Count}.";
+            var added = toAddIds.Count;
+            var removed = existing.Count;
+
+            if (added > 0 && removed > 0)
+            {
+                TempData["AdminUsersMessage"] = $"Admin role updated. Added: {added}, removed {removed}.";
+            }
+            else if (added > 0)
+            {
+                TempData["AdminUsersMessage"] = $"Granted admin role to {added} user(s).";
+            }
+            else if (removed > 0)
+            {
+                TempData["AdminUsersMessage"] = $"Removed admin role from {removed} user(s).";
+            }
+            else
+            {
+                TempData["AdminUsersMessage"] = $"No admin role changes.";
+            }
+           
             return RedirectToAction(nameof(Index));
         }
 
