@@ -371,7 +371,7 @@ namespace iLearning.Web.Controllers
                     .AnyAsync(a => a.InventoryId == inv.Id && a.UserId == userId.Value && a.CanWrite);
             }
 
-            var canWrite = canEdit || (isAuthenticated && inv.IsPublic) || hasExplicitWriteAccess;
+            var canWrite = canEdit || hasExplicitWriteAccess;
 
             var requestedTab = string.IsNullOrWhiteSpace(tab) ? "items" : tab.Trim().ToLowerInvariant();
             var allowedTabs = canEdit

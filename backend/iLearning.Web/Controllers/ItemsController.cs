@@ -48,7 +48,7 @@ namespace iLearning.Web.Controllers
                     .AnyAsync(a => a.InventoryId == inventoryId && a.UserId == userId.Value && a.CanWrite);
             }
 
-            var canWrite = canEdit || hasExplicitWrite || (inv.IsPublic && _current.IsAuthenticated(User));
+            var canWrite = canEdit || hasExplicitWrite;
             if (!canWrite) return Forbid();
 
             var itemsToDelete = await _db.Items
