@@ -1,25 +1,111 @@
-﻿@{
+﻿@model iLearning.Web.Models.ViewModels.Search.SearchResultsVm 
+
+@{
     ViewData["Title"] = "Search";
-    var q = (string)(ViewBag.Query ?? "");
 }
 
 <div class="container py-4">
-    <h1 class="h4 mb-3">Search</h1>
 
-    @if (string.IsNullOrWhiteSpace(q))
-    {
-        <div class="alert alert-secondary mb-0">
-            Type something in the search box above to search inventories and items.
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <div>
+            <h2 class="mb-0">Search</h2>
+            @if (!string.IsNullOrWhiteSpace(Model.Q))
+            {
+                <div class="text-muted">Results for: <span class="fw-semibold">@Model.Q</span></div>
+            }
+            else
+            {
+                <div class="text-muted">Type a query in the search box above.</div>
+            }
         </div>
-    }
-    else
-    {
-        <div class="alert alert-secondary">
-            Search query: <strong>@q</strong>
-        </div>
+    </div>
 
-        <div class="text-muted">
-            Search results after inventories/items.
+    @if (!string.IsNullOrWhiteSpace(Model.Q))
+    {
+        <div class="row g-3">
+
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header fw-semibold">Inventories (@Model.Inventories.Count)</div>
+                    <div class="card-body">
+
+                        @if (Model.Inventories.Count == 0)
+                        {
+                            <div class="text-muted">No inventories found.</div>
+                        }
+                        else
+                        {
+                            <div class="list-group">
+                                @foreach (var inv in Model.Inventories)
+                                {
+                                    <a class="list-group-item list-group-item-action" asp-controller="Inventories" asp-action="Details"
+                                       asp-route-id="@inv.Id" asp-route-tab="items">
+                                       <div class="d-flex justify-content-between align-items-start gap-2">
+                                           <div class="me-auto">
+                                               <div class="fw-semibold">@inv.Title</div>
+                                               <div class="text-muted small">
+                                                    @inv.CategoryName · by @inv.CreatorName
+                                                    @if (inv.IsPublic)
+                                                        {
+                                                            <span class="badge text-bg-success m-sm-2">Public</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="badge text-bg-secondary m-sm-2">Private</span>
+                                                        }
+                                                    </div>
+
+                                                    @if (!string.IsNullOrWhiteSpace(inv.Description))
+                                                    {
+                                                        <div class="text-muted small mt-1">
+                                                            @(inv.Description!.Length > 140 ? inv.Description.Substring(0, 140) + "..." : inv.Description)
+                                                        </div>
+                                                    }
+                                                </div>
+
+                                                <div class="text-muted small text-nowrap">
+                                                    @inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy")
+                                                </div>
+                                       </div>
+                                   </a>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header fw-semibold">Items (@Model.Items.Count)</div>
+                    <div class="card-body">
+
+                        @if (Model.Items.Count == 0)
+                        {
+                            <div class="text-muted">No items found.</div>
+                        }
+                        else
+                        {
+                            @foreach (var it in Model.Items)
+                            {
+                                <a class="list-group-item list-group-item-action" asp-controller="Items" asp-action="Details"
+                                   asp-route-inventoryId="@it.InventoryId" asp-route-itemId="@it.ItemId">
+                                    <div class="d-flex justify-content-between align-items-start gap-2">
+                                        <div class="me-auto">
+                                            <div class="fw-semibold">@it.CustomId</div>
+                                            <div class="text-muted small">@it.Title</div>
+                                            <div class="text-muted small mt-1">Inventory: @it.InventoryTitle</div>
+                                        </div>
+                                        <div class="text-muted small text-nowrap">
+                                            @it.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy")
+                                        </div>
+                                    </div>
+                               </a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
     }
 </div>
