@@ -21,8 +21,8 @@
     @if (Model.CanWrite)
     {
         <div class="d-flex gap-2">
-            <a class="btn btn-primary btn-sm" asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="items">
-                Add Item (will do)
+            <a class="btn btn-primary btn-sm" asp-controller="Items" asp-action="Create" asp-route-inventoryId="@Model.Id">
+                Add Item
             </a>
 
             <form method="post" asp-controller="Items" asp-action="BulkDelete" asp-route-inventoryId="@Model.Id" id="itemsDeleteForm">

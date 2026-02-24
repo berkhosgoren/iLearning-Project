@@ -1,0 +1,110 @@
+﻿@model iLearning.Web.Models.ViewModels.Items.ItemUpsertVm
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <label class="form-label">Custom ID</label>
+        <input asp-for="CustomId" class="form-control" />
+        <span asp-validation-for="CustomId" class="text-danger small"></span>
+        <div class="form-text">Unique inside this inventory.</div>
+    </div>
+
+    <div class="col-md-8">
+        <label class="form-label">Title</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger small"></span>
+    </div>
+
+    <div class="col-12">
+        <hr />
+        <div class="text-muted small mb-2">
+            Custom fields are controlled by the inv "Fields" setting, forced enabled/disabled later. 
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">String 1</label>
+        <input asp-for="String1" class="form-control" />
+        <span asp-validation-for="String1" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">String 2</label>
+        <input asp-for="String2" class="form-control" />
+        <span asp-validation-for="String2" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">String 3</label>
+        <input asp-for="String3" class="form-control" />
+        <span asp-validation-for="String3" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Text 1</label>
+        <textarea asp-for="Text1" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Text1" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Text 2</label>
+        <textarea asp-for="Text2" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Text2" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Text 3</label>
+        <textarea asp-for="Text3" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Text3" class="text-danger small"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Number 1</label>
+        <input asp-for="Number1" class="form-control" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Number 2</label>
+        <input asp-for="Number2" class="form-control" />
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Number 3</label>
+        <input asp-for="Number3" class="form-control" />
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Bool 1</label>
+        <select asp-for="Bool1" class="form-select">
+            <option value="">(empty)</option>
+            <option value="true">True</option>
+            <option value="false">False</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Bool 2</label>
+        <select asp-for="Bool2" class="form-select">
+            <option value="">(empty)</option>
+            <option value="true">True</option>
+            <option value="false">False</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Bool 3</label>
+        <select asp-for="Bool3" class="form-select">
+            <option value="">(empty)</option>
+            <option value="true">True</option>
+            <option value="false">False</option>
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <label class="form-label">Link 1</label>
+        <input asp-for="Link1" class="form-control" />
+        <span asp-validation-for="Link1" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Link 2</label>
+        <input asp-for="Link2" class="form-control" />
+        <span asp-validation-for="Link1" class="text-danger small"></span>
+    </div>
+    <div class="col-md-4">
+        <label class="form-label">Link 3</label>
+        <input asp-for="Link3" class="form-control" />
+        <span asp-validation-for="Link1" class="text-danger small"></span>
+    </div>
+
+</div>

@@ -1,0 +1,38 @@
+﻿@model iLearning.Web.Models.ViewModels.Items.ItemUpsertVm
+
+@{
+    ViewData["Title"] = "Create Item";
+}
+
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 ">
+        <h2 class="mb-0">Create Item</h2>
+
+        <a class="btn btn-outline-secondary" asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.InventoryId"
+           asp-route-tab="items">Back to Items</a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post" asp-controller="Items" asp-action="Create" asp-route-inventoryId="@Model.InventoryId">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="InventoryId" />
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
+
+                <partial name="_UpsertForm" model="Model" />
+
+                <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-primary" type="submit">Create</button>
+                    <a class="btn btn-outline-primary" asp-controller="Inventories" asp-action="Details"
+                       asp-route-id="@Model.InventoryId" asp-route-tab="items">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
