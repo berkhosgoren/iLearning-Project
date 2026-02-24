@@ -5,6 +5,9 @@ namespace iLearning.Web.Models.ViewModels.Items
     public class ItemUpsertVm
     {
         public Guid InventoryId { get; set; }
+        public Guid ItemId { get; set; }
+
+        public int Version { get; set; }
 
         [Required, MaxLength(200)]
         public string CustomId { get; set; } = string.Empty;

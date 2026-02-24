@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using iLearning.Web.Models.ViewModels.Items;
 using iLearning.Web.Models.Domain;
+using System.Security.Principal;
 
 namespace iLearning.Web.Controllers
 {
@@ -204,6 +205,135 @@ namespace iLearning.Web.Controllers
             return View(vm);
         }
 
+
+        [HttpGet("{itemId:guid}/edit")]
+        public async Task<IActionResult> Edit(Guid inventoryId, Guid itemId)
+        {
+            var canWrite = await CanWriteInventoryAsync(inventoryId);
+            if (!canWrite) return Forbid();
+
+            var item = await _db.Items
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.InventoryId == inventoryId && x.Id == itemId);
+
+            if (item == null) return NotFound();
+
+            var vm = new ItemUpsertVm
+            {
+                InventoryId = inventoryId,
+                ItemId = itemId,
+                Version = item.Version,
+
+                CustomId = item.CustomId,
+                Title = item.Title,
+
+                String1 = item.String1,
+                String2 = item.String2,
+                String3 = item.String3,
+
+                Text1 = item.Text1,
+                Text2 = item.Text2,
+                Text3 = item.Text3,
+
+                Number1 = item.Number1,
+                Number2 = item.Number2,
+                Number3 = item.Number3,
+
+                Bool1 = item.Bool1,
+                Bool2 = item.Bool2,
+                Bool3 = item.Bool3,
+
+                Link1 = item.Link1,
+                Link2 = item.Link2,
+                Link3 = item.Link3,
+            };
+
+            return View(vm);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost("{itemId:guid}/edit")]
+        public async Task<IActionResult> Edit(Guid inventoryId, Guid itemId, ItemUpsertVm vm)
+        {
+            if (inventoryId != vm.InventoryId || itemId != vm.ItemId) 
+                return BadRequest();
+
+            var canWrite = await CanWriteInventoryAsync(inventoryId);
+            if (!canWrite) return Forbid();
+
+            vm.CustomId = (vm.CustomId ?? "").Trim();
+            vm.Title = (vm.Title ?? "").Trim();
+
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            var item = await _db.Items
+                .FirstOrDefaultAsync(x => x.InventoryId == inventoryId && x.Id == itemId);
+
+            if (item == null) return NotFound();
+
+            if (vm.Version != item.Version)
+            {
+                ModelState.AddModelError("", "This item was updated by someone else, reload and try again.");
+                vm.Version = item.Version;
+                return View(vm);
+            }
+
+            var customIdTaken = await _db.Items
+                .AsNoTracking()
+                .AnyAsync(x => x.InventoryId == inventoryId && x.CustomId == vm.CustomId && x.Id != itemId);
+
+            if (customIdTaken)
+            {
+                ModelState.AddModelError(nameof(vm.CustomId), "Custom ID already exists in this inventory.");
+                return View(vm);
+            }
+
+            var userId = _current.GetUserId(User);
+            if (!userId.HasValue) return RedirectToAction("login", "Auth");
+
+            item.CustomId = vm.CustomId;
+            item.Title = vm.Title;
+
+            item.String1 = string.IsNullOrWhiteSpace(vm.String1) ? null : vm.String1.Trim();
+            item.String2 = string.IsNullOrWhiteSpace(vm.String2) ? null : vm.String2.Trim();
+            item.String3 = string.IsNullOrWhiteSpace(vm.String3) ? null : vm.String3.Trim();
+
+            item.Text1 = string.IsNullOrWhiteSpace(vm.Text1) ? null : vm.Text1.Trim();
+            item.Text2 = string.IsNullOrWhiteSpace(vm.Text2) ? null : vm.Text2.Trim();
+            item.Text3 = string.IsNullOrWhiteSpace(vm.Text3) ? null : vm.Text3.Trim();
+
+            item.Number1 = vm.Number1;
+            item.Number2 = vm.Number2;
+            item.Number3 = vm.Number3;
+
+            item.Bool1 = vm.Bool1;
+            item.Bool2 = vm.Bool2;
+            item.Bool3 = vm.Bool3;
+
+            item.Link1 = string.IsNullOrWhiteSpace(vm.Link1) ? null : vm.Link1.Trim();
+            item.Link2 = string.IsNullOrWhiteSpace(vm.Link2) ? null : vm.Link2.Trim();
+            item.Link3 = string.IsNullOrWhiteSpace(vm.Link3) ? null : vm.Link3.Trim();
+
+            item.UpdatedById = userId.Value;
+            item.UpdatedAtUtc = DateTime.UtcNow;
+
+            item.Version += 1;
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                ModelState.AddModelError("", "Could not save changes. Try again.");
+                return View(vm);
+            }
+
+            TempData["InventoryMessage"] = "Item updated.";
+            return RedirectToAction(nameof(Details), new { inventoryId, itemId });
+
+        }
 
         [ValidateAntiForgeryToken]
         [HttpPost("bulk-delete")]
