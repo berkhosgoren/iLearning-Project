@@ -72,7 +72,7 @@
                             }
                         </td>
                         <td>
-                            <a class="text-decoration-none" asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="items">
+                            <a class="text-decoration-none" asp-controller="Items" asp-action="Details" asp-route-inventoryId="@Model.Id" asp-route-itemId="@it.Id">
                                 @it.CustomId
                             </a>
                         </td>

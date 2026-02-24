@@ -115,6 +115,94 @@ namespace iLearning.Web.Controllers
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "items" });
         }
 
+        [AllowAnonymous]
+        [HttpGet("{itemId:guid}")]
+        public async Task<IActionResult> Details(Guid inventoryId, Guid itemId)
+        {
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == inventoryId);
+
+            if (inv == null) return NotFound();
+
+            var isAuthenticated = _current.IsAuthenticated(User);
+            var userId = _current.GetUserId(User);
+            var isAdmin = _current.IsAdmin(User);
+
+            var isOwner = isAuthenticated && userId.HasValue && inv.CreatorId == userId.Value;
+            var canEditInventory = isAdmin || isOwner;
+
+            bool hasAnyAccessRow = false;
+            bool hasExplicitWrite = false;
+
+            if (!canEditInventory && isAuthenticated && userId.HasValue)
+            {
+                var access = await _db.InventoryAccesses
+                    .AsNoTracking()
+                    .Where(a => a.InventoryId == inventoryId && a.UserId == userId.Value)
+                    .Select(a => new { a.CanWrite })
+                    .FirstOrDefaultAsync();
+
+                hasAnyAccessRow = access != null;
+                hasExplicitWrite = access?.CanWrite == true;
+            }
+
+            var canRead = inv.IsPublic || (isAuthenticated && (canEditInventory || hasAnyAccessRow));
+
+            if (!canRead) return Forbid();
+
+            var canWrite = canEditInventory || (isAuthenticated && hasExplicitWrite);
+
+            var vm = await _db.Items
+                .AsNoTracking()
+                .Where(X => X.InventoryId == inventoryId && X.Id == itemId)
+                .Select(x => new ItemDetailsVm
+                {
+                    InventoryId = inventoryId,
+                    ItemId = x.Id,
+
+                    InventoryTitle = inv.Title,
+
+                    CustomId = x.CustomId,
+                    Title = x.Title,
+
+                    CreatedAtUtc = x.CreatedAtUtc,
+                    UpdatedAtUtc = x.UpdatedAtUtc,
+
+                    CreatedByName = x.CreatedBy != null ? x.CreatedBy.Name : "Unknown",
+                    UpdatedByName = x.UpdatedBy != null ? x.UpdatedBy.Name : null,
+
+                    LikesCount = x.Likes.Count,
+                    CommentsCount = x.Comments.Count,
+
+                    CanWrite = canWrite,
+
+                    String1 = x.String1,
+                    String2 = x.String2,
+                    String3 = x.String3,
+
+                    Text1 = x.Text1,
+                    Text2 = x.Text2,
+                    Text3 = x.Text3,
+
+                    Number1 = x.Number1,
+                    Number2 = x.Number2,
+                    Number3 = x.Number3,
+
+                    Bool1 = x.Bool1,
+                    Bool2 = x.Bool2,
+                    Bool3 = x.Bool3,
+
+                    Link1 = x.Link1,
+                    Link2 = x.Link2,
+                    Link3 = x.Link3
+                })
+                .FirstOrDefaultAsync();
+
+            if (vm == null) return NotFound();
+
+            return View(vm);
+        }
 
 
         [ValidateAntiForgeryToken]
