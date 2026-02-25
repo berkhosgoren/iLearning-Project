@@ -23,6 +23,14 @@ namespace iLearning.Web.Models.ViewModels.Items
 
         public bool CanWrite { get; set; }
 
+        public bool IsAuthenticated { get; set; }
+        public bool IsLikedByMe { get; set; }
+
+        [MaxLength(1000)]
+        public string? NewCommentBody { get; set; }
+
+        public List<ItemCommentRowVm> Comments { get; set; } = new();
+
         public string? String1 { get; set; }
         public string? String2 { get; set; }
         public string? String3 { get; set; }

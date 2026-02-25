@@ -12,8 +12,8 @@ namespace iLearning.Web.Models.Domain
         public Guid UserId { get; set; }
         public AppUser User { get; set; } = null!;
 
-        [Required, MaxLength(4000)]
-        public string BodyMarkdown { get; set; } = string.Empty;
+        [Required, MaxLength(1000)]
+        public string Body { get; set; } = string.Empty;
 
         public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
     }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using iLearning.Web.Models.ViewModels.Items;
 using iLearning.Web.Models.Domain;
-using System.Security.Principal;
+
 
 namespace iLearning.Web.Controllers
 {
@@ -177,6 +177,7 @@ namespace iLearning.Web.Controllers
                     CommentsCount = x.Comments.Count,
 
                     CanWrite = canWrite,
+                    IsAuthenticated = isAuthenticated, 
 
                     String1 = x.String1,
                     String2 = x.String2,
@@ -202,7 +203,149 @@ namespace iLearning.Web.Controllers
 
             if (vm == null) return NotFound();
 
+            if (isAuthenticated && userId.HasValue)
+            {
+                vm.IsLikedByMe = await _db.ItemLikes
+                    .AsNoTracking()
+                    .AnyAsync(l => l.ItemId == itemId && l.UserId == userId.Value);
+            }
+
+            vm.Comments = await _db.ItemComments
+                .AsNoTracking()
+                .Where(c => c.ItemId == itemId)
+                .OrderByDescending(c => c.CreatedAtUtc)
+                .Take(200)
+                .Select(c => new ItemCommentRowVm
+                {
+                    Id = c.Id,
+                    UserId = c.UserId,
+                    UserName = c.User != null ? c.User.Name : "Unknown",
+                    Body = c.Body,
+                    CreatedAtUtc = c.CreatedAtUtc,
+                    CanDelete = isAdmin || (isAuthenticated && userId.HasValue && (c.UserId == userId.Value ||inv.CreatorId == userId.Value))
+                })
+                .ToListAsync();
+
             return View(vm);
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost("{itemId:guid}/toggle-like")]
+        public async Task<IActionResult> ToggleLike(Guid inventoryId, Guid itemId)
+        {
+            var canRead = await CanReadInventoryAsync(inventoryId);
+            if (!canRead) return Forbid();
+
+            var userId = _current.GetUserId(User);
+            if (!userId.HasValue) return RedirectToAction("login", "Auth");
+
+            var itemExists = await _db.Items
+                .AsNoTracking()
+                .AnyAsync(i => i.InventoryId == inventoryId && i.Id == itemId);
+
+            if (!itemExists) return NotFound();
+
+            var existing = await _db.ItemLikes
+                .FirstOrDefaultAsync(l => l.ItemId == itemId && l.UserId == userId.Value);
+
+            if (existing != null)
+            {
+                _db.ItemLikes.Remove(existing);
+                TempData["InventoryMessage"] = "Like Removed.";
+            }
+            else
+            {
+                _db.ItemLikes.Add(new ItemLike
+                {
+                    ItemId = itemId,
+                    UserId = userId.Value,
+                    CreatedAtUtc = DateTime.UtcNow
+                });
+
+                TempData["InventoryMessage"] = "Liked.";
+            }
+
+            await _db.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { inventoryId, itemId });
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost("{itemId:guid}/comments")]
+        public async Task<IActionResult> AddComment(Guid inventoryId, Guid itemId, [FromForm] string? body)
+        {
+            var canRead = await CanReadInventoryAsync(inventoryId);
+            if (!canRead) return Forbid();
+
+            var userId = _current.GetUserId(User);
+            if (!userId.HasValue) return RedirectToAction("login", "Auth");
+
+            var text = (body ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                TempData["InventoryMessage"] = "Comment cannot be empty.";
+                return RedirectToAction(nameof(Details), new { inventoryId, itemId });
+            }
+
+            if (text.Length > 1000)
+                text = text[..1000];
+
+            var itemExists = await _db.Items
+                .AsNoTracking()
+                .AnyAsync(i => i.InventoryId == inventoryId && i.Id == itemId);
+
+            if (!itemExists) return NotFound();
+
+            _db.ItemComments.Add(new ItemComment
+            {
+                ItemId = itemId,
+                UserId = userId.Value,
+                Body = text,
+                CreatedAtUtc = DateTime.UtcNow
+            });
+
+            await _db.SaveChangesAsync();
+
+            TempData["InventoryMessage"] = "Comment added.";
+            return RedirectToAction(nameof(Details), new { inventoryId, itemId });
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost("{itemId:guid}/comments/{commentId:guid}/delete")]
+        public async Task<IActionResult> DeleteComment(Guid inventoryId, Guid itemId, Guid commentId)
+        {
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .Select(i => new { i.Id, i.CreatorId, i.IsPublic })
+                .FirstOrDefaultAsync(i => i.Id == inventoryId);
+
+            if (inv is null) return NotFound();
+
+            var isAuthenticated = _current.IsAuthenticated(User);
+            var userId = _current.GetUserId(User);
+            var isAdmin = _current.IsAdmin(User);
+
+            if (!isAuthenticated || !userId.HasValue)
+                return RedirectToAction("login", "Auth");
+
+            var canRead = inv.IsPublic || isAdmin || inv.CreatorId == userId.Value 
+                || await _db.InventoryAccesses.AsNoTracking().AnyAsync(a => a.InventoryId == inventoryId && a.UserId == userId.Value);
+
+            if (!canRead) return Forbid();
+
+            var comment = await _db.ItemComments
+                .FirstOrDefaultAsync(c => c.Id == commentId && c.ItemId == itemId);
+
+            if (comment == null) return NotFound();
+
+            var canDelete = isAdmin || comment.UserId == userId.Value || inv.CreatorId == userId.Value;
+            if (!canDelete) return Forbid();
+
+            _db.ItemComments.Remove(comment);
+            await _db.SaveChangesAsync();
+
+            TempData["InventoryMessage"] = "Comment deleted.";
+            return RedirectToAction(nameof(Details), new { inventoryId, itemId });
         }
 
 
@@ -402,6 +545,33 @@ namespace iLearning.Web.Controllers
                 .AnyAsync(a => a.InventoryId == inventoryId && a.UserId == userId.Value && a.CanWrite);
 
             return hasExplicitWrite;
+        }
+
+        private async Task<bool> CanReadInventoryAsync(Guid inventoryId)
+        {
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .Select(i => new { i.Id, i.CreatorId, i.IsPublic })
+                .FirstOrDefaultAsync(i => i.Id == inventoryId);
+
+            if (inv == null) return false;
+
+            if (inv.IsPublic) return true;
+
+            var isAuthenticated = _current.IsAuthenticated(User);
+            if (!isAuthenticated) return false;
+
+            var userId = _current.GetUserId(User);
+            if (!userId.HasValue) return false;
+
+            if (_current.IsAdmin(User)) return true;
+            if (inv.CreatorId == userId.Value) return true;
+
+            var hasAnyAccess = await _db.InventoryAccesses
+                .AsNoTracking()
+                .AnyAsync(a => a.InventoryId == inventoryId && a.UserId == userId.Value);
+
+            return hasAnyAccess;
         }
     }
 }

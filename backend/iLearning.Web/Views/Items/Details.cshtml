@@ -2,9 +2,15 @@
 
 @{
     ViewData["Title"] = Model.CustomId;
+    var msg = TempData["InventoryMessage"] as string;
 }
 
 <div class="container py-4">
+    @if (!string.IsNullOrWhiteSpace(msg))
+    {
+        <div class="alert alert-success mb-3">@msg</div>
+    }
+
     <div class="d-flex align-items-start justify-content-between flex-wrap gap-2 mb-3">
         <div>
             <h2 class="mb-1">@Model.CustomId</h2>
@@ -52,7 +58,36 @@
                 </dd>
 
                 <dt class="col-sm-3">Likes</dt>
-                <dd class="col-sm-9">@Model.LikesCount</dd>
+                <dd class="col-sm-9">
+                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                        <span class="fw-semibold">@Model.LikesCount</span>
+
+                        @if (Model.IsAuthenticated)
+                        {
+                            <form method="post"
+                                  asp-controller="Items"
+                                  asp-action="ToggleLike"
+                                  asp-route-inventoryId="@Model.InventoryId"
+                                  asp-route-itemId="@Model.ItemId"
+                                  class="m-0">
+                                @Html.AntiForgeryToken()
+
+                                @if (Model.IsLikedByMe)
+                                {
+                                    <button class="btn btn-outline-secondary btn-sm" type="submit">Unlike</button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-outline-primary btn-sm" type="submit">Like</button>
+                                }
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-muted small">Login to like</span>
+                        }
+                    </div>
+                </dd>
 
                 <dt class="col-sm-3">Comments</dt>
                 <dd class="col-sm-9">@Model.CommentsCount</dd>
@@ -60,7 +95,7 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-header fw-semibold">Fields</div>
         <div class="card-body">
             <dl class="row mb-0">
@@ -84,18 +119,20 @@
                 <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Text3) ? Model.Text3 : "-")</dd>
 
                 <dt class="col-sm-3">Number1</dt>
-                <dd class="col-sm-9">@((Model.Number1.HasValue) ? Model.Number1.Value.ToString() : "*")</dd>
+                <dd class="col-sm-9">@((Model.Number1.HasValue) ? Model.Number1.Value.ToString() : "-")</dd>
 
                 <dt class="col-sm-3">Number2</dt>
-                <dd class="col-sm-9">@((Model.Number2.HasValue) ? Model.Number2.Value.ToString() : "*")</dd>
+                <dd class="col-sm-9">@((Model.Number2.HasValue) ? Model.Number2.Value.ToString() : "-")</dd>
 
                 <dt class="col-sm-3">Number3</dt>
-                <dd class="col-sm-9">@((Model.Number3.HasValue) ? Model.Number3.Value.ToString() : "*")</dd>
+                <dd class="col-sm-9">@((Model.Number3.HasValue) ? Model.Number3.Value.ToString() : "-")</dd>
 
                 <dt class="col-sm-3">Bool1</dt>
                 <dd class="col-sm-9">@((Model.Bool1.HasValue) ? (Model.Bool1.Value ? "Yes" : "No") : "-")</dd>
+
                 <dt class="col-sm-3">Bool2</dt>
                 <dd class="col-sm-9">@((Model.Bool2.HasValue) ? (Model.Bool2.Value ? "Yes" : "No") : "-")</dd>
+
                 <dt class="col-sm-3">Bool3</dt>
                 <dd class="col-sm-9">@((Model.Bool3.HasValue) ? (Model.Bool3.Value ? "Yes" : "No") : "-")</dd>
 
@@ -105,7 +142,11 @@
                     {
                         <a href="@Model.Link1" target="_blank" rel="noopener noreferrer">@Model.Link1</a>
                     }
-                    else { <span class="text-muted">-</span>}
+                    else
+                    {
+
+                        <span class="text-muted">-</span>
+                    }
                 </dd>
 
                 <dt class="col-sm-3">Link2</dt>
@@ -138,6 +179,72 @@
             <div class="text-muted small mt-3">
                 Fields labels will be replaced by inventory fields later.
             </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header fw-semibold">Comments</div>
+        <div class="card-body">
+
+            @if (Model.IsAuthenticated)
+            {
+                <form method="post"
+                      asp-controller="Items"
+                      asp-action="AddComment"
+                      asp-route-inventoryId="@Model.InventoryId"
+                      asp-route-itemId="@Model.ItemId"
+                      class="mb-3">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-2">
+                        <textarea name="body" class="form-control" rows="3" maxlength="1000" placeholder="Write a comment..."></textarea>
+                        <div class="form-text">Max 1000 characters.</div>
+                    </div>
+
+                    <button class="btn btn-primary btn-sm" type="submit">Post Comment</button>
+                </form>
+            }
+            else
+            {
+                <div class="text-muted small mb-3">Login to post comments.</div>
+            }
+
+            @if (Model.Comments.Count == 0)
+            {
+                <div class="text-muted">No comments yet.</div>
+            }
+            else
+            {
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var c in Model.Comments)
+                    {
+                        <div class="border rounded p-3">
+                            <div class="d-flex align-items-start justify-content-between gap-2">
+                                <div>
+                                    <div class="fw-semibold">@c.UserName</div>
+                                    <div class="text-muted small">@c.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
+                                </div>
+
+                                @if (c.CanDelete)
+                                {
+                                    <form method="post"
+                                          asp-controller="Items"
+                                          asp-action="DeleteComment"
+                                          asp-route-inventoryId="@Model.InventoryId"
+                                          asp-route-itemId="@Model.ItemId"
+                                          asp-route-commentId="@c.Id"
+                                          class="m-0">
+                                        @Html.AntiForgeryToken()
+                                        <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                                    </form>
+                                }
+                            </div>
+
+                            <div class="mt-2">@c.Body</div>
+                        </div>
+                    }
+                </div>
+            }
         </div>
     </div>
 </div>
