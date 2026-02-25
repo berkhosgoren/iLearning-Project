@@ -26,9 +26,16 @@ namespace iLearning.Web.Controllers
             [FromQuery] string? oq,
             [FromQuery] string? os,
             [FromQuery] string? od,
+
             [FromQuery] string? aq,
             [FromQuery] string? @as,
-            [FromQuery] string? ad)
+            [FromQuery] string? ad,
+            
+            [FromQuery] string? vq,
+            [FromQuery] string? vs,
+            [FromQuery] string? vd)
+
+
         {
             var userId = _current.GetUserId(User);
             if (!userId.HasValue) return RedirectToAction("Login", "Auth");
@@ -46,6 +53,10 @@ namespace iLearning.Web.Controllers
                 AccessQuery = aq,
                 AccessSort = NormalizeSort(@as),
                 AccessDir = NormalizeDir(ad),
+
+                ViewQuery = vq,
+                ViewSort = NormalizeSort(vs),
+                ViewDir = NormalizeDir(vd),
             };
 
             IQueryable<Models.Domain.Inventory> ownedQuery = _db.Inventories
@@ -115,6 +126,42 @@ namespace iLearning.Web.Controllers
                 vm.Access = await accessQuery
                     .Take(200)
                     .Select(i => new AccessInventoryRowVm
+                    {
+                        Id = i.Id,
+                        Title = i.Title,
+                        CategoryName = i.Category != null ? i.Category.Name : "Other",
+                        IsPublic = i.IsPublic,
+                        CreatedAtUtc = i.CreatedAtUtc,
+                        OwnerName = i.Creator != null ? i.Creator.Name : "Unknown"
+                    })
+                    .ToListAsync();
+
+                var viewOnlyIds = _db.InventoryAccesses
+                    .AsNoTracking()
+                    .Where(a => a.UserId == userId.Value && !a.CanWrite)
+                    .Select(a => a.InventoryId);
+
+                var viewQuery = _db.Inventories
+                    .AsNoTracking()
+                    .Include(i => i.Category)
+                    .Include(i => i.Creator)
+                    .Where(i => viewOnlyIds.Contains(i.Id) && i.CreatorId != userId.Value);
+
+                if (!string.IsNullOrWhiteSpace(vm.ViewQuery))
+                {
+                    var s = vm.ViewQuery.Trim().ToLowerInvariant();
+                    viewQuery = viewQuery.Where(i =>
+                       i.Title.ToLower().Contains(s) || 
+                       (i.Description ?? "").ToLower().Contains(s) ||
+                       (i.Creator != null ? i.Creator.Name.ToLower().Contains(s) : false)
+                       );
+                }
+
+                viewQuery = ApplySort(viewQuery, vm.ViewSort, vm.ViewDir);
+
+                vm.ViewOnly = await viewQuery
+                    .Take(200)
+                    .Select(i => new ViewInventoryRowVm
                     {
                         Id = i.Id,
                         Title = i.Title,

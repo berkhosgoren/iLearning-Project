@@ -134,9 +134,9 @@
     <!--Write Access-->
     @if (!Model.IsAdmin)
     {
-        <div class="card">
+        <div class="card mb-4">
             <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
-                <div class="fw-semibold">Inventories I can Edit</div>
+                <div class="fw-semibold">Inventories I Can Edit</div>
 
                 <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
                     <input class="form-control form-control-sm" style="width: 260px"
@@ -215,6 +215,96 @@
                     This list shows inventories where you were granted explicit write access.
                 </div>
             </div>
+        </div>
+
+        <!--Read Only Access-->
+
+        <div class="card">
+            <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+                <div class="fw-semibold">Inventories I can View</div>
+
+                <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
+                    <input class="form-control form-control-sm" style="width: 260px"
+                           name="Vq" value="@Model.ViewQuery" placeholder="Filter" />
+
+                           <select class="form-select form-select-sm" name="vs" style="width: 160px">
+                               <option value="created" selected="@(Model.ViewSort == "created")">Sort: Created</option>
+                               <option value="title" selected="@(Model.ViewSort == "title")">Sort: Title</option>
+                               <option value="category" selected="@(Model.ViewSort == "category")">Sort: Category</option>
+                               <option value="public" selected="@(Model.ViewSort == "public")">Sort: Public</option>
+                           </select>
+
+                           <select class="form-select form-select-sm" name="vd" style="width: 120px">
+                               <option value="desc" selected="@(Model.ViewDir == "desc")">Desc</option>
+                               <option value="asc" selected="@(Model.ViewDir == "asc")">Asc</option>
+                           </select>
+
+                           <input type="hidden" name="oq" value="@Model.OwnedQuery" />
+                           <input type="hidden" name="os" value="@Model.OwnedSort" />
+                           <input type="hidden" name="od" value="@Model.OwnedDir" />
+
+                           <input type="hidden" name="aq" value="@Model.AccessQuery" />
+                           <input type="hidden" name="as" value="@Model.AccessSort" />
+                           <input type="hidden" name="ad" value="@Model.AccessDir" />
+
+                           <button class="btn btn-outline-secondary btn-sm" type="submit">Apply</button>
+                </form>
+            </div>
+            
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Title</th>
+                                <th style="width:220px;">Owner</th>
+                                <th style="width:180px;">Category</th>
+                                <th style="width:120px;">Visibility</th>
+                                <th style="width:170px;">Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Access.Count == 0)
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-muted text-center py-4">No inventories found.</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @foreach (var inv in Model.Access)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-controller="Inventories" asp-action="Details" asp-route-id="@inv.Id" class="text-decoration-none">
+                                                @inv.Title
+                                            </a>
+                                        </td>
+                                        <td>@inv.OwnerName</td>
+                                        <td>@inv.CategoryName</td>
+                                        <td>
+                                            @if (inv.IsPublic)
+                                            {
+                                                <span class="badge text-bg-success">Public</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge text-bg-secondary">Private</span>
+                                            }
+                                        </td>
+                                        <td>@inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-muted small mt-2">
+                    This list shows inventories where you have view access but no write permission.
+                </div>
+            </div>
+
         </div>
     }
    
