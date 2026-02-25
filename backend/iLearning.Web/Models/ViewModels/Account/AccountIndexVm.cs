@@ -10,15 +10,15 @@
         public string AccessSort { get; set; } = "created";
         public string AccessDir { get; set; } = "desc";
 
-        public string? ViewQuery { get; set; }
-        public string ViewSort { get; set; } = "created";
-        public string ViewDir { get; set; } = "desc";
+        public string? ReadQuery { get; set; }
+        public string ReadSort { get; set; } = "created";
+        public string ReadDir { get; set; } = "desc";
 
         public bool IsAdmin { get; set; }
 
         public List<InventoryRowVm> Owned { get; set; } = new();
         public List<AccessInventoryRowVm> Access { get; set; } = new();
-        public List<ViewInventoryRowVm> ViewOnly { get; set; } = new();
+        public List<ReadOnlyInventoryRowVm> ReadOnly { get; set; } = new();
     }
 
     public class InventoryRowVm
@@ -33,5 +33,5 @@
 
     public class AccessInventoryRowVm : InventoryRowVm { }
 
-    public class ViewInventoryRowVm : InventoryRowVm { }
+    public class ReadOnlyInventoryRowVm : InventoryRowVm { }
 }

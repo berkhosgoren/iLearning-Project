@@ -221,22 +221,21 @@
 
         <div class="card">
             <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
-                <div class="fw-semibold">Inventories I can View</div>
+                <div class="fw-semibold">Read-Only Inventories</div>
 
                 <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
                     <input class="form-control form-control-sm" style="width: 260px"
-                           name="Vq" value="@Model.ViewQuery" placeholder="Filter" />
+                           name="rq" value="@Model.ReadQuery" placeholder="Filter" />
 
-                           <select class="form-select form-select-sm" name="vs" style="width: 160px">
-                               <option value="created" selected="@(Model.ViewSort == "created")">Sort: Created</option>
-                               <option value="title" selected="@(Model.ViewSort == "title")">Sort: Title</option>
-                               <option value="category" selected="@(Model.ViewSort == "category")">Sort: Category</option>
-                               <option value="public" selected="@(Model.ViewSort == "public")">Sort: Public</option>
+                           <select class="form-select form-select-sm" name="rs" style="width: 160px">
+                               <option value="created" selected="@(Model.ReadSort == "created")">Sort: Created</option>
+                               <option value="title" selected="@(Model.ReadSort == "title")">Sort: Title</option>
+                               <option value="category" selected="@(Model.ReadSort == "category")">Sort: Category</option>
                            </select>
 
-                           <select class="form-select form-select-sm" name="vd" style="width: 120px">
-                               <option value="desc" selected="@(Model.ViewDir == "desc")">Desc</option>
-                               <option value="asc" selected="@(Model.ViewDir == "asc")">Asc</option>
+                           <select class="form-select form-select-sm" name="rd" style="width: 120px">
+                               <option value="desc" selected="@(Model.ReadDir == "desc")">Desc</option>
+                               <option value="asc" selected="@(Model.ReadDir == "asc")">Asc</option>
                            </select>
 
                            <input type="hidden" name="oq" value="@Model.OwnedQuery" />
@@ -264,7 +263,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.Access.Count == 0)
+                            @if (Model.ReadOnly.Count == 0)
                             {
                                 <tr>
                                     <td colspan="5" class="text-muted text-center py-4">No inventories found.</td>
@@ -272,7 +271,7 @@
                             }
                             else
                             {
-                                @foreach (var inv in Model.Access)
+                                @foreach (var inv in Model.ReadOnly)
                                 {
                                     <tr>
                                         <td>
@@ -301,7 +300,7 @@
                 </div>
 
                 <div class="text-muted small mt-2">
-                    This list shows inventories where you have view access but no write permission.
+                    This list shows private inventories where you have view access but no write permission.
                 </div>
             </div>
 

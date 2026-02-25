@@ -31,9 +31,9 @@ namespace iLearning.Web.Controllers
             [FromQuery] string? @as,
             [FromQuery] string? ad,
             
-            [FromQuery] string? vq,
-            [FromQuery] string? vs,
-            [FromQuery] string? vd)
+            [FromQuery] string? rq,
+            [FromQuery] string? rs,
+            [FromQuery] string? rd)
 
 
         {
@@ -54,9 +54,9 @@ namespace iLearning.Web.Controllers
                 AccessSort = NormalizeSort(@as),
                 AccessDir = NormalizeDir(ad),
 
-                ViewQuery = vq,
-                ViewSort = NormalizeSort(vs),
-                ViewDir = NormalizeDir(vd),
+                ReadQuery = rq,
+                ReadSort = NormalizeSort(rs),
+                ReadDir = NormalizeDir(rd),
             };
 
             IQueryable<Models.Domain.Inventory> ownedQuery = _db.Inventories
@@ -136,32 +136,32 @@ namespace iLearning.Web.Controllers
                     })
                     .ToListAsync();
 
-                var viewOnlyIds = _db.InventoryAccesses
+                var readOnlyIds = _db.InventoryAccesses
                     .AsNoTracking()
                     .Where(a => a.UserId == userId.Value && !a.CanWrite)
                     .Select(a => a.InventoryId);
 
-                var viewQuery = _db.Inventories
+                var readQuery = _db.Inventories
                     .AsNoTracking()
                     .Include(i => i.Category)
                     .Include(i => i.Creator)
-                    .Where(i => viewOnlyIds.Contains(i.Id) && i.CreatorId != userId.Value);
+                    .Where(i => readOnlyIds.Contains(i.Id) && i.CreatorId != userId.Value);
 
-                if (!string.IsNullOrWhiteSpace(vm.ViewQuery))
+                if (!string.IsNullOrWhiteSpace(vm.ReadQuery))
                 {
-                    var s = vm.ViewQuery.Trim().ToLowerInvariant();
-                    viewQuery = viewQuery.Where(i =>
+                    var s = vm.ReadQuery.Trim().ToLowerInvariant();
+                    readQuery = readQuery.Where(i =>
                        i.Title.ToLower().Contains(s) || 
                        (i.Description ?? "").ToLower().Contains(s) ||
                        (i.Creator != null ? i.Creator.Name.ToLower().Contains(s) : false)
                        );
                 }
 
-                viewQuery = ApplySort(viewQuery, vm.ViewSort, vm.ViewDir);
+                readQuery = ApplySort(readQuery, vm.ReadSort, vm.ReadDir);
 
-                vm.ViewOnly = await viewQuery
+                vm.ReadOnly = await readQuery
                     .Take(200)
-                    .Select(i => new ViewInventoryRowVm
+                    .Select(i => new ReadOnlyInventoryRowVm
                     {
                         Id = i.Id,
                         Title = i.Title,
