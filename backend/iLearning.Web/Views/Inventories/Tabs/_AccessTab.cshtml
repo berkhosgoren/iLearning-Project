@@ -1,3 +1,210 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryDetailsVm
 
-<div class="text-muted">Access management will be implemented. </div>
+@{
+    var msg = TempData["InventoryMessage"] as string;
+}
+
+@if (!string.IsNullOrWhiteSpace(msg))
+{
+    <div class="alert alert-success mb-3">@msg</div>
+}
+
+@if (!Model.CanEdit)
+{
+    <div class="text-muted">You do not have permission to manage access.</div>
+    return;
+}
+
+<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+    <div class="text-muted small">
+        Access Rows: @Model.AccessUsers.Count
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="post" asp-controller="Inventories" asp-action="AccessAdd" asp-route-id="@Model.Id" class="row g-2 align-items-end">
+            @Html.AntiForgeryToken()
+
+            <div class="col-md-6">
+                <label class="form-label">Add user by email</label>
+                <input class="form-control" name="email" placeholder="user@example.com" />
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">Permission</label>
+                <select class="form-select" name="canWrite">
+                    <option value="true" selected>Can Write</option>
+                    <option value="false">Read Only</option>
+                </select>
+            </div>
+
+            <div class="col-md-3 d-flex gap-2">
+                <button class="btn btn-primary w-100" type="submit">Add / Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+    <div class="text-muted small" id="accessSelectedLabel">Selected: 0</div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <form method="post" asp-controller="Inventories" asp-action="AccessSetWrite" asp-route-id="@Model.Id" id="accessWriteForm">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="canWrite" value="true" />
+            <button class="btn btn-outline-primary btn-sm" type="submit" id="accessWriteBtn" disabled>
+                Grant Write
+            </button>
+        </form>
+
+        <form method="post" asp-controller="Inventories" asp-action="AccessSetWrite" asp-route-id="@Model.Id" id="accessReadForm">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="canWrite" value="false" />
+            <button class="btn btn-outline-secondary btn-sm" type="submit" id="accessReadBtn" disabled>
+                Set Read-Only
+            </button>
+        </form>
+
+        <form method="post" asp-controller="Inventories" asp-action="AccessRemove" asp-route-id="@Model.Id" id="accessRemoveForm">
+            @Html.AntiForgeryToken()
+            <button class="btn btn-danger btn-sm" type="submit" id="accessRemoveBtn" disabled>
+                Remove Selected
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm align-middle mb-0">
+        <thead class="table-light">
+            <tr>
+                <th style="width:44px;" class="text-cented align-middle p-0">
+                    <input type="checkbox" id="accessAll" class="form-check-input d-block mx-auto my-2" aria-label="Select all" />
+                </th>
+                <th>Name</th>
+                <th style="width:280px;">Email</th>
+                <th style="width:140px;">Write</th>
+                <th style="width:180px;">Granted</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.AccessUsers.Count == 0)
+            {
+                <tr>
+                    <td colspan="5" class="text-muted text-center py-4">No access entries yet.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var a in Model.AccessUsers)
+                {
+                    <tr>
+                        <td class="text-center align-middle p-0">
+                            <input type="checkbox" class="form-check-input d-block mx-auto my-2 accessRow" value="@a.UserId" />
+                        </td>
+                        <td>@a.Name</td>
+                        <td>@a.Email</td>
+                        <td>
+                            @if (a.CanWrite)
+                            {
+                                <span class="badge text-bg-primary">Yes</span>
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-secondary">No</span>
+                            }
+                        </td>
+                        <td>@a.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="text-muted small mt-2">
+    Access rows are for non-owners. Owner and admins can always edit.
+</div>
+
+<script>
+    (function () {
+        const all = document.getElementById('accessAll');
+        const label = document.getElementById('accessSelectedLabel');
+
+        const writeBtn = document.getElementById('accessWriteBtn');
+        const readBtn = document.getElementById('accessReadBtn');
+        const removeBtn = document.getElementById('accessRemoveBtn');
+
+        const writeForm = document.getElementById('accessWriteForm');
+        const readForm = document.getElementById('accessReadForm');
+        const removeForm = document.getElementById('accessRemoveForm');
+
+        const rows = () => Array.from(document.querySelectorAll('input.accessRow'));
+
+        function clearHidden(form) {
+            Array.from(form.querySelectorAll('input[type="hidden"][name="ids"]')).forEach(x => x.remove());
+        }
+        
+        function setHidden(form, ids) {
+            clearHidden(form);
+            ids.forEach(id => {
+                const inp = document.createElement('input');
+                inp.type = 'hidden';
+                inp.name = 'ids';
+                inp.value = id;
+                form.appendChild(inp);
+            });
+        }
+        function update() {
+            const rowCbs = rows();
+            const checkedIds = rowCbs.filter(x => x.checked).map(x => x.value);
+            const checkedCount = checkedIds.length;
+
+            if (label) label.textContent = 'Selected: ' + checkedCount;
+
+            const enable = checkedCount > 0;
+            if (writeBtn) writeBtn.disabled = !enable;
+            if (readBtn) readBtn.disabled = !enable;
+            if (removeBtn) removeBtn.disabled = !enable;
+
+            if (writeForm) setHidden(writeForm, checkedIds);
+            if (readForm) setHidden(readForm, checkedIds);
+            if (removeForm) setHidden(removeForm, checkedIds);
+
+            if (!all) return;
+            
+            const totalCount = rowCbs.length;
+            if (totalCount === 0) {
+                all.checked = false;
+                all.indeterminate = false;
+                return;
+            }
+
+            if (checkedCount === 0) {
+                all.checked = false;
+                all.indeterminate = false;
+            } else if (checkedCount === totalCount) {
+                all.checked = true;
+                all.indeterminate = false;
+            } else {
+                all.checked = false;
+                all.indeterminate = true;
+            }
+        }
+        
+        if (all) {
+            all.addEventListener('change', function () {
+            rows().forEach(x => x.checked = all.checked);
+            update();
+            });
+        }
+        
+        document.addEventListener('change', function(e) {
+            if (e.target && e.target.matches('input.accessRow')) {
+                update();
+            }
+        });
+        update();
+   })();
+</script>

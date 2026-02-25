@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using iLearning.Web.Services;
 using iLearning.Web.Models.Domain;
 using iLearning.Web.Models.ViewModels.Items;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace iLearning.Web.Controllers
 {
@@ -273,71 +274,118 @@ namespace iLearning.Web.Controllers
             return RedirectToAction(nameof(Details), new { id = inv.Id });
         }
 
-
-        private static string? NormalizeFieldName(bool enabled, string? name)
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpPost("{id:guid}/access/add")]
+        public async Task<IActionResult> AccessAdd(Guid id, [FromForm] string? email, [FromForm] bool canWrite)
         {
-            if (!enabled) return null;
-            var trimmed = (name ?? "").Trim();
-            return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
-        }
+            var inv = await _db.Inventories.FirstOrDefaultAsync(i => i.Id == id);
+            if (inv == null) return NotFound();
+            if (!await CanEditInventoryAsync(inv)) return Forbid();
 
-        private async Task<bool> CanEditInventoryAsync(Inventory inv)
-        {
-            var userId = _currentUser.GetUserId(User);
-            if (!userId.HasValue) return false;
-
-            if (_currentUser.IsAdmin(User)) return true;
-            return inv.CreatorId == userId.Value;
-        }
-
-        private async Task LoadCategoriesAsync()
-        {
-            var cats = await _db.Categories
-                .AsNoTracking()
-                .OrderBy(c => c.Name)
-                .ToListAsync();
-
-            ViewBag.Categories = cats;
-        }
-
-        private async Task UpsertInventoryTagsAsync(Inventory inv, string? tagsCsv)
-        {
-            //simple vers with parse, normalize, ensure tag exist etc
-            var tags = (tagsCsv ?? "")
-                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                .Select(t => t.Trim())
-                .Where(t => !string.IsNullOrWhiteSpace(t))
-                .Select(t => t.Length > 60 ? t[..60] : t)
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
-
-            inv.InventoryTags.Clear();
-
-            if (tags.Count == 0)
-                return;
-
-
-            var existing = await _db.Tags
-                .Where(t => tags.Contains(t.Name))
-                .ToListAsync();
-
-            foreach (var name in tags)
+            email = (email ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(email))
             {
-                var tag = existing.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                if (tag is null)
-                {
-                    tag = new Tag { Name = name };
-                    _db.Tags.Add(tag);
-                    existing.Add(tag);
-                }
-
-                inv.InventoryTags.Add(new InventoryTag
-                {
-                    InventoryId = inv.Id,
-                    TagId = tag.Id,
-                    Tag = tag
-                });
+                TempData["InventoryMessage"] = "Email is required.";
+                return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
+
+            var user = await _db.Users
+                .AsNoTracking()
+                .Where(u => u.Email.ToLower() == email.ToLower())
+                .Select(u => new { u.Id, u.Email })
+                .FirstOrDefaultAsync();
+            
+            if (user is null)
+            {
+                TempData["InventoryMessage"] = "User not found by that email.";
+                return RedirectToAction(nameof(Details), new { id, tab = "access" });
+            }
+
+            if (user.Id == inv.CreatorId)
+            {
+                TempData["InventoryMessage"] = "Owner already has access.";
+                return RedirectToAction(nameof(Details), new { id, tab = "access" });
+            }
+
+            var existing = await _db.InventoryAccesses
+                .FirstOrDefaultAsync(a => a.InventoryId == id && a.UserId == user.Id);
+
+            if (existing is null)
+            {
+                _db.InventoryAccesses.Add(new InventoryAccess
+                {
+                    InventoryId = id,
+                    UserId = user.Id,
+                    CanWrite = canWrite,
+                    CreatedAtUtc = DateTime.UtcNow
+                });
+
+                await _db.SaveChangesAsync();
+                TempData["InventoryMessage"] = "Access granted.";
+                return RedirectToAction(nameof(Details), new { id, tab = "access" });
+            }
+
+            existing.CanWrite = canWrite;
+            await _db.SaveChangesAsync();
+
+            TempData["InventoryMessage"] = "Access updated.";
+            return RedirectToAction(nameof(Details), new { id, tab = "access" });
+        }
+
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpPost("{id:guid}/access/remove")]
+        public async Task<IActionResult> AccessRemove(Guid id, [FromForm] Guid[] ids)
+        {
+            var inv = await _db.Inventories.FirstOrDefaultAsync(i => i.Id == id);
+            if (inv is null) return NotFound();
+            if (!await CanEditInventoryAsync(inv)) return Forbid();
+
+            if (ids == null || ids.Length == 0)
+                return RedirectToAction(nameof(Details), new { id, tab = "access" });
+
+            var rows = await _db.InventoryAccesses
+                .Where(a => a.InventoryId == id && ids.Contains(a.UserId))
+                .ToListAsync();
+
+            if (rows.Count == 0)
+                return RedirectToAction(nameof(Details), new { id, tab = "access" });
+
+            _db.InventoryAccesses.RemoveRange(rows);
+            await _db.SaveChangesAsync();
+
+            TempData["InventoryMessage"] = "Removed acces for {rows.Count} user(s).";
+            return RedirectToAction(nameof(Details), new { id, tab = "access" });
+        }
+
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpPost("{id:guid}/access/set-write")]
+        public async Task<IActionResult> AccessSetWrite(Guid id, [FromForm] Guid[] ids, [FromForm] bool canWrite)
+        {
+            var inv = await _db.Inventories.FirstOrDefaultAsync(i => i.Id == id);
+            if (inv is null) return NotFound();
+            if (!await CanEditInventoryAsync (inv)) return Forbid();
+
+            if (ids == null || ids.Length == 0)
+                return RedirectToAction(nameof(Details), new { id, tab = "access" });
+
+            var rows = await _db.InventoryAccesses
+                .Where(a => a.InventoryId == id && ids.Contains(a.UserId))
+                .ToListAsync();
+
+            if (rows.Count == 0)
+                return RedirectToAction(nameof(Details), new { id, tab = "access" });
+
+            foreach (var r in rows)
+                r.CanWrite = canWrite;
+
+            await _db.SaveChangesAsync();
+
+            TempData["InventoryMessage"] = canWrite ? $"Granted write access to {rows.Count} user(s)." : $"Set read-only access for {rows.Count} user(s)";
+
+            return RedirectToAction(nameof(Details), new { id, tab = "access" });
         }
 
         [AllowAnonymous]
@@ -416,8 +464,92 @@ namespace iLearning.Web.Controllers
                     .ToListAsync();
             }
 
+            if (activeTab == "access" && canEdit)
+            {
+                vm.AccessUsers = await _db.InventoryAccesses
+                    .AsNoTracking()
+                    .Include(a => a.User)
+                    .Where(a => a.InventoryId == inv.Id)
+                    .OrderBy(a => a.User.Name)
+                    .Take(500)
+                    .Select(a => new InventoryAccessRowVm
+                    {
+                        UserId = a.User.Id,
+                        Name = a.User != null ? a.User.Name : "Unknown",
+                        Email = a.User != null ? a.User.Email : "",
+                        CanWrite = a.CanWrite,
+                        CreatedAtUtc = a.CreatedAtUtc
+                    })
+                    .ToListAsync();
+            }
+
             return View(vm);
         }
-    
+
+        private static string? NormalizeFieldName(bool enabled, string? name)
+        {
+            if (!enabled) return null;
+            var trimmed = (name ?? "").Trim();
+            return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
+        }
+
+        private async Task<bool> CanEditInventoryAsync(Inventory inv)
+        {
+            var userId = _currentUser.GetUserId(User);
+            if (!userId.HasValue) return false;
+
+            if (_currentUser.IsAdmin(User)) return true;
+            return inv.CreatorId == userId.Value;
+        }
+
+        private async Task LoadCategoriesAsync()
+        {
+            var cats = await _db.Categories
+                .AsNoTracking()
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            ViewBag.Categories = cats;
+        }
+
+        private async Task UpsertInventoryTagsAsync(Inventory inv, string? tagsCsv)
+        {
+            //simple vers with parse, normalize, ensure tag exist etc
+            var tags = (tagsCsv ?? "")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                .Select(t => t.Trim())
+                .Where(t => !string.IsNullOrWhiteSpace(t))
+                .Select(t => t.Length > 60 ? t[..60] : t)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            inv.InventoryTags.Clear();
+
+            if (tags.Count == 0)
+                return;
+
+
+            var existing = await _db.Tags
+                .Where(t => tags.Contains(t.Name))
+                .ToListAsync();
+
+            foreach (var name in tags)
+            {
+                var tag = existing.FirstOrDefault(t => t.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                if (tag is null)
+                {
+                    tag = new Tag { Name = name };
+                    _db.Tags.Add(tag);
+                    existing.Add(tag);
+                }
+
+                inv.InventoryTags.Add(new InventoryTag
+                {
+                    InventoryId = inv.Id,
+                    TagId = tag.Id,
+                    Tag = tag
+                });
+            }
+        }       
     }
 }

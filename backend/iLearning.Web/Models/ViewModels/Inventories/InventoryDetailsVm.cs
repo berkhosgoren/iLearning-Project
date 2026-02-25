@@ -31,5 +31,19 @@ namespace iLearning.Web.Models.ViewModels.Inventories
         public string ActiveTab { get; set; } = "items";
 
         public List<ItemRowVm> Items { get; set; } = new();
+
+        public List<InventoryAccessRowVm> AccessUsers { get; set; } = new();
+
+        public string? AccessAddEmail { get; set; }
+        public bool AccessAddCanWrite { get; set; } = true;
+    }
+
+    public class InventoryAccessRowVm
+    {
+        public Guid UserId { get; set; }
+        public string Name { get; set; } = "";
+        public string Email { get; set; } = "";
+        public bool CanWrite { get; set; }
+        public DateTime CreatedAtUtc { get; set; }
     }
 }
