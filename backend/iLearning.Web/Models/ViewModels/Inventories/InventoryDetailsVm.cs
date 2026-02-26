@@ -18,6 +18,13 @@ namespace iLearning.Web.Models.ViewModels.Inventories
         public string CategoryName { get; set; } = string.Empty;
 
         public bool IsPublic { get; set; }
+        
+        public bool IsAuthenticated { get; set; }
+
+        [MaxLength(1000)]
+        public string? DiscussionNewBody { get; set; }
+
+        public List<InventoryDiscussionCommentRowVm> DiscussionComments { get; set; } = new();
 
         public bool CanEdit { get; set; } = false;
         public bool CanWrite { get; set; } = false;

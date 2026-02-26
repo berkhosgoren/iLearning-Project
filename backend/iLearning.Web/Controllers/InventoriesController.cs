@@ -442,6 +442,7 @@ namespace iLearning.Web.Controllers
                 ActiveTab = activeTab,
                 CanEdit = canEdit,
                 CanWrite = canWrite,
+                IsAuthenticated = isAuthenticated,
             };
 
             if (activeTab == "items")
@@ -479,6 +480,25 @@ namespace iLearning.Web.Controllers
                         Email = a.User != null ? a.User.Email : "",
                         CanWrite = a.CanWrite,
                         CreatedAtUtc = a.CreatedAtUtc
+                    })
+                    .ToListAsync();
+            }
+
+            if (activeTab == "discussion")
+            {
+                vm.DiscussionComments = await _db.InventoryComments
+                    .AsNoTracking()
+                    .Where(c => c.InventoryId == inv.Id)
+                    .OrderByDescending(c => c.CreatedAtUtc)
+                    .Take(200)
+                    .Select(c => new InventoryDiscussionCommentRowVm
+                    {
+                        Id = c.Id,
+                        UserId = c.UserId,
+                        UserName = c.User != null ? c.User.Name : "Unknown",
+                        Body = c.Body,
+                        CreatedAtUtc = c.CreatedAtUtc,
+                        CanDelete = isAdmin || (isAuthenticated && userId.HasValue && (c.UserId == userId.Value || inv.CreatorId == userId.Value))
                     })
                     .ToListAsync();
             }

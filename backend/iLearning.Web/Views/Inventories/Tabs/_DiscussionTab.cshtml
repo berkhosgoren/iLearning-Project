@@ -1,3 +1,64 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryDetailsVm
 
-<div class="text-muted">Chat/discussion will be implemented.</div>
+@{
+    var msg = TempData["InventoryMessage"] as string;
+}
+
+@if (!string.IsNullOrWhiteSpace(msg))
+{
+    <div class="alert alert-success mb-3">@msg</div>
+}
+
+<div class="text-muted small mb-3">
+    Seperate from item comments, discussion is inventory-level
+</div>
+
+@if (Model.IsAuthenticated)
+{
+    <form method="post" asp-controller="InventoryDiscussion" asp-action="AddComment" asp-route-inventoryId="@Model.Id" class="mb-3">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-2">
+            <textarea name="body" class="form-control" rows="3" maxlength="1000" placeholder="Write a message..."></textarea>
+            <div class="form-text">Max 1000 Characters.</div>
+        </div>
+
+        <button class="btn btn-primary btn-sm" type="submit">Post</button>
+    </form>
+}
+else
+{
+    <div class="text-muted small mb-3">Login to Post Messages.</div>
+}
+
+@if (Model.DiscussionComments.Count == 0)
+{
+    <div class="text-muted">No Messages Yet.</div>
+}
+else
+{
+    <div class="d-flex flex-column gap-3">
+        @foreach (var c in Model.DiscussionComments)
+        {
+            <div class="border rounded p-3">
+                <div class="d-flex align-items-start justify-content-between gap-2">
+                    <div>
+                        <div class="fw-semibold">@c.UserName</div>
+                        <div class="text-muted small">@c.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
+                    </div>
+
+                    @if (c.CanDelete)
+                    {
+                        <form method="post" asp-controller="InventoryDiscussion" asp-action="DeleteComment" asp-route-inventoryId="@Model.Id"
+                              asp-route-commentId="@c.Id" class="m-0">
+                             @Html.AntiForgeryToken()
+                             <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                        </form>
+                    }
+                </div>
+
+                <div class="mt-2">@c.Body</div>
+            </div>
+        }
+    </div>
+}
