@@ -17,6 +17,7 @@ namespace iLearning.Web.Data
 
         public DbSet<Tag> Tags => Set<Tag>();
         public DbSet<InventoryTag> InventoryTags => Set<InventoryTag>();
+        public DbSet<InventoryComment> InventoryComments => Set<InventoryComment>();
 
         public DbSet<Item> Items => Set<Item>();
         public DbSet<ItemLike> ItemLikes => Set<ItemLike>();
@@ -75,9 +76,18 @@ namespace iLearning.Web.Data
             modelBuilder.Entity<ItemLike>()
                 .HasKey(x => new { x.ItemId, x.UserId });
 
+            modelBuilder.Entity<InventoryComment>()
+                .HasKey(x => x.Id);
+
             // Cascades avoiding loops letting DB handle integrity
             modelBuilder.Entity<Inventory>()
                 .HasMany(x => x.Items)
+                .WithOne(x => x.Inventory)
+                .HasForeignKey(x => x.InventoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Inventory>()
+                .HasMany(x => x.DiscussionComments)
                 .WithOne(x => x.Inventory)
                 .HasForeignKey(x => x.InventoryId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -94,6 +104,7 @@ namespace iLearning.Web.Data
                 .HasForeignKey(x => x.ItemId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+           
             //Seed categories
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Equipment" },

@@ -75,6 +75,7 @@ namespace iLearning.Web.Models.Domain
         public ICollection<Item> Items { get; set; } = new List<Item>();
         public ICollection<InventoryAccess> AccessList { get; set; } = new List<InventoryAccess>();
         public ICollection<InventoryTag> InventoryTags { get; set; } = new List<InventoryTag>();
+        public ICollection<InventoryComment> DiscussionComments { get; set; } = new List<InventoryComment>();
 
     }
 }
