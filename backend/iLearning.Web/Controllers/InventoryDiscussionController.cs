@@ -50,7 +50,7 @@ namespace iLearning.Web.Controllers
 
             await _db.SaveChangesAsync();
 
-            TempData["Inventory Message"] = "Comment added.";
+            TempData["InventoryMessage"] = "Comment added.";
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "discussion" });
         }
 
