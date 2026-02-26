@@ -1,0 +1,151 @@
+﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryStatsPageVm
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="text-muted small">Items</div>
+                <div class="fs-3 fw-semibold">@Model.Stats.ItemsTotal</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="text-muted small">Likes</div>
+                <div class="fs-3 fw-semibold">@Model.Stats.LikesTotal</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="text-muted small">Comments</div>
+                <div class="fs-3 fw-semibold">@Model.Stats.CommentsTotal</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header fw-semibold">Recent Activity</div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-3">Last Item Created</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.Stats.LastItemCreatedAtUtc.HasValue)
+                        {
+                            @Model.Stats.LastItemCreatedAtUtc.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </dd>
+
+                    <dt class="col-sm-3">Last Item Updated</dt>
+                    <dd class="col-sm-9">
+                        @if (Model.Stats.LastItemUpdatedAtUtc.HasValue)
+                        {
+                            @Model.Stats.LastItemUpdatedAtUtc.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header fw-semibold">Top Items by Likes</div>
+            <div class="card-body">
+                @if (Model.Stats.TopItemsByLikes.Count == 0)
+                {
+                    <div class="text-muted">No items yet.</div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:140px;">Custom ID</th>
+                                    <th>Title</th>
+                                    <th style="width:90px;">Likes</th>
+                                    <th style="width:110px;">Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var x in Model.Stats.TopItemsByLikes)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a class="text-decoration-none" asp-controller="Items"
+                                               asp-action="Details" asp-route-inventoryId="@Model.InventoryId"
+                                               asp-route-itemId="@x.ItemId">
+                                                @x.CustomId
+                                            </a>
+                                        </td>
+                                        <td>@x.Title</td>
+                                        <td>@x.LikesCount</td>
+                                        <td>@x.CommentsCount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="card h-100">
+            <div class="card-header fw-semibold">Top Items by Comments</div>
+            <div class="card-body">
+                @if (Model.Stats.TopItemsByComments.Count == 0)
+                {
+                    <div class="text-muted">No items yet.</div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width:140px;">Custom ID</th>
+                                    <th>Title</th>
+                                    <th style="width:90px;">Likes</th>
+                                    <th style="width:110px;">Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var x in Model.Stats.TopItemsByComments)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a class="text-decoration-none" asp-controller="Items"
+                                               asp-action="Details" asp-route-inventoryId="@Model.InventoryId"
+                                               asp-route-itemId="@x.ItemId">
+                                                @x.CustomId
+                                            </a>
+                                        </td>
+                                        <td>@x.Title</td>
+                                        <td>@x.LikesCount</td>
+                                        <td>@x.CommentsCount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

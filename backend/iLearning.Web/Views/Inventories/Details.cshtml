@@ -2,6 +2,9 @@
 @{
     ViewData["Title"] = Model.Title;
     var tab = (Model.ActiveTab ?? "items").ToLowerInvariant();
+
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var isStatsPage = string.Equals(controller, "InventoryStats", StringComparison.OrdinalIgnoreCase);
 }
 
 <div class="container py-4">
@@ -84,8 +87,8 @@
                    asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="access">Access</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link @(tab == "stats" ? "active" : "")"
-                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="stats">Stats</a>
+                <a class="nav-link @(isStatsPage ? "active" : "")"
+                   asp-controller="InventoryStats" asp-action="Index" asp-route-inventoryId="@Model.Id">Stats</a>
             </li>
         }
        
@@ -119,10 +122,6 @@
                 else if (tab == "access")
                 {
                     <partial name="Tabs/_AccessTab" model="Model" />
-                }
-                else if (tab == "stats")
-                {
-                    <partial name="Tabs/_StatsTab" model="Model" />
                 }
                 else
                 {
