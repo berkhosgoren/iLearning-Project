@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using iLearning.Web.Models.ViewModels.Shared;
 
 namespace iLearning.Web.Models.ViewModels.Items
 {
@@ -30,6 +31,8 @@ namespace iLearning.Web.Models.ViewModels.Items
         public string? NewCommentBody { get; set; }
 
         public List<ItemCommentRowVm> Comments { get; set; } = new();
+
+        public InventoryFieldConfigVm Fields { get; set; } = new();
 
         public string? String1 { get; set; }
         public string? String2 { get; set; }

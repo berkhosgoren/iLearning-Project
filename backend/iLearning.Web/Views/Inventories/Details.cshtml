@@ -5,6 +5,7 @@
 
     var controller = ViewContext.RouteData.Values["controller"]?.ToString();
     var isStatsPage = string.Equals(controller, "InventoryStats", StringComparison.OrdinalIgnoreCase);
+    var isFieldsPage = string.Equals(controller, "InventoryFields", StringComparison.OrdinalIgnoreCase);
 }
 
 <div class="container py-4">
@@ -79,8 +80,8 @@
                    asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="customid">Custom ID</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link @(tab == "fields" ? "active" : "")"
-                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="fields">Fields</a>
+                <a class="nav-link @(isFieldsPage ? "active" : "")"
+                   asp-controller="InventoryFields" asp-action="Index" asp-route-inventoryId="@Model.Id">Fields</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link @(tab == "access" ? "active" : "")"

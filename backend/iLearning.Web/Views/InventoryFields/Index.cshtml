@@ -1,0 +1,212 @@
+﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryFieldsPageVm
+
+@{
+    ViewData["Title"] = "Fields";
+    var msg = TempData["InventoryMessage"] as string;
+}
+
+<div class="container py-4" style="max-width: 1000px;">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <div>
+            <h2 class="mb-0">Fields</h2>
+            <div class="text-muted small">@Model.InventoryTitle</div>
+        </div>
+
+        <a class="btn btn-outline-secondary"
+           asp-controller="Inventories" asp-action="Details"
+           asp-route-id="@Model.InventoryId" asp-route-tab="items">
+            Back to Inventory
+        </a>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(msg))
+    {
+        <div class="alert alert-success mb-3">@msg</div>
+    }
+
+    <div class="card">
+        <div class="card-body">
+            <form method="post" asp-action="Save" asp-route-inventoryId="@Model.InventoryId">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <input type="hidden" asp-for="InventoryId" />
+                <input type="hidden" asp-for="Version" />
+
+                <div class="text-muted small mb-3">
+                    Enable the fields you want to use on items. Disabled fields are hidden on item create/edit and on item details.
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomString1Enabled" />
+                                <label class="form-check-label">String 1</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomString1Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <div class="form-text">If empty, default label will be used.</div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomString2Enabled" />
+                                <label class="form-check-label">String 2</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomString2Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomString3Enabled" />
+                                <label class="form-check-label">String 3</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomString3Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomText1Enabled" />
+                                <label class="form-check-label">Text 1</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomText1Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomText2Enabled" />
+                                <label class="form-check-label">Text 2</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomText2Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomText3Enabled" />
+                                <label class="form-check-label">Text 3</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomText3Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomNumber1Enabled" />
+                                <label class="form-check-label">Number 1</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomNumber1Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomNumber2Enabled" />
+                                <label class="form-check-label">Number 2</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomNumber2Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomNumber3Enabled" />
+                                <label class="form-check-label">Number 3</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomNumber3Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomBool1Enabled" />
+                                <label class="form-check-label">Bool 1</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomBool1Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomBool2Enabled" />
+                                <label class="form-check-label">Bool 2</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomBool2Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomBool3Enabled" />
+                                <label class="form-check-label">Bool 3</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomBool3Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomLink1Enabled" />
+                                <label class="form-check-label">Link 1</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomLink1Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomLink2Enabled" />
+                                <label class="form-check-label">Link 2</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomLink2Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="border rounded p-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="CustomLink3Enabled" />
+                                <label class="form-check-label">Link 3</label>
+                            </div>
+                            <input class="form-control" asp-for="CustomLink3Name" placeholder="Custom label (optional)" maxlength="100" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 mt-4">
+                    <button class="btn btn-primary" type="submit">Save Fields</button>
+                    <a class="btn btn-outline-secondary"
+                       asp-controller="Inventories" asp-action="Details"
+                       asp-route-id="@Model.InventoryId" asp-route-tab="items">
+                        Cancel
+                    </a>
+                </div>
+
+                <div class="form-text mt-3">
+                    Field changes apply immediately to item create/edit and item details.
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
