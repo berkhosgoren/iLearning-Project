@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = Model.CustomId;
     var msg = TempData["InventoryMessage"] as string;
+
+    string Label(string? custom, string fallback) => !string.IsNullOrWhiteSpace(custom) ? custom! : fallback;
 }
 
 <div class="container py-4">
@@ -100,85 +102,109 @@
         <div class="card-body">
             <dl class="row mb-0">
 
-                <dt class="col-sm-3">String1</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.String1) ? Model.String1 : "-")</dd>
-
-                <dt class="col-sm-3">String2</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.String2) ? Model.String2 : "-")</dd>
-
-                <dt class="col-sm-3">String3</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.String3) ? Model.String3 : "-")</dd>
-
-                <dt class="col-sm-3">Text1</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Text1) ? Model.Text1 : "-")</dd>
-
-                <dt class="col-sm-3">Text2</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Text2) ? Model.Text2 : "-")</dd>
-
-                <dt class="col-sm-3">Text3</dt>
-                <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Text3) ? Model.Text3 : "-")</dd>
-
-                <dt class="col-sm-3">Number1</dt>
-                <dd class="col-sm-9">@((Model.Number1.HasValue) ? Model.Number1.Value.ToString() : "-")</dd>
-
-                <dt class="col-sm-3">Number2</dt>
-                <dd class="col-sm-9">@((Model.Number2.HasValue) ? Model.Number2.Value.ToString() : "-")</dd>
-
-                <dt class="col-sm-3">Number3</dt>
-                <dd class="col-sm-9">@((Model.Number3.HasValue) ? Model.Number3.Value.ToString() : "-")</dd>
-
-                <dt class="col-sm-3">Bool1</dt>
-                <dd class="col-sm-9">@((Model.Bool1.HasValue) ? (Model.Bool1.Value ? "Yes" : "No") : "-")</dd>
-
-                <dt class="col-sm-3">Bool2</dt>
-                <dd class="col-sm-9">@((Model.Bool2.HasValue) ? (Model.Bool2.Value ? "Yes" : "No") : "-")</dd>
-
-                <dt class="col-sm-3">Bool3</dt>
-                <dd class="col-sm-9">@((Model.Bool3.HasValue) ? (Model.Bool3.Value ? "Yes" : "No") : "-")</dd>
-
-                <dt class="col-sm-3">Link1</dt>
-                <dd class="col-sm-9">
-                    @if (!string.IsNullOrWhiteSpace(Model.Link1))
-                    {
-                        <a href="@Model.Link1" target="_blank" rel="noopener noreferrer">@Model.Link1</a>
-                    }
-                    else
-                    {
-
-                        <span class="text-muted">-</span>
-                    }
-                </dd>
-
-                <dt class="col-sm-3">Link2</dt>
-                <dd class="col-sm-9">
-                    @if (!string.IsNullOrWhiteSpace(Model.Link2))
-                    {
-                        <a href="@Model.Link2" target="_blank" rel="noopener noreferrer">@Model.Link2</a>
-                    }
-                    else
-                    {
-
-                        <span class="text-muted">-</span>
-                    }
-                </dd>
-
-                <dt class="col-sm-3">Link3</dt>
-                <dd class="col-sm-9">
-                    @if (!string.IsNullOrWhiteSpace(Model.Link3))
-                    {
-                        <a href="@Model.Link3" target="_blank" rel="noopener noreferrer">@Model.Link3</a>
-                    }
-                    else
-                    {
-
-                        <span class="text-muted">-</span>
-                    }
-                </dd>
+                @if (Model.Fields.String1Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.String1Name, "String 1")</dt>
+                    <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.String1) ? Model.String1 : "-")</dd>
+                }
+                @if (Model.Fields.String2Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.String2Name, "String 2")</dt>
+                    <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.String2) ? Model.String2 : "-")</dd>
+                }
+                @if (Model.Fields.String3Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.String3Name, "String 3")</dt>
+                    <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.String3) ? Model.String3 : "-")</dd>
+                }
+                @if (Model.Fields.Text1Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Text1Name, "Text 1")</dt>
+                    <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Text1) ? Model.Text1 : "-")</dd>
+                }
+                @if (Model.Fields.Text2Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Text2Name, "Text 2")</dt>
+                    <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Text2) ? Model.Text2 : "-")</dd>
+                }
+                @if (Model.Fields.Text3Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Text3Name, "Text 3")</dt>
+                    <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Text3) ? Model.Text3 : "-")</dd>
+                }
+                @if (Model.Fields.Number1Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Number1Name, "Number 1")</dt>
+                    <dd class="col-sm-9">@((Model.Number1.HasValue) ? Model.Number1.Value.ToString() : "-")</dd>
+                }
+                @if (Model.Fields.Number2Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Number2Name, "Number 2")</dt>
+                    <dd class="col-sm-9">@((Model.Number2.HasValue) ? Model.Number2.Value.ToString() : "-")</dd>
+                }
+                @if (Model.Fields.Number3Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Number3Name, "Number 3")</dt>
+                    <dd class="col-sm-9">@((Model.Number3.HasValue) ? Model.Number3.Value.ToString() : "-")</dd>
+                }
+                @if (Model.Fields.Bool1Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Bool1Name, "Bool 1")</dt>
+                    <dd class="col-sm-9">@((Model.Bool1.HasValue) ? (Model.Bool1.Value ? "Yes" : "No") : "-")</dd>
+                }
+                @if (Model.Fields.Bool2Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Bool2Name, "Bool 2")</dt>
+                    <dd class="col-sm-9">@((Model.Bool2.HasValue) ? (Model.Bool2.Value ? "Yes" : "No") : "-")</dd>
+                }
+                @if (Model.Fields.Bool3Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Bool3Name, "Bool 3")</dt>
+                    <dd class="col-sm-9">@((Model.Bool3.HasValue) ? (Model.Bool3.Value ? "Yes" : "No") : "-")</dd>
+                }
+                @if (Model.Fields.Link1Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Link1Name, "Link 1")</dt>
+                    <dd class="col-sm-9">
+                        @if (!string.IsNullOrWhiteSpace(Model.Link1))
+                        {
+                            <a href="@Model.Link1" target="_blank" rel="noopener noreferrer">@Model.Link1</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </dd>
+                }
+                @if (Model.Fields.Link2Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Link2Name, "Link 2")</dt>
+                    <dd class="col-sm-9">
+                        @if (!string.IsNullOrWhiteSpace(Model.Link2))
+                        {
+                            <a href="@Model.Link2" target="_blank" rel="noopener noreferrer">@Model.Link2</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </dd>
+                }
+                @if (Model.Fields.Link3Enabled)
+                {
+                    <dt class="col-sm-3">@Label(Model.Fields.Link3Name, "Link 3")</dt>
+                    <dd class="col-sm-9">
+                        @if (!string.IsNullOrWhiteSpace(Model.Link3))
+                        {
+                            <a href="@Model.Link3" target="_blank" rel="noopener noreferrer">@Model.Link3</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </dd>
+                }
             </dl>
-
-            <div class="text-muted small mt-3">
-                Fields labels will be replaced by inventory fields later.
-            </div>
         </div>
     </div>
 

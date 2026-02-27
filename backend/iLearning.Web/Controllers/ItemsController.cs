@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using iLearning.Web.Models.ViewModels.Items;
 using iLearning.Web.Models.Domain;
+using iLearning.Web.Models.ViewModels.Shared;
 
 
 namespace iLearning.Web.Controllers
@@ -572,6 +573,70 @@ namespace iLearning.Web.Controllers
                 .AnyAsync(a => a.InventoryId == inventoryId && a.UserId == userId.Value);
 
             return hasAnyAccess;
+        }
+
+        private static InventoryFieldConfigVm MapFieldConfig(Inventory inv)
+        {
+            return new InventoryFieldConfigVm
+            {
+                String1Enabled = inv.CustomString1Enabled,
+                String1Name = inv.CustomString1Name,
+                String2Enabled = inv.CustomString2Enabled,
+                String2Name = inv.CustomString2Name,
+                String3Enabled = inv.CustomString3Enabled,
+                String3Name = inv.CustomString3Name,
+
+                Text1Enabled = inv.CustomText1Enabled,
+                Text1Name = inv.CustomText1Name,
+                Text2Enabled = inv.CustomText2Enabled,
+                Text2Name = inv.CustomText2Name,
+                Text3Enabled = inv.CustomText3Enabled,
+                Text3Name = inv.CustomText3Name,
+
+                Number1Enabled = inv.CustomNumber1Enabled,
+                Number1Name = inv.CustomNumber1Name,
+                Number2Enabled = inv.CustomNumber2Enabled,
+                Number2Name = inv.CustomNumber2Name,
+                Number3Enabled = inv.CustomNumber3Enabled,
+                Number3Name = inv.CustomNumber3Name,
+
+                Bool1Enabled = inv.CustomBool1Enabled,
+                Bool1Name = inv.CustomBool1Name,
+                Bool2Enabled = inv.CustomBool2Enabled,
+                Bool2Name = inv.CustomBool2Name,
+                Bool3Enabled = inv.CustomBool3Enabled,
+                Bool3Name = inv.CustomBool3Name,
+
+                Link1Enabled = inv.CustomLink1Enabled,
+                Link1Name = inv.CustomLink1Name,
+                Link2Enabled = inv.CustomLink2Enabled,
+                Link2Name = inv.CustomLink2Name,
+                Link3Enabled = inv.CustomLink3Enabled,
+                Link3Name = inv.CustomLink3Name
+            };
+        }
+
+        private static void ApplyFieldEnforcement(ItemUpsertVm vm, Inventory inv)
+        {
+            if (!inv.CustomString1Enabled) vm.String1 = null;
+            if (!inv.CustomString2Enabled) vm.String2 = null;
+            if (!inv.CustomString3Enabled) vm.String3 = null;
+
+            if (!inv.CustomText1Enabled) vm.Text1 = null;
+            if (!inv.CustomText2Enabled) vm.Text2 = null;
+            if (!inv.CustomText3Enabled) vm.Text3 = null;
+
+            if (!inv.CustomNumber1Enabled) vm.Number1 = null;
+            if (!inv.CustomNumber2Enabled) vm.Number2 = null;
+            if (!inv.CustomNumber3Enabled) vm.Number3 = null;
+
+            if (!inv.CustomBool1Enabled) vm.Bool1 = null;
+            if (!inv.CustomBool2Enabled) vm.Bool2 = null;
+            if (!inv.CustomBool3Enabled) vm.Bool3 = null;
+
+            if (!inv.CustomLink1Enabled) vm.Link1 = null;
+            if (!inv.CustomLink2Enabled) vm.Link2 = null;
+            if (!inv.CustomLink3Enabled) vm.Link3 = null;
         }
     }
 }

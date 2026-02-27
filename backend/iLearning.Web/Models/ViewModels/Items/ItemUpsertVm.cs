@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using iLearning.Web.Models.ViewModels.Shared;
 
 namespace iLearning.Web.Models.ViewModels.Items
 {
@@ -14,6 +15,8 @@ namespace iLearning.Web.Models.ViewModels.Items
 
         [Required, MaxLength(200)]
         public string Title {  get; set; } = string.Empty;
+
+        public InventoryFieldConfigVm Fields { get; set; } = new();
 
         [MaxLength(500)]
         public string? String1 { get; set; }
