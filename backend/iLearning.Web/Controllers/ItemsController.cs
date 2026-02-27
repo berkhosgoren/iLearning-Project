@@ -29,9 +29,16 @@ namespace iLearning.Web.Controllers
             var canWrite = await CanWriteInventoryAsync(inventoryId);
             if (!canWrite) return Forbid();
 
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == inventoryId);
+
+            if (inv == null) return NotFound();
+
             var vm = new ItemUpsertVm
             {
                 InventoryId = inventoryId,
+                Fields = MapFieldConfig(inv)
             };
 
             return View(vm);
@@ -47,14 +54,20 @@ namespace iLearning.Web.Controllers
             var canWrite = await CanWriteInventoryAsync(inventoryId);
             if (!canWrite) return Forbid();
 
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == inventoryId);
+
+            if (inv == null) return NotFound();
+
+            vm.Fields = MapFieldConfig(inv);
+
             vm.CustomId = (vm.CustomId ?? "").Trim();
             vm.Title = (vm.Title ?? "").Trim();
+            ApplyFieldEnforcement(vm, inv);
 
             if (!ModelState.IsValid)
                 return View(vm);
-
-            var invExists = await _db.Inventories.AsNoTracking().AnyAsync(i => i.Id == inventoryId);
-            if (!invExists) return NotFound();
 
             var customIdExists = await _db.Items
                 .AsNoTracking()
@@ -179,6 +192,8 @@ namespace iLearning.Web.Controllers
 
                     CanWrite = canWrite,
                     IsAuthenticated = isAuthenticated, 
+
+                    Fields = MapFieldConfig(inv),
 
                     String1 = x.String1,
                     String2 = x.String2,
@@ -356,6 +371,12 @@ namespace iLearning.Web.Controllers
             var canWrite = await CanWriteInventoryAsync(inventoryId);
             if (!canWrite) return Forbid();
 
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == inventoryId);
+
+            if (inv == null) return NotFound();
+
             var item = await _db.Items
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.InventoryId == inventoryId && x.Id == itemId);
@@ -392,6 +413,8 @@ namespace iLearning.Web.Controllers
                 Link3 = item.Link3,
             };
 
+            vm.Fields = MapFieldConfig(inv);
+
             return View(vm);
         }
 
@@ -404,6 +427,14 @@ namespace iLearning.Web.Controllers
 
             var canWrite = await CanWriteInventoryAsync(inventoryId);
             if (!canWrite) return Forbid();
+
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == inventoryId);
+
+            if (inv == null) return NotFound();
+
+            vm.Fields = MapFieldConfig(inv);
 
             vm.CustomId = (vm.CustomId ?? "").Trim();
             vm.Title = (vm.Title ?? "").Trim();
