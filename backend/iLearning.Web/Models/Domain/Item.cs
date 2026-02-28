@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using NpgsqlTypes;
 
 namespace iLearning.Web.Models.Domain
 {
@@ -45,6 +47,9 @@ namespace iLearning.Web.Models.Domain
         [MaxLength(1000)] public string? Link1 { get; set; }
         [MaxLength(1000)] public string? Link2 { get; set; }
         [MaxLength(1000)] public string? Link3 { get; set; }
+
+        [Column(TypeName = "tsvector")]
+        public NpgsqlTsVector SearchVector { get; set; } = default!;
 
         public ICollection<ItemLike> Likes { get; set; } = new List<ItemLike>();
         public ICollection<ItemComment> Comments { get; set; } = new List<ItemComment>();

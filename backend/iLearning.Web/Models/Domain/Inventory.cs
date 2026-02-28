@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using NpgsqlTypes;
 
 namespace iLearning.Web.Models.Domain
 {
@@ -71,6 +73,9 @@ namespace iLearning.Web.Models.Domain
 
         public bool CustomLink3Enabled { get; set; }
         [MaxLength(100)] public string? CustomLink3Name { get; set; }
+
+        [Column(TypeName = "tsvector")]
+        public NpgsqlTsVector SearchVector { get; set; } = default!;
 
         public ICollection<Item> Items { get; set; } = new List<Item>();
         public ICollection<InventoryAccess> AccessList { get; set; } = new List<InventoryAccess>();

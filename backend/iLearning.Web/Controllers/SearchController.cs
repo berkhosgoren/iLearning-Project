@@ -28,21 +28,18 @@ namespace iLearning.Web.Controllers
                 Q = (q ?? "").Trim()
             };
 
+            vm.IsAuthenticated = _current.IsAuthenticated(User);
+            vm.IsAdmin = _current.IsAdmin(User);
+
             if (string.IsNullOrWhiteSpace(vm.Q))
-            {
-                vm.IsAuthenticated = _current.IsAuthenticated(User);
-                vm.IsAdmin = _current.IsAdmin(User);
                 return View(vm);
-            }
 
-            var isAuthenticated = _current.IsAuthenticated(User);
-            var isAdmin = _current.IsAdmin(User);
+            if (vm.Q.Length > 200)
+                vm.Q = vm.Q[..200];
+
+            var isAuthenticated = vm.IsAuthenticated;
+            var isAdmin = vm.IsAdmin;
             var userId = _current.GetUserId(User);
-
-            vm.IsAuthenticated = isAuthenticated;
-            vm.IsAdmin = isAdmin;
-
-            var pattern = $"%{vm.Q}%";
 
             IQueryable<Guid> allowedInventoryIds;
 
@@ -71,15 +68,10 @@ namespace iLearning.Web.Controllers
 
             vm.Inventories = await _db.Inventories
                 .AsNoTracking()
-                .Include(i => i.Category)
-                .Include(i => i.Creator)
                 .Where(i => allowedInventoryIds.Contains(i.Id))
-                .Where(i => EF.Functions.ILike(i.Title, pattern) ||
-                    (i.Description != null && EF.Functions.ILike(i.Description, pattern)) ||
-                    (i.Category != null && EF.Functions.ILike(i.Category.Name, pattern)) ||
-                    (i.Creator != null && EF.Functions.ILike(i.Creator.Name, pattern))
-                )
-                .OrderByDescending(i => i.CreatedAtUtc)
+                .Where(i => i.SearchVector.Matches(EF.Functions.PlainToTsQuery("simple", vm.Q)))
+                .OrderByDescending(i => i.SearchVector.Rank(EF.Functions.PlainToTsQuery("simple", vm.Q)))
+                .ThenByDescending(i => i.CreatedAtUtc)
                 .Take(50)
                 .Select(i => new SearchInventoryRowVm
                 {
@@ -96,11 +88,9 @@ namespace iLearning.Web.Controllers
             vm.Items = await _db.Items
                 .AsNoTracking()
                 .Where(it => allowedInventoryIds.Contains(it.InventoryId))
-                .Include(it => it.Inventory)
-                .Where(it => EF.Functions.ILike(it.CustomId, pattern) || EF.Functions.ILike(it.Title, pattern)
-
-                )
-                .OrderByDescending(it => it.CreatedAtUtc)
+                .Where(i => i.SearchVector.Matches(EF.Functions.PlainToTsQuery("simple", vm.Q)))
+                .OrderByDescending(i => i.SearchVector.Rank(EF.Functions.PlainToTsQuery("simple", vm.Q)))
+                .ThenByDescending (it => it.CreatedAtUtc)
                 .Take(100)
                 .Select(it => new SearchItemRowVm
                 {

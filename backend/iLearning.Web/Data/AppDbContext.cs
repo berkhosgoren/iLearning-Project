@@ -104,7 +104,22 @@ namespace iLearning.Web.Data
                 .HasForeignKey(x => x.ItemId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-           
+            modelBuilder.Entity<Inventory>()
+                .HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "simple",
+                p => new { p.Title, p.Description })
+                .HasIndex(p => p.SearchVector)
+                .HasMethod("GIN");
+
+            modelBuilder.Entity<Item>()
+                .HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "simple",
+                p => new { p.CustomId, p.Title })
+                .HasIndex(p => p.SearchVector)
+                .HasMethod("GIN");
+
             //Seed categories
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Equipment" },
