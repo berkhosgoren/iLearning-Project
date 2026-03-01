@@ -23,13 +23,21 @@
 
 <div class="card mb-3">
     <div class="card-body">
-        <form method="post" asp-controller="Inventories" asp-action="AccessAdd" asp-route-id="@Model.Id" class="row g-2 align-items-end">
+        <form method="post" asp-controller="Inventories" asp-action="AccessAdd" asp-route-id="@Model.Id" class="row g-2 align-items-start">
             @Html.AntiForgeryToken()
 
-            <div class="col-md-6">
-                <label class="form-label">Add user by email</label>
-                <input class="form-control" name="email" placeholder="user@example.com" />
-            </div>
+            <div class="col-md-6 position-relative">
+                <label class="form-label">Add user (name or email)</label>
+
+                <input class="form-control" id="accessUserQuery" autocomplete="off" placeholder="Type name or email..." />
+
+                <input type="hidden" name="userId" id="accessUserId" />
+
+                <div class="list-group position-absolute w-100 shadow-sm" id="accessUserSuggest" style="z-index: 1000; display:none;
+                     max-height: 260px; overflow:auto;">
+                </div>
+                
+            </div> 
 
             <div class="col-md-3">
                 <label class="form-label">Permission</label>
@@ -39,8 +47,9 @@
                 </select>
             </div>
 
-            <div class="col-md-3 d-flex gap-2">
-                <button class="btn btn-primary w-100" type="submit">Add / Update</button>
+            <div class="col-md-3 d-flex flex-column">
+                <label class="form-label invisible">Action</label>
+                <button class="btn btn-primary w-100" type="submit" id="accessAddBtn" disabled>Add / Update</button>
             </div>
         </form>
     </div>
@@ -156,7 +165,7 @@
                 form.appendChild(inp);
             });
         }
-        function update() {
+        function updateBulk() {
             const rowCbs = rows();
             const checkedIds = rowCbs.filter(x => x.checked).map(x => x.value);
             const checkedCount = checkedIds.length;
@@ -192,19 +201,151 @@
                 all.indeterminate = true;
             }
         }
+
+        const invId = '@Model.Id';
+
+        const input = document.getElementById('accessUserQuery');
+        const hiddenId = document.getElementById('accessUserId');
+        const suggestBox = document.getElementById('accessUserSuggest');
+        const addBtn = document.getElementById('accessAddBtn');
+
+        let timer = null;
+        let lastQuery = '';
+
+        function escapeHtml(s) {
+            return (s ?? '').toString()
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll('"', '&#039;');
+            
+        }
+
+        function showSuggest() {
+            if (suggestBox) suggestBox.style.display = '';
+        }
+
+        function hideSuggest() {
+            if (!suggestBox) return;
+            suggestBox.style.display = 'none';
+            suggestBox.innerHTML = '';
+        }
+
+        function setPicked(user) {
+            if (!hiddenId || !input || !addBtn) return;
+
+            hiddenId.value = user.id;
+            input.value = user.name + ' (' + user.email + ') ';
+            addBtn.disabled = false;
+            hideSuggest();
+        }
+
+        function clearPicked() {
+            if (!hiddenId || !addBtn) return;
+
+            hiddenId.value = '';
+            addBtn.disabled = true;
+        }
+
+        async function fetchSuggest(q) {
+            const url = '/inventories/' + invId + '/access/suggest?q=' + encodeURIComponent(q);
+            const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+            if (!res.ok) return [];
+            return await res.json();
+        }
+
+        function renderSuggest(list) {
+            if (!suggestBox) return;
+
+            suggestBox.innerHTML = '';
+
+            if (!list || list.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'list-group-item text-muted';
+                empty.textContent = 'No Matches.';
+                suggestBox.appendChild(empty);
+                showSuggest();
+                return;
+            }
+
+            list.forEach(u => {
+                const a = document.createElement('button');
+                a.type= 'button';
+                a.className = 'list-group-item list-group-item-action';
+                a.innerHTML =
+                    '<div class="fw-semibold">' + escapeHtml(u.name) + '</div>' +
+                    '<div class="text-muted small">' + escapeHtml(u.email) + '</div>';
+                a.addEventListener('click', () => setPicked(u));
+                suggestBox.appendChild(a);
+            });
+
+            showSuggest();
+        }
+
+        function updateSuggestState() {
+            if (!addBtn || !hiddenId) return;
+            addBtn.disabled = !hiddenId.value;
+        }
         
         if (all) {
             all.addEventListener('change', function () {
             rows().forEach(x => x.checked = all.checked);
-            update();
+            updateBulk();
             });
         }
         
         document.addEventListener('change', function(e) {
             if (e.target && e.target.matches('input.accessRow')) {
-                update();
+                updateBulk();
             }
         });
-        update();
+
+        if (input && hiddenId && suggestBox && addBtn) {
+            input.addEventListener('input', function() {
+                const q = (input.value || '').trim();
+
+                clearPicked();
+                updateSuggestState();
+
+                if (q.length < 2) {
+                    hideSuggest();
+                    return;
+                }
+
+                if (timer) clearTimeout(timer);
+                timer = setTimeout(async () => {
+                    if (q === lastQuery) return;
+                    lastQuery = q;
+
+                    const list = await fetchSuggest(q);
+                    renderSuggest(list);
+                }, 200);
+            });
+
+            document.addEventListener('click', function(e) {
+                if (!suggestBox.contains(e.target) && e.target !== input) {
+                    hideSuggest();
+                }
+            });
+
+            input.addEventListener('focus', function () {
+                const q = (input.value || '').trim();
+                if (q.length >= 2 && suggestBox.innerHTML.trim() !== '') showSuggest();
+            });
+
+            const form = addBtn.closest('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    if (!hiddenId.value) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                });
+            }
+        }
+
+        updateBulk();
+        updateSuggestState();
    })();
 </script>

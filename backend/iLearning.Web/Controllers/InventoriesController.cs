@@ -277,34 +277,39 @@ namespace iLearning.Web.Controllers
         [Authorize]
         [ValidateAntiForgeryToken]
         [HttpPost("{id:guid}/access/add")]
-        public async Task<IActionResult> AccessAdd(Guid id, [FromForm] string? email, [FromForm] bool canWrite)
+        public async Task<IActionResult> AccessAdd(Guid id, [FromForm] Guid? userId, [FromForm] bool canWrite)
         {
             var inv = await _db.Inventories.FirstOrDefaultAsync(i => i.Id == id);
             if (inv == null) return NotFound();
             if (!await CanEditInventoryAsync(inv)) return Forbid();
 
-            email = (email ?? "").Trim();
-            if (string.IsNullOrWhiteSpace(email))
+            if (!userId.HasValue || userId.Value == Guid.Empty)
             {
-                TempData["InventoryMessage"] = "Email is required.";
+                TempData["InventoryMessage"] = "PLease select a user from the suggestions.";
+                return RedirectToAction(nameof(Details), new { id, tab = "access" });
+            }
+
+            if (userId.Value == inv.CreatorId)
+            {
+                TempData["InventoryMessage"] = "Owner already has access.";
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
             var user = await _db.Users
                 .AsNoTracking()
-                .Where(u => u.Email.ToLower() == email.ToLower())
-                .Select(u => new { u.Id, u.Email })
+                .Where(u => u.Id == userId.Value)
+                .Select(u => new { u.Id, u.IsBlocked })
                 .FirstOrDefaultAsync();
-            
-            if (user is null)
+
+            if (user == null)
             {
-                TempData["InventoryMessage"] = "User not found by that email.";
+                TempData["InventoryMessage"] = "User not found";
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
-            if (user.Id == inv.CreatorId)
+            if (user.IsBlocked)
             {
-                TempData["InventoryMessage"] = "Owner already has access.";
+                TempData["InventoryMessage"] = "That user is blocked.";
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
@@ -386,6 +391,53 @@ namespace iLearning.Web.Controllers
             TempData["InventoryMessage"] = canWrite ? $"Granted write access to {rows.Count} user(s)." : $"Set read-only access for {rows.Count} user(s)";
 
             return RedirectToAction(nameof(Details), new { id, tab = "access" });
+        }
+
+        [Authorize]
+        [HttpGet("{id:guid}/access/suggest")]
+        public async Task<IActionResult> AccessSuggest(Guid id, [FromQuery] string? q)
+        {
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .Select(i => new { i.Id, i.CreatorId })
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (inv == null) return NotFound();
+
+            var invEntity = new Inventory { Id = inv.Id, CreatorId = inv.CreatorId };
+            if (!await CanEditInventoryAsync(invEntity)) return Forbid();
+
+            var term = (q ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(term))
+                return Json(Array.Empty<object>());
+
+            if (term.Length > 80)
+                term = term[..80];
+
+            var pattern = $"%{term}%";
+
+            var existing = _db.InventoryAccesses
+                .AsNoTracking()
+                .Where(a => a.InventoryId == id)
+                .Select(a => a.UserId);
+
+            var results = await _db.Users
+                .AsNoTracking()
+                .Where(u => !u.IsBlocked)
+                .Where(u => u.Id != inv.CreatorId)
+                .Where(u => !existing.Contains(u.Id))
+                .Where(u => EF.Functions.ILike(u.Name, pattern) || EF.Functions.ILike(u.Email, pattern))
+                .OrderBy(u => u.Name)
+                .Take(10)
+                .Select(u => new
+                {
+                    id = u.Id,
+                    name = u.Name,
+                    email = u.Email
+                })
+                .ToListAsync();
+
+            return Json(results);
         }
 
         [AllowAnonymous]
