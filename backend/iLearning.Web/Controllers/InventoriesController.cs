@@ -15,11 +15,13 @@ namespace iLearning.Web.Controllers
     {
         private readonly AppDbContext _db;
         private readonly CurrentUserService _currentUser;
+        private readonly IMarkdownService _markdown;
 
-        public InventoriesController(AppDbContext db, CurrentUserService currentUser)
+        public InventoriesController(AppDbContext db, CurrentUserService currentUser, IMarkdownService markdown)
         {
             _db = db; 
             _currentUser = currentUser;
+            _markdown = markdown;
         }
 
 
@@ -485,6 +487,7 @@ namespace iLearning.Web.Controllers
                 Id = inv.Id,
                 Title = inv.Title,
                 Description = inv.Description,
+                DescriptionHtml = _markdown.ToSafeHtml(inv.Description),
                 ImageUrl = inv.ImageUrl,
                 CategoryName = inv.Category?.Name ?? "Other",
                 IsPublic = inv.IsPublic,

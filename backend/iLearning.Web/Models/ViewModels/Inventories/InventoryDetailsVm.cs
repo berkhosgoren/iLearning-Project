@@ -13,6 +13,8 @@ namespace iLearning.Web.Models.ViewModels.Inventories
         [Display(Name = "Description")]
         public string? Description { get; set; }
 
+        public string DescriptionHtml { get; set; } = "";
+
         public string? ImageUrl { get; set; }
 
         public string CategoryName { get; set; } = string.Empty;
