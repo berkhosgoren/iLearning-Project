@@ -48,12 +48,126 @@
 
 <hr class="my-4" />
 
-<div class="mb-3">
+<div class="mb-3 position-relative">
     <label asp-for="TagsCsv" class="form-label"></label>
-    <input asp-for="TagsCsv" class="form-control" />
-    <div class="form-text">Example: equipment, laptops, office</div>
+
+    <input asp-for="TagsCsv" class="form-control" autocomplete="off" id="tagsInput" />
+    <div class="form-text">Comma seperated. Start typing to see suggestions.</div>
     <span asp-validation-for="TagsCsv" class="text-danger"></span>
+
+    <div class="list-group position-absolute w-100 shadow-sm d-none" id="tagsSuggest" style="z-index: 1050; max-height: 240px; overflow:auto"></div>
 </div>
+
+<script>
+    (function () {
+        const input = document.getElementById('tagsInput');
+        const box = document.getElementById('tagsSuggest');
+        if (!input || !box) return;
+
+        let timer = null;
+        let lastQuery = '';
+
+        function normalize(s) { return (s || '').trim().toLowerCase(); }
+
+        function parseTags(csv) {
+            return (csv || '')
+            .split(',')
+            .map(x => x.trim())
+            .filter(x => x.length > 0);
+        }
+
+        function currentToken() {
+            const v = input.value || '';
+            const parts = v.split(',');
+            return (parts[parts.length - 1] || '').trim();
+        }
+
+        function hide() {
+            box.classList.add('d-none');
+            box.innerHTML = '';
+        }
+
+        function show(items) {
+            box.innerHTML = '';
+            items.forEach(it => {
+                const a = document.createElement('button');
+                a.type = 'button';
+                a.className = 'list-group-item list-group-item-action';
+                a.textContent = it.name;
+                a.addEventListener('click', () => insertTag(it.name));
+                box.appendChild(a);
+            });
+            if (items.length > 0) box.classList.remove('d-none');
+            else hide();
+        }
+
+        function insertTag(tagName) {
+            const existing = parseTags(input.value);
+            const exists = existing.some(t => normalize(t) === normalize(tagName));
+            if (exists) {
+                replaceLastToken(existing.join(', '));
+                hide();
+                return;
+            }
+
+            const updated = existing.slice();
+            if (updated.length === 0) updated.push(tagName);
+            else {
+                const token = currentToken();
+                if (token.length > 0) updated.pop();
+                updated.push(tagName);
+            }
+
+            replaceLastToken(updated.join(', ') + ', ');
+            hide();
+            input.focus();
+        }
+
+        function replaceLastToken(newValue) {
+            input.value = newValue;
+        }
+
+        async function fetchSuggest(q) {
+            const res = await fetch('/tags/suggest?q=' + encodeURIComponent(q), {
+                headers: { 'Accept': 'application/json' }
+            });
+            if (!res.ok) return[];
+            const data = await res.json();
+            return (data || []).map(x => ({ id: x.id, name: x.name }));
+        }
+
+        async function update() {
+            const token = currentToken();
+            if (token.length < 2) { hide(); return; }
+            if (token === lastQuery) return;
+            lastQuery = token;
+
+            const items = await fetchSuggest(token);
+
+            const selected = parseTags(input.value).map(normalize);
+            const filtered = items.filter(x => !selected.includes(normalize(x.name)));
+
+            show(filtered);
+        }
+
+        input.addEventListener('input', () => {
+            if (timer)clearTimeout(timer);
+            timer = setTimeout(update, 200);
+        });
+
+        input.addEventListener('blur', () => {
+            setTimeout(hide, 150);
+        });
+
+        input.addEventListener('focus', () => {
+            if (currentToken().trim().length >= 2) update();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') hide();
+        }); 
+    })();
+</script>
 
 <hr class="my-4" />
 
@@ -94,21 +208,21 @@
             <input asp-for="CustomText1Enabled" class="form-check-input" />
             <label asp-for="CustomText1Enabled" class="form-check-label">Text 1</label>
         </div>
-            <input asp-for="CustomText1Name" class="form-control mt-2" placeholder="Title (e.g, Notes" />
+            <input asp-for="CustomText1Name" class="form-control mt-2" placeholder="Title (e.g, Notes)" />
         </div>
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomText2Enabled" class="form-check-input" />
                 <label asp-for="CustomText2Enabled" class="form-check-label">Text 2</label>
             </div>
-            <input asp-for="CustomText2Name" class="form-control mt-2" placeholder="Title (e.g, Description" />
+            <input asp-for="CustomText2Name" class="form-control mt-2" placeholder="Title (e.g, Description)" />
         </div>
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomText3Enabled" class="form-check-input" />
                 <label asp-for="CustomText3Enabled" class="form-check-label">Text 3</label>
             </div>
-            <input asp-for="CustomText3Name" class="form-control mt-2" placeholder="Title (e.g, Warranty" />
+            <input asp-for="CustomText3Name" class="form-control mt-2" placeholder="Title (e.g, Warranty)" />
         </div>
     </div>
 
