@@ -1,4 +1,4 @@
-﻿@model List<iLearning.Web.Models.Domain.Inventory>
+﻿@model List<iLearning.Web.Models.ViewModels.Home.HomeInventoryCardVm>
 
 @{
     ViewData["Title"] = "Inventories";
@@ -34,18 +34,16 @@
                             </h5>
 
                             <p class="text-muted small mb-2">
-                                @inv.Category.Name • by @inv.Creator.Name
+                                @inv.CategoryName • by @inv.CreatorName
                             </p>
 
                             <p class="text-muted small mb-2">
                                 Created: @inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
                             </p>
 
-                            <p class="card-text">
-                                @(inv.Description?.Length > 120 
-                                    ? inv.Description.Substring(0,120) + "..."
-                                    : inv.Description)
-                            </p>
+                            <div class="markdown-preview text-muted small">
+                                @Html.Raw(inv.DescriptionHtml)
+                            </div>
 
                         </div>
 

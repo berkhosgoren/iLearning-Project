@@ -1,6 +1,8 @@
 using iLearning.Web.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using iLearning.Web.Services;
+using iLearning.Web.Models.ViewModels.Home;
 
 
 namespace iLearning.Web.Controllers
@@ -8,35 +10,49 @@ namespace iLearning.Web.Controllers
     public class HomeController : Controller
     {
         private readonly AppDbContext _db;
+        private readonly MarkdownService _markdown;
 
-        public HomeController(AppDbContext db)
+        public HomeController(AppDbContext db, MarkdownService markdown)
         {
             _db = db;
+            _markdown = markdown;
         }
 
-        public async Task<IActionResult> Index(string? q)
+        [HttpGet("")]
+        public async Task<IActionResult> Index()
         {
-            var query = _db.Inventories
-                .Include(i => i.Creator)
-                .Include(i => i.Category)
+            var rows = await _db.Inventories
+                .AsNoTracking()
                 .Where(i => i.IsPublic)
-                .AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(q))
-            {
-                var search = q.Trim().ToLower();
-                query = query.Where(i =>
-                    i.Title.ToLower().Contains(search) ||
-                    (i.Description ?? "").ToLower().Contains(search)
-                );
-            }
-
-            var inventories = await query
+                .Include(i => i.Category)
+                .Include(i => i.Creator)
                 .OrderByDescending(i => i.CreatedAtUtc)
-                .Take(50)
+                .Take(60)
+                .Select(i => new
+                {
+                    i.Id,
+                    i.Title,
+                    CategoryName = i.Category != null ? i.Category.Name : "Other",
+                    CreatorName = i.Creator != null ? i.Creator.Name : "Unknown",
+                    i.CreatedAtUtc,
+                    i.ImageUrl,
+                    i.Description
+                })
                 .ToListAsync();
 
-            return View(inventories);
+            var vm = rows.Select(i => new HomeInventoryCardVm
+            {
+                Id = i.Id,
+                Title = i.Title,
+                CategoryName = i.CategoryName,
+                CreatorName = i.CreatorName,
+                CreatedAtUtc = i.CreatedAtUtc,
+                ImageUrl = i.ImageUrl,
+                DescriptionHtml = _markdown.ToSafeHtml(i.Description)
+            })
+                .ToList();
+
+            return View(vm);
         }
     }
 }

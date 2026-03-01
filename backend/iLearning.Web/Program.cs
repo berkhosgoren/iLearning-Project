@@ -4,6 +4,7 @@ using iLearning.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
@@ -13,7 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<CurrentUserService>();
 builder.Services.AddScoped<DbSeeder>();
-builder.Services.AddSingleton<IMarkdownService, MarkdownService>();
+builder.Services.AddSingleton<MarkdownService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
