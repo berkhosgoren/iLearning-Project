@@ -42,22 +42,12 @@
                             <form method="post" action="/prefs/theme" class="m-0 d-flex gap-1">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                <input type="hidden" name="theme" value="@(theme == "dark" ? "light" : "dark")" />
 
-                            @if (theme == "dark")
-                                    {
-                                        <input type="hidden" name="theme" value="light" />
-                                        <button class="btn btn-outline-secondary" type="submit" title="Switch to Light">
-                                            Light
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <input type="hidden" name="theme" value="dark" />
-                                        <button class="btn btn-outline-secondary" type="submit" title="Switch to Dark">
-                                            Dark
-                                        </button>
-                                    }
-                                </form>
+                                <button class="btn btn-outline-secondary" type="submit" title="Toggle Theme">
+                                @(theme == "dark" ? "☀️ Light" : "🌙 Dark")
+                                </button>
+                             </form>
                         @if (User?.Identity?.IsAuthenticated == true)
                             {
                                 <a class="btn btn-success" asp-controller="Inventories" asp-action="Create">
