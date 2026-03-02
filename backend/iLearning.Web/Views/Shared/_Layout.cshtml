@@ -1,5 +1,11 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@{
+    var theme = (Context.Request.Cookies["ilearning_theme"] ?? "light").Trim().ToLowerInvariant();
+    if (theme != "dark" && theme != "light") { theme = "light"; }
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+}
+
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="@theme">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,8 +14,8 @@
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     </head>
     <body>
-        <header class="border-bottom bg-white">
-            <nav class="navbar navbar-expand-lg navbar-light">
+        <header class="border-bottom">
+            <nav class="navbar navbar-expand-lg">
                 <div class="container">
                     <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">iLearning</a>
 
@@ -32,6 +38,26 @@
                         </form>
 
                         <div class="d-flex align-items-center gap-2 ms-5">
+
+                            <form method="post" action="/prefs/theme" class="m-0 d-flex gap-1">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+                            @if (theme == "dark")
+                                    {
+                                        <input type="hidden" name="theme" value="light" />
+                                        <button class="btn btn-outline-secondary" type="submit" title="Switch to Light">
+                                            Light
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <input type="hidden" name="theme" value="dark" />
+                                        <button class="btn btn-outline-secondary" type="submit" title="Switch to Dark">
+                                            Dark
+                                        </button>
+                                    }
+                                </form>
                         @if (User?.Identity?.IsAuthenticated == true)
                             {
                                 <a class="btn btn-success" asp-controller="Inventories" asp-action="Create">
