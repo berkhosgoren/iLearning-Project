@@ -14,7 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<CurrentUserService>();
 builder.Services.AddScoped<DbSeeder>();
-builder.Services.AddSingleton<MarkdownService>();
+builder.Services.AddScoped<IMarkdownService, MarkdownService>();
+
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

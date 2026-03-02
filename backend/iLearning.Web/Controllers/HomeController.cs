@@ -10,9 +10,9 @@ namespace iLearning.Web.Controllers
     public class HomeController : Controller
     {
         private readonly AppDbContext _db;
-        private readonly MarkdownService _markdown;
+        private readonly IMarkdownService _markdown;
 
-        public HomeController(AppDbContext db, MarkdownService markdown)
+        public HomeController(AppDbContext db, IMarkdownService markdown)
         {
             _db = db;
             _markdown = markdown;
