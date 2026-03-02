@@ -38,40 +38,73 @@
                         </form>
 
                         <div class="d-flex align-items-center gap-2 ms-5">
-
-                            <form method="post" action="/prefs/theme" class="m-0 d-flex gap-1">
-                                @Html.AntiForgeryToken()
-                                <input type="hidden" name="returnUrl" value="@returnUrl" />
-                                <input type="hidden" name="theme" value="@(theme == "dark" ? "light" : "dark")" />
-
-                                <button class="btn btn-outline-secondary" type="submit" title="Toggle Theme">
-                                @(theme == "dark" ? "☀️ Light" : "🌙 Dark")
-                                </button>
-                             </form>
                         @if (User?.Identity?.IsAuthenticated == true)
                             {
                                 <a class="btn btn-success" asp-controller="Inventories" asp-action="Create">
                                     Create Inventory
                                 </a>
 
-                                <a class="btn btn-secondary" asp-controller="Account" asp-action="Index">
-                                    @User.Identity!.Name
-                                </a>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" 
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                            @User.Identity!.Name
+                                    </button>
 
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a class="btn btn-outline-secondary" href="/admin/users">Admin Panel</a>
-                                }
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Account" asp-action="Index">
+                                                Profile
+                                            </a>
+                                        </li>
 
-                                <form method="post" action="/auth/logout" class="m-0">
-                                     @Html.AntiForgeryToken()
-                                     <button class="btn btn-outline-secondary" type="submit">Logout</button>
-                                </form>
+                                        
+
+                                        <li>
+                                            <form method="post" action="/prefs/theme" class="m-0">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                                <input type="hidden" name="theme" value="@(theme == "dark" ? "light" : "dark")" />
+                                                <button class="dropdown-item" type="submit" title="Toggle Theme">
+                                                @(theme == "dark" ? "☀️ Switch to Light" : "🌙 Switch to Dark")
+                                                </button>
+                                            </form>
+                                        </li>
+
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li>
+                                                <a class="dropdown-item" href="/admin/users">
+                                                    Admin Panel
+                                                </a>
+                                            </li>
+                                        }
+
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form method="post" action="/auth/logout" class="m-0">
+                                                @Html.AntiForgeryToken()
+                                                <button class="dropdown-item text-danger" type="submit">
+                                                    Logout
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
                             }
                             else
                             {
+                                <form method="post" action="/prefs/theme" class="m-0">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                    <input type="hidden" name="theme" value="@(theme == "dark" ? "light" : "dark")" />
+                                    <button class="btn btn-outline-secondary px-2" type="submit" title="Toggle Theme">
+                                        @(theme == "dark" ? "☀️" : "🌙")
+                                    </button>
+                                </form>
+
                                 <a class="btn btn-outline-secondary" href="/auth/login">Login</a>
-                                <a class="btn btn-primary" href="/auth/register">Register</a>
+                            <a class="btn btn-primary" href="/auth/register">Register</a>
                             }
                         </div>
                     </div>
