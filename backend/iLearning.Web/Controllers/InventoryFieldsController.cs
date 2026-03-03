@@ -5,6 +5,7 @@ using iLearning.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
 
 namespace iLearning.Web.Controllers
 {
@@ -14,11 +15,13 @@ namespace iLearning.Web.Controllers
     {
         private readonly AppDbContext _db;
         private readonly CurrentUserService _current;
+        private readonly IStringLocalizer<SharedResource> T;
 
-        public InventoryFieldsController(AppDbContext db, CurrentUserService current)
+        public InventoryFieldsController(AppDbContext db, CurrentUserService current, IStringLocalizer<SharedResource> t)
         {
             _db = db;
             _current = current;
+            T = t;
         }
 
         [HttpGet("")]
@@ -90,7 +93,7 @@ namespace iLearning.Web.Controllers
 
             if (vm.Version != inv.Version)
             {
-                ModelState.AddModelError("", "This inventory was updated by someone else. Reload");
+                ModelState.AddModelError("", T["InventoryFields.Errors.ConcurrencyReload"]);
                 vm.InventoryTitle = inv.Title;
                 vm.IsPublic = inv.IsPublic;
                 return View("Index", vm);
@@ -149,13 +152,13 @@ namespace iLearning.Web.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                ModelState.AddModelError("", "This inventory was updated by someone else, reload.");
+                ModelState.AddModelError("", T["InventoryFields.Errors.ConcurrencyReload"]);
                 vm.InventoryTitle = inv.Title;
                 vm.IsPublic = inv.IsPublic;
                 return View("Index", vm);
             }
 
-            TempData["InventoryMessage"] = "Fields updated.";
+            TempData["InventoryMessage"] = T["InventoryFields.Messages.FieldsUpdated"];
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "items" });
         }
 

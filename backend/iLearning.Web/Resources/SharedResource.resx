@@ -279,17 +279,29 @@
   <data name="Common.Back" xml:space="preserve">
     <value>Back</value>
   </data>
+  <data name="Common.BackToInventory" xml:space="preserve">
+    <value>Back to Inventory</value>
+  </data>
   <data name="Common.Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
   <data name="Common.Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="Common.CustomLabelOptional" xml:space="preserve">
+    <value>Custom label (optional)</value>
+  </data>
   <data name="Common.Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
   <data name="Common.Email" xml:space="preserve">
     <value>Email</value>
+  </data>
+  <data name="Common.Fields" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="Common.IfEmptyDefaultLabelUsed" xml:space="preserve">
+    <value>If empty, default label will be used.</value>
   </data>
   <data name="Common.Name" xml:space="preserve">
     <value>Name</value>
@@ -620,6 +632,66 @@
   </data>
   <data name="InvDetails.Public" xml:space="preserve">
     <value>Public</value>
+  </data>
+  <data name="InventoryFields.Actions.SaveFields" xml:space="preserve">
+    <value>Save Fields</value>
+  </data>
+  <data name="InventoryFields.Errors.ConcurrencyReload" xml:space="preserve">
+    <value>This inventory was updated by someone else. Reload.</value>
+  </data>
+  <data name="InventoryFields.Help.AppliesImmediately" xml:space="preserve">
+    <value>Field changes apply immediately to item create/edit and item details.</value>
+  </data>
+  <data name="InventoryFields.Help.EnableFields" xml:space="preserve">
+    <value>Enable the fields you want to use on items. Disabled fields are hidden on item create/edit and on item details.</value>
+  </data>
+  <data name="InventoryFields.Label.Bool1" xml:space="preserve">
+    <value>Bool 1</value>
+  </data>
+  <data name="InventoryFields.Label.Bool2" xml:space="preserve">
+    <value>Bool 2</value>
+  </data>
+  <data name="InventoryFields.Label.Bool3" xml:space="preserve">
+    <value>Bool 3</value>
+  </data>
+  <data name="InventoryFields.Label.Link1" xml:space="preserve">
+    <value>Link 1</value>
+  </data>
+  <data name="InventoryFields.Label.Link2" xml:space="preserve">
+    <value>Link 2</value>
+  </data>
+  <data name="InventoryFields.Label.Link3" xml:space="preserve">
+    <value>Link 3</value>
+  </data>
+  <data name="InventoryFields.Label.Number1" xml:space="preserve">
+    <value>Number 1</value>
+  </data>
+  <data name="InventoryFields.Label.Number2" xml:space="preserve">
+    <value>Number 2</value>
+  </data>
+  <data name="InventoryFields.Label.Number3" xml:space="preserve">
+    <value>Number 3</value>
+  </data>
+  <data name="InventoryFields.Label.String1" xml:space="preserve">
+    <value>String 1</value>
+  </data>
+  <data name="InventoryFields.Label.String2" xml:space="preserve">
+    <value>String 2</value>
+  </data>
+  <data name="InventoryFields.Label.String3" xml:space="preserve">
+    <value>String 3</value>
+  </data>
+  <data name="InventoryFields.Label.Text1" xml:space="preserve">
+    <value>Text 1</value>
+  </data>
+  <data name="InventoryFields.Label.Text2" xml:space="preserve">
+    <value>Text 2</value>
+  </data>
+  <data name="InventoryFields.Label.Text3" xml:space="preserve">
+    <value>Text 3</value>
+  </data>
+  <data name="InventoryFields.Messages.FieldsUpdated" xml:space="preserve">
+    <value>Fields updated.</value>
   </data>
   <data name="InvTabs.Access" xml:space="preserve">
     <value>Access</value>

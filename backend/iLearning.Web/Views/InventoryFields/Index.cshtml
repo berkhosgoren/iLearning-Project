@@ -1,21 +1,22 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryFieldsPageVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
-    ViewData["Title"] = "Fields";
+    ViewData["Title"] = T["Common.Fields"];
     var msg = TempData["InventoryMessage"] as string;
 }
 
 <div class="container py-4" style="max-width: 1000px;">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
         <div>
-            <h2 class="mb-0">Fields</h2>
+            <h2 class="mb-0">@T["Common.Fields"]</h2>
             <div class="text-muted small">@Model.InventoryTitle</div>
         </div>
 
         <a class="btn btn-outline-secondary"
            asp-controller="Inventories" asp-action="Details"
            asp-route-id="@Model.InventoryId" asp-route-tab="items">
-            Back to Inventory
+            @T["Common.BackToInventory"]
         </a>
     </div>
 
@@ -34,7 +35,7 @@
                 <input type="hidden" asp-for="Version" />
 
                 <div class="text-muted small mb-3">
-                    Enable the fields you want to use on items. Disabled fields are hidden on item create/edit and on item details.
+                    @T["InventoryFields.Help.EnableFields"]
                 </div>
 
                 <div class="row g-3">
@@ -42,10 +43,10 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomString1Enabled" />
-                                <label class="form-check-label">String 1</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.String1"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomString1Name" placeholder="Custom label (optional)" maxlength="100" />
-                            <div class="form-text">If empty, default label will be used.</div>
+                            <input class="form-control" asp-for="CustomString1Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
+                            <div class="form-text">@T["Common.IfEmptyDefaultLabelUsed"]</div>
                         </div>
                     </div>
 
@@ -53,9 +54,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomString2Enabled" />
-                                <label class="form-check-label">String 2</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.String2"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomString2Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomString2Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -63,9 +64,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomString3Enabled" />
-                                <label class="form-check-label">String 3</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.String3"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomString3Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomString3Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -73,9 +74,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomText1Enabled" />
-                                <label class="form-check-label">Text 1</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Text1"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomText1Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomText1Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -83,9 +84,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomText2Enabled" />
-                                <label class="form-check-label">Text 2</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Text2"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomText2Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomText2Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -93,9 +94,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomText3Enabled" />
-                                <label class="form-check-label">Text 3</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Text3"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomText3Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomText3Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -103,9 +104,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomNumber1Enabled" />
-                                <label class="form-check-label">Number 1</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Number1"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomNumber1Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomNumber1Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -113,9 +114,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomNumber2Enabled" />
-                                <label class="form-check-label">Number 2</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Number2"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomNumber2Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomNumber2Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -123,9 +124,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomNumber3Enabled" />
-                                <label class="form-check-label">Number 3</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Number3"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomNumber3Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomNumber3Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -133,9 +134,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomBool1Enabled" />
-                                <label class="form-check-label">Bool 1</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Bool1"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomBool1Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomBool1Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -143,9 +144,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomBool2Enabled" />
-                                <label class="form-check-label">Bool 2</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Bool2"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomBool2Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomBool2Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -153,9 +154,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomBool3Enabled" />
-                                <label class="form-check-label">Bool 3</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Bool3"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomBool3Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomBool3Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -163,9 +164,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomLink1Enabled" />
-                                <label class="form-check-label">Link 1</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Link1"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomLink1Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomLink1Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -173,9 +174,9 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomLink2Enabled" />
-                                <label class="form-check-label">Link 2</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Link2"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomLink2Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomLink2Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
 
@@ -183,24 +184,24 @@
                         <div class="border rounded p-3">
                             <div class="form-check mb-2">
                                 <input class="form-check-input" asp-for="CustomLink3Enabled" />
-                                <label class="form-check-label">Link 3</label>
+                                <label class="form-check-label">@T["InventoryFields.Label.Link3"]</label>
                             </div>
-                            <input class="form-control" asp-for="CustomLink3Name" placeholder="Custom label (optional)" maxlength="100" />
+                            <input class="form-control" asp-for="CustomLink3Name" placeholder="@T["Common.CustomLabelOptional"]" maxlength="100" />
                         </div>
                     </div>
                 </div>
 
                 <div class="d-flex gap-2 mt-4">
-                    <button class="btn btn-primary" type="submit">Save Fields</button>
+                    <button class="btn btn-primary" type="submit">@T["InventoryFields.Actions.SaveFields"]</button>
                     <a class="btn btn-outline-secondary"
                        asp-controller="Inventories" asp-action="Details"
                        asp-route-id="@Model.InventoryId" asp-route-tab="items">
-                        Cancel
+                        @T["Common.Cancel"]
                     </a>
                 </div>
 
                 <div class="form-text mt-3">
-                    Field changes apply immediately to item create/edit and item details.
+                    @T["InventoryFields.Help.AppliesImmediately"]
                 </div>
             </form>
         </div>
