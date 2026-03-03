@@ -276,6 +276,378 @@
   <data name="Auth.Register.Title" xml:space="preserve">
     <value>Регистрация</value>
   </data>
+  <data name="Common.Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Common.Create" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="Common.Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Common.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Common.Name" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="Common.No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Common.NoMatches" xml:space="preserve">
+    <value>Совпадений нет.</value>
+  </data>
+  <data name="Common.SelectAll" xml:space="preserve">
+    <value>Выбрать все</value>
+  </data>
+  <data name="Common.SelectAllAria" xml:space="preserve">
+    <value>Выбрать все</value>
+  </data>
+  <data name="Common.SelectedCount" xml:space="preserve">
+    <value>Выбрано: {0}</value>
+  </data>
+  <data name="Common.SelectedPrefix" xml:space="preserve">
+    <value>Выбрано:</value>
+  </data>
+  <data name="Common.Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="Inv.Access.ActionLabel" xml:space="preserve">
+    <value>Действие</value>
+  </data>
+  <data name="Inv.Access.AddOrUpdate" xml:space="preserve">
+    <value>Добавить / Обновить</value>
+  </data>
+  <data name="Inv.Access.AddUserLabel" xml:space="preserve">
+    <value>Добавить пользователя (имя или email)</value>
+  </data>
+  <data name="Inv.Access.AddUserPlaceholder" xml:space="preserve">
+    <value>Введите имя или email...</value>
+  </data>
+  <data name="Inv.Access.Bulk.GrantWrite" xml:space="preserve">
+    <value>Дать запись</value>
+  </data>
+  <data name="Inv.Access.Bulk.RemoveSelected" xml:space="preserve">
+    <value>Удалить выбранных</value>
+  </data>
+  <data name="Inv.Access.Bulk.SetReadOnly" xml:space="preserve">
+    <value>Сделать только чтение</value>
+  </data>
+  <data name="Inv.Access.Empty" xml:space="preserve">
+    <value>Пока нет записей доступа.</value>
+  </data>
+  <data name="Inv.Access.Err.OwnerAlreadyHasAccess" xml:space="preserve">
+    <value>У владельца уже есть доступ.</value>
+  </data>
+  <data name="Inv.Access.Err.SelectUser" xml:space="preserve">
+    <value>Пожалуйста, выберите пользователя из подсказок.</value>
+  </data>
+  <data name="Inv.Access.Err.UserBlocked" xml:space="preserve">
+    <value>Этот пользователь заблокирован.</value>
+  </data>
+  <data name="Inv.Access.Err.UserNotFound" xml:space="preserve">
+    <value>Пользователь не найден.</value>
+  </data>
+  <data name="Inv.Access.HelpText" xml:space="preserve">
+    <value>Строки доступа предназначены для не владельцев. Владелец и админы всегда могут редактировать.</value>
+  </data>
+  <data name="Inv.Access.Msg.Granted" xml:space="preserve">
+    <value>Доступ предоставлен.</value>
+  </data>
+  <data name="Inv.Access.Msg.GrantedWriteCount" xml:space="preserve">
+    <value>Права на запись предоставлены для {0} пользовател(я/ей).</value>
+  </data>
+  <data name="Inv.Access.Msg.RemovedCount" xml:space="preserve">
+    <value>Доступ удалён для {0} пользовател(я/ей).</value>
+  </data>
+  <data name="Inv.Access.Msg.SetReadOnlyCount" xml:space="preserve">
+    <value>Права только на чтение установлены для {0} пользовател(я/ей).</value>
+  </data>
+  <data name="Inv.Access.Msg.Updated" xml:space="preserve">
+    <value>Доступ обновлён.</value>
+  </data>
+  <data name="Inv.Access.NoPermission" xml:space="preserve">
+    <value>У вас нет прав для управления доступом.</value>
+  </data>
+  <data name="Inv.Access.Permission.CanWrite" xml:space="preserve">
+    <value>Можно писать</value>
+  </data>
+  <data name="Inv.Access.Permission.ReadOnly" xml:space="preserve">
+    <value>Только чтение</value>
+  </data>
+  <data name="Inv.Access.PermissionLabel" xml:space="preserve">
+    <value>Права</value>
+  </data>
+  <data name="Inv.Access.RowsLabel" xml:space="preserve">
+    <value>Строки доступа</value>
+  </data>
+  <data name="Inv.Access.Table.Granted" xml:space="preserve">
+    <value>Выдано</value>
+  </data>
+  <data name="Inv.Access.Table.Write" xml:space="preserve">
+    <value>Запись</value>
+  </data>
+  <data name="Inv.Category" xml:space="preserve">
+    <value>Категория</value>
+  </data>
+  <data name="Inv.Create.Heading" xml:space="preserve">
+    <value>Создать инвентарь</value>
+  </data>
+  <data name="Inv.Create.Title" xml:space="preserve">
+    <value>Создать инвентарь</value>
+  </data>
+  <data name="Inv.Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="Inv.Discussion.Hint" xml:space="preserve">
+    <value>Отдельно от комментариев к элементам, это обсуждение относится ко всему инвентарю.</value>
+  </data>
+  <data name="Inv.Discussion.LoginToPost" xml:space="preserve">
+    <value>Войдите, чтобы писать сообщения.</value>
+  </data>
+  <data name="Inv.Discussion.Max" xml:space="preserve">
+    <value>Максимум 1000 символов.</value>
+  </data>
+  <data name="Inv.Discussion.None" xml:space="preserve">
+    <value>Сообщений пока нет.</value>
+  </data>
+  <data name="Inv.Discussion.Placeholder" xml:space="preserve">
+    <value>Напишите сообщение...</value>
+  </data>
+  <data name="Inv.Discussion.Post" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="Inv.Edit.BackToDetails" xml:space="preserve">
+    <value>Назад к деталям</value>
+  </data>
+  <data name="Inv.Edit.Cancel" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Inv.Edit.Concurrency" xml:space="preserve">
+    <value> Если кто-то изменит инвентарь одновременно с вами, нужно будет перезагрузить страницу.</value>
+  </data>
+  <data name="Inv.Edit.Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="Inv.Edit.Title" xml:space="preserve">
+    <value>Редактировать инвентарь</value>
+  </data>
+  <data name="Inv.Err.Concurrency" xml:space="preserve">
+    <value>Этот инвентарь был изменён другим пользователем. Обновите страницу и попробуйте снова.</value>
+  </data>
+  <data name="Inv.Err.InvalidCategory" xml:space="preserve">
+    <value>Неверная категория.</value>
+  </data>
+  <data name="Inv.Form.BoolField1" xml:space="preserve">
+    <value>Да/Нет 1</value>
+  </data>
+  <data name="Inv.Form.BoolField2" xml:space="preserve">
+    <value> Да/Нет 2</value>
+  </data>
+  <data name="Inv.Form.BoolField3" xml:space="preserve">
+    <value>Да/Нет 3</value>
+  </data>
+  <data name="Inv.Form.CustomFieldsSubtitle" xml:space="preserve">
+    <value>Выберите, какие поля будут у элементов этого инвентаря.</value>
+  </data>
+  <data name="Inv.Form.CustomFieldsTitle" xml:space="preserve">
+    <value>Пользовательские поля (до 3 каждого типа)</value>
+  </data>
+  <data name="Inv.Form.ImageHint" xml:space="preserve">
+    <value>Используйте публичный URL</value>
+  </data>
+  <data name="Inv.Form.LinkField1" xml:space="preserve">
+    <value>Ссылка 1</value>
+  </data>
+  <data name="Inv.Form.LinkField2" xml:space="preserve">
+    <value>Ссылка 2</value>
+  </data>
+  <data name="Inv.Form.LinkField3" xml:space="preserve">
+    <value>Ссылка 3</value>
+  </data>
+  <data name="Inv.Form.LinkFieldsTitle" xml:space="preserve">
+    <value>Ссылки</value>
+  </data>
+  <data name="Inv.Form.MultilineTextFieldsTitle" xml:space="preserve">
+    <value>Многострочный текст</value>
+  </data>
+  <data name="Inv.Form.NumberField1" xml:space="preserve">
+    <value>Число 1</value>
+  </data>
+  <data name="Inv.Form.NumberField2" xml:space="preserve">
+    <value>Число 2</value>
+  </data>
+  <data name="Inv.Form.NumberField3" xml:space="preserve">
+    <value>Число 3</value>
+  </data>
+  <data name="Inv.Form.NumberFieldsTitle" xml:space="preserve">
+    <value>Числовые поля</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Approved" xml:space="preserve">
+    <value>Название (например, Одобрено?)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.DatasheetUrl" xml:space="preserve">
+    <value>Название (например, ссылка на даташит)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Description" xml:space="preserve">
+    <value>Название (например, Описание)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.InWarranty" xml:space="preserve">
+    <value>Название (например, На гарантии?)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.ManualUrl" xml:space="preserve">
+    <value>Название (например, ссылка на инструкцию)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Manufacturer" xml:space="preserve">
+    <value>Название (например, Производитель)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Model" xml:space="preserve">
+    <value>Название (например, Модель)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Notes" xml:space="preserve">
+    <value>Название (например, Заметки)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Price" xml:space="preserve">
+    <value>Название (например, Цена)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.PurchaseUrl" xml:space="preserve">
+    <value>Название (например, ссылка на покупку)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Serial" xml:space="preserve">
+    <value>Название (например, Серийный номер)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Stock" xml:space="preserve">
+    <value>Название (например, Остаток)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Warranty" xml:space="preserve">
+    <value>Название (например, Гарантия)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Weight" xml:space="preserve">
+    <value>Название (например, Вес)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Working" xml:space="preserve">
+    <value>Название (например, Работает?)</value>
+  </data>
+  <data name="Inv.Form.PublicHint" xml:space="preserve">
+    <value>Если публичный, все авторизованные пользователи смогут добавлять элементы позже.</value>
+  </data>
+  <data name="Inv.Form.StringField1" xml:space="preserve">
+    <value>Строка 1</value>
+  </data>
+  <data name="Inv.Form.StringField2" xml:space="preserve">
+    <value>Строка 2</value>
+  </data>
+  <data name="Inv.Form.StringField3" xml:space="preserve">
+    <value>Строка 3</value>
+  </data>
+  <data name="Inv.Form.StringFieldsTitle" xml:space="preserve">
+    <value>Строковые поля</value>
+  </data>
+  <data name="Inv.Form.TagsHint" xml:space="preserve">
+    <value>Теги через запятую. Начните вводить, чтобы увидеть подсказки.</value>
+  </data>
+  <data name="Inv.Form.TextField1" xml:space="preserve">
+    <value>Текст 1</value>
+  </data>
+  <data name="Inv.Form.TextField2" xml:space="preserve">
+    <value>Текст 2</value>
+  </data>
+  <data name="Inv.Form.TextField3" xml:space="preserve">
+    <value>Текст 3</value>
+  </data>
+  <data name="Inv.Form.TrueFalseFieldsTitle" xml:space="preserve">
+    <value>Да/Нет</value>
+  </data>
+  <data name="Inv.ImageUrl" xml:space="preserve">
+    <value>URL изображения</value>
+  </data>
+  <data name="Inv.IsPublic" xml:space="preserve">
+    <value> Публичный инвентарь</value>
+  </data>
+  <data name="Inv.Items.Add" xml:space="preserve">
+    <value>Добавить элемент</value>
+  </data>
+  <data name="Inv.Items.Count" xml:space="preserve">
+    <value>Элементы: {0}</value>
+  </data>
+  <data name="Inv.Items.DeleteSelected" xml:space="preserve">
+    <value>Удалить выбранные</value>
+  </data>
+  <data name="Inv.Items.None" xml:space="preserve">
+    <value>Элементы не найдены.</value>
+  </data>
+  <data name="Inv.Items.ReadOnly" xml:space="preserve">
+    <value>Только чтение</value>
+  </data>
+  <data name="Inv.Items.Th.Comments" xml:space="preserve">
+    <value>Комментарии</value>
+  </data>
+  <data name="Inv.Items.Th.Created" xml:space="preserve">
+    <value>Создано</value>
+  </data>
+  <data name="Inv.Items.Th.CustomId" xml:space="preserve">
+    <value>Пользовательский ID</value>
+  </data>
+  <data name="Inv.Items.Th.Likes" xml:space="preserve">
+    <value>Лайки</value>
+  </data>
+  <data name="Inv.Items.Th.Title" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="Inv.Items.Th.Updated" xml:space="preserve">
+    <value>Обновлено</value>
+  </data>
+  <data name="Inv.Tags" xml:space="preserve">
+    <value>Теги</value>
+  </data>
+  <data name="Inv.Title" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="InvDetails.By" xml:space="preserve">
+    <value>автор</value>
+  </data>
+  <data name="InvDetails.Description" xml:space="preserve">
+    <value> Описание</value>
+  </data>
+  <data name="InvDetails.EditInventory" xml:space="preserve">
+    <value>Редактировать инвентарь</value>
+  </data>
+  <data name="InvDetails.Private" xml:space="preserve">
+    <value>Приватный</value>
+  </data>
+  <data name="InvDetails.Public" xml:space="preserve">
+    <value>Публичный</value>
+  </data>
+  <data name="InvTabs.Access" xml:space="preserve">
+    <value>Доступ</value>
+  </data>
+  <data name="InvTabs.AutoSaveLater" xml:space="preserve">
+    <value>Автосохранение: (позже)</value>
+  </data>
+  <data name="InvTabs.CustomId" xml:space="preserve">
+    <value>Пользовательский ID</value>
+  </data>
+  <data name="InvTabs.Discussion" xml:space="preserve">
+    <value>Обсуждение</value>
+  </data>
+  <data name="InvTabs.Fields" xml:space="preserve">
+    <value>Поля</value>
+  </data>
+  <data name="InvTabs.Items" xml:space="preserve">
+    <value>Элементы</value>
+  </data>
+  <data name="InvTabs.Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="InvTabs.Stats" xml:space="preserve">
+    <value>Статистика</value>
+  </data>
+  <data name="InvTabs.UnknownTab" xml:space="preserve">
+    <value>Неизвестная вкладка.</value>
+  </data>
   <data name="Nav.AdminPanel" xml:space="preserve">
     <value>Админ панель</value>
   </data>

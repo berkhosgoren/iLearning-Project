@@ -1,4 +1,5 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryDetailsVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
     var msg = TempData["InventoryMessage"] as string;
@@ -10,7 +11,7 @@
 }
 
 <div class="text-muted small mb-3">
-    Seperate from item comments, discussion is inventory-level
+    @T["Inv.Discussion.Hint"]
 </div>
 
 @if (Model.IsAuthenticated)
@@ -19,21 +20,21 @@
         @Html.AntiForgeryToken()
 
         <div class="mb-2">
-            <textarea name="body" class="form-control" rows="3" maxlength="1000" placeholder="Write a message..."></textarea>
-            <div class="form-text">Max 1000 Characters.</div>
+            <textarea name="body" class="form-control" rows="3" maxlength="1000" placeholder="@T["Inv.Discussion.Placeholder"]"></textarea>
+            <div class="form-text">@T["Inv.Discussion.Max"]</div>
         </div>
 
-        <button class="btn btn-primary btn-sm" type="submit">Post</button>
+        <button class="btn btn-primary btn-sm" type="submit">@T["Inv.Discussion.Post"]</button>
     </form>
 }
 else
 {
-    <div class="text-muted small mb-3">Login to Post Messages.</div>
+    <div class="text-muted small mb-3">@T["Inv.Discussion.LoginToPost"]</div>
 }
 
 @if (Model.DiscussionComments.Count == 0)
 {
-    <div class="text-muted">No Messages Yet.</div>
+    <div class="text-muted">@T["Inv.Discussion.None"]</div>
 }
 else
 {
@@ -52,7 +53,7 @@ else
                         <form method="post" asp-controller="InventoryDiscussion" asp-action="DeleteComment" asp-route-inventoryId="@Model.Id"
                               asp-route-commentId="@c.Id" class="m-0">
                              @Html.AntiForgeryToken()
-                             <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                            <button class="btn btn-outline-danger btn-sm" type="submit">@T["Common.Delete"]</button>
                         </form>
                     }
                 </div>

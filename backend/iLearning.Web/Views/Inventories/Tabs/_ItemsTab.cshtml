@@ -1,7 +1,9 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryDetailsVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
     var msg = TempData["InventoryMessage"] as string;
+    var selectedPrefixJson = System.Text.Json.JsonSerializer.Serialize(T["Common.SelectedPrefix"].Value);
 }
 
 @if (!string.IsNullOrWhiteSpace(msg))
@@ -11,10 +13,10 @@
 
 <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
     <div class="text-muted small">
-        Items: @Model.Items.Count
+        @T["Inv.Items.Count", Model.Items.Count]
         @if (!Model.CanWrite)
         {
-            <span class="m-sm-2">Read-only access</span>
+            <span class="m-sm-2">@T["Inv.Items.ReadOnly"]</span>
         }
     </div>
 
@@ -22,13 +24,13 @@
     {
         <div class="d-flex gap-2">
             <a class="btn btn-primary btn-sm" asp-controller="Items" asp-action="Create" asp-route-inventoryId="@Model.Id">
-                Add Item
+                @T["Inv.Items.Add"]
             </a>
 
             <form method="post" asp-controller="Items" asp-action="BulkDelete" asp-route-inventoryId="@Model.Id" id="itemsDeleteForm">
                 @Html.AntiForgeryToken()
                 <button class="btn btn-danger btn-sm" type="submit" id="itemsDeleteBtn" disabled>
-                    Delete Selected
+                    @T["Inv.Items.DeleteSelected"]
                 </button>
             </form>
         </div>
@@ -42,22 +44,22 @@
                 <th style="width:44px;" class="text-center align-middle p-0">
                     @if (Model.CanWrite)
                     {
-                        <input type="checkbox" id="itemsAll" class="form-check-input d-block mx-auto my-2" aria-label="Select All" />
+                        <input type="checkbox" id="itemsAll" class="form-check-input d-block mx-auto my-2" aria-label="@T["Common.SelectAll"]" />
                     }
                 </th>
-                <th style="width:160px;">Custom ID</th>
-                <th>Title</th>
-                <th style="width:120px;">Likes</th>
-                <th style="width:120px;">Comments</th>
-                <th style="width:170px;">Created</th>
-                <th style="width:170px;">Updated</th>
+                <th style="width:160px;">@T["Inv.Items.Th.CustomId"]</th>
+                <th>@T["Inv.Items.Th.Title"]</th>
+                <th style="width:120px;">@T["Inv.Items.Th.Likes"]</th>
+                <th style="width:120px;">@T["Inv.Items.Th.Comments"]</th>
+                <th style="width:170px;">@T["Inv.Items.Th.Created"]</th>
+                <th style="width:170px;">@T["Inv.Items.Th.Updated"]</th>
             </tr>
         </thead>
         <tbody>
             @if (Model.Items.Count == 0)
             {
                 <tr>
-                    <td colspan="7" class="text-muted text-center py-4">No items found.</td>
+                    <td colspan="7" class="text-muted text-center py-4">@T["Inv.Items.None"]</td>
                 </tr>
             }
             else
@@ -99,7 +101,7 @@
 
 @if (Model.CanWrite)
 {
-    <div class="text-muted small mt-2" id="itemsSelectedLabel">Selected: 0</div>
+    <div class="text-muted small mt-2" id="itemsSelectedLabel">@T["Common.SelectedPrefix"]0</div>
 }
 <script>
     (function () {

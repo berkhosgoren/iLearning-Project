@@ -7,25 +7,26 @@ namespace iLearning.Web.Models.ViewModels.Inventories
         public Guid? Id { get; set; }
 
         [Required, MaxLength(120)]
+        [Display(Name = "Inv.Title")]
         public string Title { get; set; } = string.Empty;
 
         [MaxLength(4000)]
+        [Display(Name = "Inv.Description")]
         public string? Description { get; set; }
 
         [MaxLength(1000)]
-        [Display(Name = "Image URL")]
+        [Display(Name = "Inv.ImageUrl")]
         public string? ImageUrl { get; set; }
 
-        [Display(Name = "Category")]
+        [Display(Name = "Inv.Category")]
         public int CategoryId { get; set; }
 
-        [Display(Name = "Public inventory")]
+        [Display(Name = "Inv.IsPublic")]
         public bool IsPublic { get; set; }
 
-        [Display(Name = "Tags (comma seperated for now)")]
+        [Display(Name = "Inv.Tags")]
         [MaxLength(500)]
         public string? TagsCsv { get; set; }
-
 
         public int Version { get; set; }
 

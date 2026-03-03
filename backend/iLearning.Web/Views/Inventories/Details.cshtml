@@ -1,4 +1,6 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryDetailsVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
+
 @{
     ViewData["Title"] = Model.Title;
     var tab = (Model.ActiveTab ?? "items").ToLowerInvariant();
@@ -13,14 +15,14 @@
         <div>
             <h2 class="mb-1">@Model.Title</h2>
             <div class="text-muted">
-                @Model.CategoryName · by @Model.CreatorName
+                @Model.CategoryName · @T["InvDetails.By"] @Model.CreatorName
                 @if (Model.IsPublic)
                 {
-                    <span class="badge text-bg-success ms-2">Public</span>
+                    <span class="badge text-bg-success ms-2">@T["InvDetails.Public"]</span>
                 }
                 else
                 {
-                    <span class="badge text-bg-secondary ms-2">Private</span>
+                    <span class="badge text-bg-secondary ms-2">@T["InvDetails.Private"]</span>
                 }
             </div>
 
@@ -37,12 +39,12 @@
         </div>
 
         <div class="d-flex gap-2">
-            <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">Back</a>
+            <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">@T["Common.Back"]</a>
 
             @if (Model.CanEdit)
             {
                 <a class="btn btn-outline-primary" asp-controller="Inventories" asp-action="Edit" asp-route-id="@Model.Id">
-                    Edit Inventory
+                    @T["InvDetails.EditInventory"]
                 </a>
             }
         </div>
@@ -73,11 +75,11 @@
     <ul class="nav nav-tabs mt-4">
         <li class="nav-item">
             <a class="nav-link @(tab=="items" ? "active" : "")"
-               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="items">Items</a>
+               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="items">@T["InvTabs.Items"]</a>
         </li>
         <li class="nav-item">
             <a class="nav-link @(tab=="discussion" ? "active" : "")"
-               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="discussion">Discussion</a>
+               asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="discussion">@T["InvTabs.Discussion"]</a>
         </li>
 
         @* Edit-only tabs: owner/admin*@
@@ -85,23 +87,23 @@
         {
             <li class="nav-item">
                 <a class="nav-link @(tab == "settings" ? "active" : "")"
-                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="settings">Settings</a>
+                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="settings">@T["InvTabs.Settings"]</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link @(tab == "customid" ? "active" : "")"
-                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="customid">Custom ID</a>
+                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="customid">@T["InvTabs.CustomId"]</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link @(isFieldsPage ? "active" : "")"
-                   asp-controller="InventoryFields" asp-action="Index" asp-route-inventoryId="@Model.Id">Fields</a>
+                   asp-controller="InventoryFields" asp-action="Index" asp-route-inventoryId="@Model.Id">@T["InvTabs.Fields"]</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link @(tab == "access" ? "active" : "")"
-                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="access">Access</a>
+                   asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" asp-route-tab="access">@T["InvTabs.Access"]</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link @(isStatsPage ? "active" : "")"
-                   asp-controller="InventoryStats" asp-action="Index" asp-route-inventoryId="@Model.Id">Stats</a>
+                   asp-controller="InventoryStats" asp-action="Index" asp-route-inventoryId="@Model.Id">@T["InvTabs.Stats"]</a>
             </li>
         }
        
@@ -138,7 +140,7 @@
                 }
                 else
                 {
-                    <div class="text-muted">Unknown tab.</div>
+                <div class="text-muted">@T["InvTabs.UnknownTab"]</div>
                 }
            </div>
         </div>

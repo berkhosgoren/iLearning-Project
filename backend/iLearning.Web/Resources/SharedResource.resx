@@ -138,6 +138,9 @@
   <data name="Admin.Users.Block" xml:space="preserve">
     <value>Block</value>
   </data>
+  <data name="Admin.Users.BlockedMsg" xml:space="preserve">
+    <value>Blocked {0} user(s).</value>
+  </data>
   <data name="Admin.Users.CardTitle" xml:space="preserve">
     <value>Users</value>
   </data>
@@ -210,6 +213,9 @@
   <data name="Admin.Users.Unblock" xml:space="preserve">
     <value>Unblock</value>
   </data>
+  <data name="Admin.Users.UnblockedMsg" xml:space="preserve">
+    <value>Unblocked {0} user(s).</value>
+  </data>
   <data name="Admin.Users.UnknownAction" xml:space="preserve">
     <value>Unknown action.</value>
   </data>
@@ -269,6 +275,378 @@
   </data>
   <data name="Auth.Register.Title" xml:space="preserve">
     <value>Register</value>
+  </data>
+  <data name="Common.Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common.Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Common.Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Common.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Common.Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Common.No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Common.NoMatches" xml:space="preserve">
+    <value>No matches.</value>
+  </data>
+  <data name="Common.SelectAll" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="Common.SelectAllAria" xml:space="preserve">
+    <value>Select all</value>
+  </data>
+  <data name="Common.SelectedCount" xml:space="preserve">
+    <value>Selected: {0}</value>
+  </data>
+  <data name="Common.SelectedPrefix" xml:space="preserve">
+    <value>Selected: </value>
+  </data>
+  <data name="Common.Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Inv.Access.ActionLabel" xml:space="preserve">
+    <value>Action</value>
+  </data>
+  <data name="Inv.Access.AddOrUpdate" xml:space="preserve">
+    <value>Add / Update</value>
+  </data>
+  <data name="Inv.Access.AddUserLabel" xml:space="preserve">
+    <value>Add User (name or email)</value>
+  </data>
+  <data name="Inv.Access.AddUserPlaceholder" xml:space="preserve">
+    <value>Type name or email...</value>
+  </data>
+  <data name="Inv.Access.Bulk.GrantWrite" xml:space="preserve">
+    <value>Grant Write</value>
+  </data>
+  <data name="Inv.Access.Bulk.RemoveSelected" xml:space="preserve">
+    <value>Remove Selected</value>
+  </data>
+  <data name="Inv.Access.Bulk.SetReadOnly" xml:space="preserve">
+    <value>Set Read-Only</value>
+  </data>
+  <data name="Inv.Access.Empty" xml:space="preserve">
+    <value>No access entries yet.</value>
+  </data>
+  <data name="Inv.Access.Err.OwnerAlreadyHasAccess" xml:space="preserve">
+    <value>Owner already has access.</value>
+  </data>
+  <data name="Inv.Access.Err.SelectUser" xml:space="preserve">
+    <value>Please select a user from the suggestions.</value>
+  </data>
+  <data name="Inv.Access.Err.UserBlocked" xml:space="preserve">
+    <value>That user is blocked.</value>
+  </data>
+  <data name="Inv.Access.Err.UserNotFound" xml:space="preserve">
+    <value>User not found.</value>
+  </data>
+  <data name="Inv.Access.HelpText" xml:space="preserve">
+    <value>Access rows are for non-owners. Owner and admins can always edit.</value>
+  </data>
+  <data name="Inv.Access.Msg.Granted" xml:space="preserve">
+    <value>Access granted.</value>
+  </data>
+  <data name="Inv.Access.Msg.GrantedWriteCount" xml:space="preserve">
+    <value>Granted write access to {0} user(s).</value>
+  </data>
+  <data name="Inv.Access.Msg.RemovedCount" xml:space="preserve">
+    <value>Removed access for {0} user(s).</value>
+  </data>
+  <data name="Inv.Access.Msg.SetReadOnlyCount" xml:space="preserve">
+    <value>Set read-only access for {0} user(s).</value>
+  </data>
+  <data name="Inv.Access.Msg.Updated" xml:space="preserve">
+    <value>Access updated.</value>
+  </data>
+  <data name="Inv.Access.NoPermission" xml:space="preserve">
+    <value>You do not have permission to manage access.</value>
+  </data>
+  <data name="Inv.Access.Permission.CanWrite" xml:space="preserve">
+    <value>Can Write</value>
+  </data>
+  <data name="Inv.Access.Permission.ReadOnly" xml:space="preserve">
+    <value>Read Only</value>
+  </data>
+  <data name="Inv.Access.PermissionLabel" xml:space="preserve">
+    <value>Permission</value>
+  </data>
+  <data name="Inv.Access.RowsLabel" xml:space="preserve">
+    <value>Access rows</value>
+  </data>
+  <data name="Inv.Access.Table.Granted" xml:space="preserve">
+    <value>Granted</value>
+  </data>
+  <data name="Inv.Access.Table.Write" xml:space="preserve">
+    <value>Write</value>
+  </data>
+  <data name="Inv.Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="Inv.Create.Heading" xml:space="preserve">
+    <value>Create Inventory</value>
+  </data>
+  <data name="Inv.Create.Title" xml:space="preserve">
+    <value>Create Inventory</value>
+  </data>
+  <data name="Inv.Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Inv.Discussion.Hint" xml:space="preserve">
+    <value>Separate from item comments, discussion is inventory-level.</value>
+  </data>
+  <data name="Inv.Discussion.LoginToPost" xml:space="preserve">
+    <value>Login to post messages.</value>
+  </data>
+  <data name="Inv.Discussion.Max" xml:space="preserve">
+    <value>Max 1000 characters.</value>
+  </data>
+  <data name="Inv.Discussion.None" xml:space="preserve">
+    <value>No messages yet.</value>
+  </data>
+  <data name="Inv.Discussion.Placeholder" xml:space="preserve">
+    <value>Write a message...</value>
+  </data>
+  <data name="Inv.Discussion.Post" xml:space="preserve">
+    <value>Post</value>
+  </data>
+  <data name="Inv.Edit.BackToDetails" xml:space="preserve">
+    <value>Back to Details</value>
+  </data>
+  <data name="Inv.Edit.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Inv.Edit.Concurrency" xml:space="preserve">
+    <value>If someone else edits the inventory at the same time, you will be asked to reload.</value>
+  </data>
+  <data name="Inv.Edit.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Inv.Edit.Title" xml:space="preserve">
+    <value>Edit Inventory</value>
+  </data>
+  <data name="Inv.Err.Concurrency" xml:space="preserve">
+    <value>This inventory was updated by someone else. Reload and try again.</value>
+  </data>
+  <data name="Inv.Err.InvalidCategory" xml:space="preserve">
+    <value>Invalid category.</value>
+  </data>
+  <data name="Inv.Form.BoolField1" xml:space="preserve">
+    <value>Bool 1</value>
+  </data>
+  <data name="Inv.Form.BoolField2" xml:space="preserve">
+    <value>Bool 2</value>
+  </data>
+  <data name="Inv.Form.BoolField3" xml:space="preserve">
+    <value>Bool 3</value>
+  </data>
+  <data name="Inv.Form.CustomFieldsSubtitle" xml:space="preserve">
+    <value>Choose which fields exist for items in this inventory.</value>
+  </data>
+  <data name="Inv.Form.CustomFieldsTitle" xml:space="preserve">
+    <value>Custom Fields (limits: up to 3 per type)</value>
+  </data>
+  <data name="Inv.Form.ImageHint" xml:space="preserve">
+    <value> Use a public URL</value>
+  </data>
+  <data name="Inv.Form.LinkField1" xml:space="preserve">
+    <value>Link 1</value>
+  </data>
+  <data name="Inv.Form.LinkField2" xml:space="preserve">
+    <value>Link 2</value>
+  </data>
+  <data name="Inv.Form.LinkField3" xml:space="preserve">
+    <value>Link 3</value>
+  </data>
+  <data name="Inv.Form.LinkFieldsTitle" xml:space="preserve">
+    <value>Link Fields</value>
+  </data>
+  <data name="Inv.Form.MultilineTextFieldsTitle" xml:space="preserve">
+    <value>Multiline Text Fields</value>
+  </data>
+  <data name="Inv.Form.NumberField1" xml:space="preserve">
+    <value>Number 1</value>
+  </data>
+  <data name="Inv.Form.NumberField2" xml:space="preserve">
+    <value>Number 2</value>
+  </data>
+  <data name="Inv.Form.NumberField3" xml:space="preserve">
+    <value>Number 3</value>
+  </data>
+  <data name="Inv.Form.NumberFieldsTitle" xml:space="preserve">
+    <value>Number Fields</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Approved" xml:space="preserve">
+    <value>Title (e.g., Approved?)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.DatasheetUrl" xml:space="preserve">
+    <value>Title (e.g., Datasheet URL)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Description" xml:space="preserve">
+    <value>Title (e.g., Description)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.InWarranty" xml:space="preserve">
+    <value> Title (e.g., In warranty?)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.ManualUrl" xml:space="preserve">
+    <value>Title (e.g., Manual URL)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Manufacturer" xml:space="preserve">
+    <value>Title (e.g., Manufacturer)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Model" xml:space="preserve">
+    <value>Title (e.g., Model)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Notes" xml:space="preserve">
+    <value>Title (e.g., Notes)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Price" xml:space="preserve">
+    <value>Title (e.g., Price)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.PurchaseUrl" xml:space="preserve">
+    <value>Title (e.g., Purchase URL)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Serial" xml:space="preserve">
+    <value>Title (e.g., Serial)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Stock" xml:space="preserve">
+    <value>Title (e.g., Stock)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Warranty" xml:space="preserve">
+    <value> Title (e.g., Warranty)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Weight" xml:space="preserve">
+    <value>Title (e.g., Weight)</value>
+  </data>
+  <data name="Inv.Form.Placeholder.Working" xml:space="preserve">
+    <value>Title (e.g., Working?)</value>
+  </data>
+  <data name="Inv.Form.PublicHint" xml:space="preserve">
+    <value>If public, all authenticated users can add items later.</value>
+  </data>
+  <data name="Inv.Form.StringField1" xml:space="preserve">
+    <value>String Field 1</value>
+  </data>
+  <data name="Inv.Form.StringField2" xml:space="preserve">
+    <value>String Field 2</value>
+  </data>
+  <data name="Inv.Form.StringField3" xml:space="preserve">
+    <value>String Field 3</value>
+  </data>
+  <data name="Inv.Form.StringFieldsTitle" xml:space="preserve">
+    <value> String Fields</value>
+  </data>
+  <data name="Inv.Form.TagsHint" xml:space="preserve">
+    <value>Comma separated. Start typing to see suggestions.</value>
+  </data>
+  <data name="Inv.Form.TextField1" xml:space="preserve">
+    <value>Text 1</value>
+  </data>
+  <data name="Inv.Form.TextField2" xml:space="preserve">
+    <value>Text 2</value>
+  </data>
+  <data name="Inv.Form.TextField3" xml:space="preserve">
+    <value>Text 3</value>
+  </data>
+  <data name="Inv.Form.TrueFalseFieldsTitle" xml:space="preserve">
+    <value>True/False Fields</value>
+  </data>
+  <data name="Inv.ImageUrl" xml:space="preserve">
+    <value>Image URL</value>
+  </data>
+  <data name="Inv.IsPublic" xml:space="preserve">
+    <value>Public Inventory</value>
+  </data>
+  <data name="Inv.Items.Add" xml:space="preserve">
+    <value>Add Item</value>
+  </data>
+  <data name="Inv.Items.Count" xml:space="preserve">
+    <value>Items: {0}</value>
+  </data>
+  <data name="Inv.Items.DeleteSelected" xml:space="preserve">
+    <value>Delete Selected</value>
+  </data>
+  <data name="Inv.Items.None" xml:space="preserve">
+    <value>No items found.</value>
+  </data>
+  <data name="Inv.Items.ReadOnly" xml:space="preserve">
+    <value>Read-only access</value>
+  </data>
+  <data name="Inv.Items.Th.Comments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Inv.Items.Th.Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Inv.Items.Th.CustomId" xml:space="preserve">
+    <value>Custom ID</value>
+  </data>
+  <data name="Inv.Items.Th.Likes" xml:space="preserve">
+    <value>Likes</value>
+  </data>
+  <data name="Inv.Items.Th.Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Inv.Items.Th.Updated" xml:space="preserve">
+    <value>Updated</value>
+  </data>
+  <data name="Inv.Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Inv.Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="InvDetails.By" xml:space="preserve">
+    <value>by</value>
+  </data>
+  <data name="InvDetails.Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="InvDetails.EditInventory" xml:space="preserve">
+    <value>Edit Inventory</value>
+  </data>
+  <data name="InvDetails.Private" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="InvDetails.Public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="InvTabs.Access" xml:space="preserve">
+    <value>Access</value>
+  </data>
+  <data name="InvTabs.AutoSaveLater" xml:space="preserve">
+    <value>Auto-save: (for later)</value>
+  </data>
+  <data name="InvTabs.CustomId" xml:space="preserve">
+    <value>Custom ID</value>
+  </data>
+  <data name="InvTabs.Discussion" xml:space="preserve">
+    <value>Discussion</value>
+  </data>
+  <data name="InvTabs.Fields" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="InvTabs.Items" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="InvTabs.Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="InvTabs.Stats" xml:space="preserve">
+    <value>Stats</value>
+  </data>
+  <data name="InvTabs.UnknownTab" xml:space="preserve">
+    <value>Unknown tab.</value>
   </data>
   <data name="Nav.AdminPanel" xml:space="preserve">
     <value>Admin Panel</value>

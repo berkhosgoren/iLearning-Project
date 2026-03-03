@@ -1,5 +1,6 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryUpsertVm
 @using iLearning.Web.Models.Domain
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
     var categories = ViewBag.Categories as List<Category> ?? new();
@@ -14,14 +15,13 @@
 <div class="mb-3">
     <label asp-for="Description" class="form-label"></label>
     <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-    <div class="form-text">Markdown for later; plain text for beginning</div>
     <span asp-validation-for="Description" class="text-danger"></span>
 </div>
 
 <div class="mb-3">
     <label asp-for="ImageUrl" class="form-label"></label>
     <input asp-for="ImageUrl" class="form-control" />
-    <div class="form-text">Use a public URL</div>
+    <div class="form-text">@T["Inv.Form.ImageHint"]</div>
     <span asp-validation-for="ImageUrl" class="text-danger"></span>
 </div>
 
@@ -41,7 +41,7 @@
         <div class="form-check">
             <input asp-for="IsPublic" class="form-check-input" />
             <label asp-for="IsPublic" class="form-check-label"></label>
-            <div class="form-text">If public, all authenticated users can add items later.</div>
+            <div class="form-text">@T["Inv.Form.PublicHint"]</div>
         </div>
     </div>
 </div>
@@ -52,7 +52,7 @@
     <label asp-for="TagsCsv" class="form-label"></label>
 
     <input asp-for="TagsCsv" class="form-control" autocomplete="off" id="tagsInput" />
-    <div class="form-text">Comma seperated. Start typing to see suggestions.</div>
+    <div class="form-text">@T["Inv.Form.TagsHint"]</div>
     <span asp-validation-for="TagsCsv" class="text-danger"></span>
 
     <div class="list-group position-absolute w-100 shadow-sm d-none" id="tagsSuggest" style="z-index: 1050; max-height: 240px; overflow:auto"></div>
@@ -171,132 +171,132 @@
 
 <hr class="my-4" />
 
-<h5 class="mb-3">Custom Fields (limits: up to 3 per type)</h5>
+<h5 class="mb-3">@T["Inv.Form.CustomFieldsTitle"]</h5>
 <div class="text-muted small mb-3">
-    Choose which fields exists for items in this inventory.
+    @T["Inv.Form.CustomFieldsSubtitle"]
 </div>
 
-<h6 class="mt-3 mb-2">String Fields</h6>
+<h6 class="mt-3 mb-2">@T["Inv.Form.StringFieldsTitle"]</h6>
 <div class="row g-3">
     <div class="col-md-4">
         <div class="form-check">
             <input asp-for="CustomString1Enabled" class="form-check-input" />
-            <label asp-for="CustomString1Enabled" class="form-check-label">String Field 1</label>
+            <label asp-for="CustomString1Enabled" class="form-check-label">@T["Inv.Form.StringField1"]</label>
         </div>
-        <input asp-for="CustomString1Name" class="form-control mt-2" placeholder="Title (e.g., Model)" />
+        <input asp-for="CustomString1Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Model"]" />
     </div>
     <div class="col-md-4">
         <div class="form-check">
             <input asp-for="CustomString2Enabled" class="form-check-input" />
-            <label asp-for="CustomString2Enabled" class="form-check-label">String Field 2</label>
+            <label asp-for="CustomString2Enabled" class="form-check-label">@T["Inv.Form.StringField2"]</label>
         </div>
-        <input asp-for="CustomString2Name" class="form-control mt-2" placeholder="Title (e.g., Manufacturer)" />
+        <input asp-for="CustomString2Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Manufacturer"]" />
     </div>
     <div class="col-md-4">
         <div class="form-check">
             <input asp-for="CustomString3Enabled" class="form-check-input" />
-            <label asp-for="CustomString3Enabled" class="form-check-label">String Field 3</label>
+            <label asp-for="CustomString3Enabled" class="form-check-label">@T["Inv.Form.StringField3"]</label>
         </div>
-        <input asp-for="CustomString3Name" class="form-control mt-2" placeholder="Title (e.g., Serial)" />
+        <input asp-for="CustomString3Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Serial"]" />
     </div>
 </div>
 
-<h6 class="mt-4 mb-2">Multiline Text Fields</h6>
+<h6 class="mt-4 mb-2">@T["Inv.Form.MultilineTextFieldsTitle"]</h6>
 <div class="row g-3">
     <div class="col-md-4">
         <div class="form-check">
             <input asp-for="CustomText1Enabled" class="form-check-input" />
-            <label asp-for="CustomText1Enabled" class="form-check-label">Text 1</label>
+            <label asp-for="CustomText1Enabled" class="form-check-label">@T["Inv.Form.TextField1"]</label>
         </div>
-            <input asp-for="CustomText1Name" class="form-control mt-2" placeholder="Title (e.g, Notes)" />
+        <input asp-for="CustomText1Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Notes"]" />
         </div>
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomText2Enabled" class="form-check-input" />
-                <label asp-for="CustomText2Enabled" class="form-check-label">Text 2</label>
+            <label asp-for="CustomText2Enabled" class="form-check-label">@T["Inv.Form.TextField2"]</label>
             </div>
-            <input asp-for="CustomText2Name" class="form-control mt-2" placeholder="Title (e.g, Description)" />
+        <input asp-for="CustomText2Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Description"]" />
         </div>
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomText3Enabled" class="form-check-input" />
-                <label asp-for="CustomText3Enabled" class="form-check-label">Text 3</label>
+            <label asp-for="CustomText3Enabled" class="form-check-label">@T["Inv.Form.TextField3"]</label>
             </div>
-            <input asp-for="CustomText3Name" class="form-control mt-2" placeholder="Title (e.g, Warranty)" />
+        <input asp-for="CustomText3Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Warranty"]" />
         </div>
     </div>
 
-    <h6 class="mt-4 mb-2">Number Fields</h6>
+<h6 class="mt-4 mb-2">@T["Inv.Form.NumberFieldsTitle"]</h6>
     <div class="row g-3">
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomNumber1Enabled" class="form-check-input" />
-                <label asp-for="CustomNumber1Enabled" class="form-check-label">Number 1</label>
+            <label asp-for="CustomNumber1Enabled" class="form-check-label">@T["Inv.Form.NumberField1"]</label>
             </div>
-            <input asp-for="CustomNumber1Name" class="form-control mt-2" placeholder="Title (e.g., Price)" />
+        <input asp-for="CustomNumber1Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Price"]" />
         </div>
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomNumber2Enabled" class="form-check-input" />
-                <label asp-for="CustomNumber2Enabled" class="form-check-label">Number 2</label>
+            <label asp-for="CustomNumber2Enabled" class="form-check-label">@T["Inv.Form.NumberField2"]</label>
             </div>
-            <input asp-for="CustomNumber2Name" class="form-control mt-2" placeholder="Title (e.g., Weigth)" />
+        <input asp-for="CustomNumber2Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Weight"]" />
         </div>
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomNumber3Enabled" class="form-check-input" />
-                <label asp-for="CustomNumber3Enabled" class="form-check-label">Number 3</label>
+            <label asp-for="CustomNumber3Enabled" class="form-check-label">@T["Inv.Form.NumberField3"]</label>
             </div>
-            <input asp-for="CustomNumber3Name" class="form-control mt-2" placeholder="Title (e.g., Stock)" />
+        <input asp-for="CustomNumber3Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Stock"]" />
         </div>
     </div>
 
-    <h6 class="mt-4 mb-2">True/False Fields</h6>
+<h6 class="mt-4 mb-2">@T["Inv.Form.TrueFalseFieldsTitle"]</h6>
     <div class="row g-3">
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomBool1Enabled" class="form-check-input" />
-                <label asp-for="CustomBool1Enabled" class="form-check-label">Bool 1</label>
+            <label asp-for="CustomBool1Enabled" class="form-check-label">@T["Inv.Form.BoolField1"]</label>
             </div>
-            <input asp-for="CustomBool1Name" class="form-control mt-2" placeholder="Title (e.g., Working?)" />
+        <input asp-for="CustomBool1Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Working"]" />
         </div>
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomBool2Enabled" class="form-check-input" />
-                <label asp-for="CustomBool2Enabled" class="form-check-label">Bool 2</label>
+            <label asp-for="CustomBool2Enabled" class="form-check-label">@T["Inv.Form.BoolField2"]</label>
             </div>
-            <input asp-for="CustomBool2Name" class="form-control mt-2" placeholder="Title (e.g., In warranty?)" />
+        <input asp-for="CustomBool2Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.InWarranty"]" />
         </div>
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomBool3Enabled" class="form-check-input" />
-                <label asp-for="CustomBool3Enabled" class="form-check-label">Bool 3</label>
+            <label asp-for="CustomBool3Enabled" class="form-check-label">@T["Inv.Form.BoolField3"]</label>
             </div>
-            <input asp-for="CustomBool3Name" class="form-control mt-2" placeholder="Title (e.g., Approved?)" />
+        <input asp-for="CustomBool3Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.Approved"]" />
         </div>
     </div>
 
-    <h6 class="mt-4 mb-2">Link Fields</h6>
+<h6 class="mt-4 mb-2">@T["Inv.Form.LinkFieldsTitle"]</h6>
     <div class="row g-3">
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomLink1Enabled" class="form-check-input" />
-                <label asp-for="CustomLink1Enabled" class="form-check-label">Link 1</label>
+            <label asp-for="CustomLink1Enabled" class="form-check-label">@T["Inv.Form.LinkField1"]</label>
             </div>
-            <input asp-for="CustomLink1Name" class="form-control mt-2" placeholder="Title (e.g,Datasheet URL)" />
+        <input asp-for="CustomLink1Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.DatasheetUrl"]" />
         </div>
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomLink2Enabled" class="form-check-input" />
-                <label asp-for="CustomLink2Enabled" class="form-check-label">Link 2</label>
+            <label asp-for="CustomLink2Enabled" class="form-check-label">@T["Inv.Form.LinkField2"]</label>
             </div>
-            <input asp-for="CustomLink2Name" class="form-control mt-2" placeholder="Title (e.g,Manual URL)" />
+        <input asp-for="CustomLink2Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.ManualUrl"]" />
         </div>
         <div class="col-md-4">
             <div class="form-check">
                 <input asp-for="CustomLink3Enabled" class="form-check-input" />
-                <label asp-for="CustomLink3Enabled" class="form-check-label">Link 3</label>
+            <label asp-for="CustomLink3Enabled" class="form-check-label">@T["Inv.Form.LinkField3"]</label>
             </div>
-            <input asp-for="CustomLink3Name" class="form-control mt-2" placeholder="Title (e.g,Purchase URL)" />
+        <input asp-for="CustomLink3Name" class="form-control mt-2" placeholder="@T["Inv.Form.Placeholder.PurchaseUrl"]" />
         </div>
     </div>

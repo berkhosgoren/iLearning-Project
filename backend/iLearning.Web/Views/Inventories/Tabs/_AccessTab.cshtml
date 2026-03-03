@@ -1,4 +1,5 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryDetailsVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
     var msg = TempData["InventoryMessage"] as string;
@@ -11,13 +12,13 @@
 
 @if (!Model.CanEdit)
 {
-    <div class="text-muted">You do not have permission to manage access.</div>
+    <div class="text-muted">@T["Inv.Access.NoPermission"]</div>
     return;
 }
 
 <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
     <div class="text-muted small">
-        Access Rows: @Model.AccessUsers.Count
+        @T["Inv.Access.RowsLabel"]: @Model.AccessUsers.Count
     </div>
 </div>
 
@@ -27,9 +28,9 @@
             @Html.AntiForgeryToken()
 
             <div class="col-md-6 position-relative">
-                <label class="form-label">Add user (name or email)</label>
+                <label class="form-label">@T["Inv.Access.AddUserLabel"]</label>
 
-                <input class="form-control" id="accessUserQuery" autocomplete="off" placeholder="Type name or email..." />
+                <input class="form-control" id="accessUserQuery" autocomplete="off" placeholder="@T["Inv.Access.AddUserPlaceholder"]" />
 
                 <input type="hidden" name="userId" id="accessUserId" />
 
@@ -42,28 +43,28 @@
             <div class="col-md-3">
                 <label class="form-label">Permission</label>
                 <select class="form-select" name="canWrite">
-                    <option value="true" selected>Can Write</option>
-                    <option value="false">Read Only</option>
+                    <option value="true" selected>@T["Inv.Access.Permission.CanWrite"]</option>
+                    <option value="false">@T["Inv.Access.Permission.ReadOnly"]</option>
                 </select>
             </div>
 
             <div class="col-md-3 d-flex flex-column">
-                <label class="form-label invisible">Action</label>
-                <button class="btn btn-primary w-100" type="submit" id="accessAddBtn" disabled>Add / Update</button>
+                <label class="form-label invisible">@T["Inv.Access.ActionLabel"]</label>
+                <button class="btn btn-primary w-100" type="submit" id="accessAddBtn" disabled>@T["Inv.Access.AddOrUpdate"]</button>
             </div>
         </form>
     </div>
 </div>
 
 <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
-    <div class="text-muted small" id="accessSelectedLabel">Selected: 0</div>
+    <div class="text-muted small" id="accessSelectedLabel">@T["Common.SelectedCount", 0]</div>
 
     <div class="d-flex flex-wrap gap-2">
         <form method="post" asp-controller="Inventories" asp-action="AccessSetWrite" asp-route-id="@Model.Id" id="accessWriteForm">
             @Html.AntiForgeryToken()
             <input type="hidden" name="canWrite" value="true" />
             <button class="btn btn-outline-primary btn-sm" type="submit" id="accessWriteBtn" disabled>
-                Grant Write
+                @T["Inv.Access.Bulk.GrantWrite"]
             </button>
         </form>
 
@@ -71,14 +72,14 @@
             @Html.AntiForgeryToken()
             <input type="hidden" name="canWrite" value="false" />
             <button class="btn btn-outline-secondary btn-sm" type="submit" id="accessReadBtn" disabled>
-                Set Read-Only
+                @T["Inv.Access.Bulk.SetReadOnly"]
             </button>
         </form>
 
         <form method="post" asp-controller="Inventories" asp-action="AccessRemove" asp-route-id="@Model.Id" id="accessRemoveForm">
             @Html.AntiForgeryToken()
             <button class="btn btn-danger btn-sm" type="submit" id="accessRemoveBtn" disabled>
-                Remove Selected
+                @T["Inv.Access.Bulk.RemoveSelected"]
             </button>
         </form>
     </div>
@@ -89,19 +90,19 @@
         <thead class="table table-hover">
             <tr>
                 <th style="width:44px;" class="text-cented align-middle p-0">
-                    <input type="checkbox" id="accessAll" class="form-check-input d-block mx-auto my-2" aria-label="Select all" />
+                    <input type="checkbox" id="accessAll" class="form-check-input d-block mx-auto my-2" aria-label="@T["Common.SelectAllAria"]" />
                 </th>
-                <th>Name</th>
-                <th style="width:280px;">Email</th>
-                <th style="width:140px;">Write</th>
-                <th style="width:180px;">Granted</th>
+                <th>@T["Common.Name"]</th>
+                <th style="width:280px;">@T["Common.Email"]</th>
+                <th style="width:140px;">@T["Inv.Access.Table.Write"]</th>
+                <th style="width:180px;">@T["Inv.Access.Table.Granted"]</th>
             </tr>
         </thead>
         <tbody>
             @if (Model.AccessUsers.Count == 0)
             {
                 <tr>
-                    <td colspan="5" class="text-muted text-center py-4">No access entries yet.</td>
+                    <td colspan="5" class="text-muted text-center py-4">@T["Inv.Access.Empty"]</td>
                 </tr>
             }
             else
@@ -117,11 +118,11 @@
                         <td>
                             @if (a.CanWrite)
                             {
-                                <span class="badge text-bg-primary">Yes</span>
+                                <span class="badge text-bg-primary">@T["Common.Yes"]</span>
                             }
                             else
                             {
-                                <span class="badge text-bg-secondary">No</span>
+                                <span class="badge text-bg-secondary">@T["Common.No"]</span>
                             }
                         </td>
                         <td>@a.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
@@ -133,7 +134,7 @@
 </div>
 
 <div class="text-muted small mt-2">
-    Access rows are for non-owners. Owner and admins can always edit.
+    @T["Inv.Access.HelpText"]
 </div>
 
 <script>
@@ -150,6 +151,9 @@
         const removeForm = document.getElementById('accessRemoveForm');
 
         const rows = () => Array.from(document.querySelectorAll('input.accessRow'));
+
+        const selectedTextPrefix = '@T["Common.SelectedPrefix"]';
+          const noMatchesText = '@T["Common.NoMatches"]';
 
         function clearHidden(form) {
             Array.from(form.querySelectorAll('input[type="hidden"][name="ids"]')).forEach(x => x.remove());

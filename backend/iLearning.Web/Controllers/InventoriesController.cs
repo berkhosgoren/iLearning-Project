@@ -7,6 +7,7 @@ using iLearning.Web.Services;
 using iLearning.Web.Models.Domain;
 using iLearning.Web.Models.ViewModels.Items;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.Extensions.Localization;
 
 namespace iLearning.Web.Controllers
 {
@@ -16,12 +17,14 @@ namespace iLearning.Web.Controllers
         private readonly AppDbContext _db;
         private readonly CurrentUserService _currentUser;
         private readonly IMarkdownService _markdown;
+        private readonly IStringLocalizer<SharedResource> T;
 
-        public InventoriesController(AppDbContext db, CurrentUserService currentUser, IMarkdownService markdown)
+        public InventoriesController(AppDbContext db, CurrentUserService currentUser, IMarkdownService markdown, IStringLocalizer<SharedResource> t)
         {
             _db = db; 
             _currentUser = currentUser;
             _markdown = markdown;
+            T = t;
         }
 
 
@@ -60,7 +63,7 @@ namespace iLearning.Web.Controllers
             var categoryExists = await _db.Categories.AnyAsync(c => c.Id == vm.CategoryId);
             if (!categoryExists)
             {
-                ModelState.AddModelError(nameof(vm.CategoryId), "Invalid category.");
+                ModelState.AddModelError(nameof(vm.CategoryId), T["Inv.Err.InvalidCategory"]);
                 return View(vm);
             }
 
@@ -219,7 +222,7 @@ namespace iLearning.Web.Controllers
             var categoryExists = await _db.Categories.AnyAsync(c => c.Id == vm.CategoryId);
             if (!categoryExists)
             {
-                ModelState.AddModelError(nameof(vm.CategoryId), "Invalid category.");
+                ModelState.AddModelError(nameof(vm.CategoryId), T["Inv.Err.InvalidCategory"]);
                 return View(vm);
             }
 
@@ -269,7 +272,7 @@ namespace iLearning.Web.Controllers
             }
             catch (DbUpdateConcurrencyException) 
             {
-                ModelState.AddModelError("", "This inventory was updated by someone else. Reload and try again.");
+                ModelState.AddModelError("", T["Inv.Err.Concurrency"]);
                 return View(vm);
             }
 
@@ -287,13 +290,13 @@ namespace iLearning.Web.Controllers
 
             if (!userId.HasValue || userId.Value == Guid.Empty)
             {
-                TempData["InventoryMessage"] = "PLease select a user from the suggestions.";
+                TempData["InventoryMessage"] = T["Inv.Err.SelectUser"];
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
             if (userId.Value == inv.CreatorId)
             {
-                TempData["InventoryMessage"] = "Owner already has access.";
+                TempData["InventoryMessage"] = T["Inv.Err.OwnerAlreadyHasAccess"];
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
@@ -305,13 +308,13 @@ namespace iLearning.Web.Controllers
 
             if (user == null)
             {
-                TempData["InventoryMessage"] = "User not found";
+                TempData["InventoryMessage"] = T["Inv.Err.UserNotFound"];
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
             if (user.IsBlocked)
             {
-                TempData["InventoryMessage"] = "That user is blocked.";
+                TempData["InventoryMessage"] = T["Inv.Err.UserBlocked"];
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
@@ -329,14 +332,14 @@ namespace iLearning.Web.Controllers
                 });
 
                 await _db.SaveChangesAsync();
-                TempData["InventoryMessage"] = "Access granted.";
+                TempData["InventoryMessage"] = T["Inv.Access.Msg.Granted"];
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
             existing.CanWrite = canWrite;
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = "Access updated.";
+            TempData["InventoryMessage"] = T["Inv.Access.Msg.Updated"];
             return RedirectToAction(nameof(Details), new { id, tab = "access" });
         }
 
@@ -362,7 +365,7 @@ namespace iLearning.Web.Controllers
             _db.InventoryAccesses.RemoveRange(rows);
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = "Removed acces for {rows.Count} user(s).";
+            TempData["InventoryMessage"] = T["Inv.Access.Msg.RemovedCount", rows.Count];
             return RedirectToAction(nameof(Details), new { id, tab = "access" });
         }
 
@@ -390,7 +393,7 @@ namespace iLearning.Web.Controllers
 
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = canWrite ? $"Granted write access to {rows.Count} user(s)." : $"Set read-only access for {rows.Count} user(s)";
+            TempData["InventoryMessage"] = canWrite ? T["Inv.Access.Msg.GrantedWriteCount", rows.Count] : T["Inv.Access.Msg.SetReadOnlyCount", rows.Count];
 
             return RedirectToAction(nameof(Details), new { id, tab = "access" });
         }
