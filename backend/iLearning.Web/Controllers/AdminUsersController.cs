@@ -121,7 +121,7 @@ namespace iLearning.Web.Controllers
                     return await DeleteInternal(ids);
 
                 default:
-                    TempData["AdminUsersMessage"] = T["Admin.Users.UnknownAction"];
+                    TempData["AdminUsersMessage"] = T["Admin.Users.UnknownAction"].Value;
                     return RedirectToAction(nameof(Index));
             }
         }

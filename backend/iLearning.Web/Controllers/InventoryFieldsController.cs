@@ -158,7 +158,7 @@ namespace iLearning.Web.Controllers
                 return View("Index", vm);
             }
 
-            TempData["InventoryMessage"] = T["InventoryFields.Messages.FieldsUpdated"];
+            TempData["InventoryMessage"] = T["InventoryFields.Messages.FieldsUpdated"].Value;
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "items" });
         }
 
