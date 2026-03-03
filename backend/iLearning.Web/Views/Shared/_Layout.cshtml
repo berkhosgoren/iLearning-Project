@@ -75,7 +75,7 @@
                                         <li><hr class="dropdown-divider"></li>
                                         <li><h6 class="dropdown-header">Language</h6></li>
                                         <li>
-                                            <form method="post" action="/ui/language" class="m-0">
+                                            <form method="post" action="/prefs/language" class="m-0">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="returnUrl" value="@returnUrl" />
                                                 <input type="hidden" name="culture" value="en" />
@@ -86,7 +86,7 @@
                                         </li>
 
                                         <li>
-                                            <form method="post" action="/ui/language" class="m-0">
+                                            <form method="post" action="/prefs/language" class="m-0">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="returnUrl" value="@returnUrl" />
                                                 <input type="hidden" name="culture" value="ru" />
@@ -137,7 +137,7 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
-                                            <form method="post" action="/ui/language" class="m-0">
+                                            <form method="post" action="/prefs/language" class="m-0">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="returnUrl" value="@returnUrl" />
                                                 <input type="hidden" name="culture" value="en" />
@@ -147,7 +147,7 @@
                                             </form>
                                         </li>
                                         <li>
-                                            <form method="post" action="/ui/language" class="m-0">
+                                            <form method="post" action="/prefs/language" class="m-0">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="returnUrl" value="@returnUrl" />
                                                 <input type="hidden" name="culture" value="ru" />
