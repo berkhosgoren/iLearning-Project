@@ -1,11 +1,15 @@
-﻿@{
+﻿@using System.Globalization;
+
+@{
     var theme = (Context.Request.Cookies["ilearning_theme"] ?? "light").Trim().ToLowerInvariant();
     if (theme != "dark" && theme != "light") { theme = "light"; }
+
+    var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
 }
 
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="@theme">
+<html lang="@lang" data-bs-theme="@theme">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,8 +18,8 @@
         <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     </head>
     <body>
-        <header class="border-bottom">
-            <nav class="navbar navbar-expand-lg">
+        <header class="border-bottom bg-body">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container">
                     <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">iLearning</a>
 
@@ -50,26 +54,48 @@
                                             @User.Identity!.Name
                                     </button>
 
-                                    <ul class="dropdown-menu dropdown-menu-end">
+                                    <ul class="dropdown-menu dropdown-menu-end" style="min-width: 16rem;">
                                         <li>
                                             <a class="dropdown-item" asp-controller="Account" asp-action="Index">
                                                 Profile
                                             </a>
-                                        </li>
-
-                                        
+                                        </li>                                        
 
                                         <li>
                                             <form method="post" action="/prefs/theme" class="m-0">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="returnUrl" value="@returnUrl" />
                                                 <input type="hidden" name="theme" value="@(theme == "dark" ? "light" : "dark")" />
-                                                <button class="dropdown-item" type="submit" title="Toggle Theme">
-                                                @(theme == "dark" ? "☀️ Switch to Light" : "🌙 Switch to Dark")
+                                                <button class="dropdown-item" type="submit">
+                                                     @(theme == "dark" ? "☀️ Switch to Light" : "🌙 Switch to Dark")
                                                 </button>
                                             </form>
                                         </li>
 
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><h6 class="dropdown-header">Language</h6></li>
+                                        <li>
+                                            <form method="post" action="/ui/language" class="m-0">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                                <input type="hidden" name="culture" value="en" />
+                                                <button type="submit" class="dropdown-item @(lang == "en" ? "active" : "")">
+                                                    English (EN)
+                                                </button>
+                                           </form>
+                                        </li>
+
+                                        <li>
+                                            <form method="post" action="/ui/language" class="m-0">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                                <input type="hidden" name="culture" value="ru" />
+                                                <button type="submit"class="dropdown-item @(lang == "ru" ? "active" : "")">
+                                                    Русский (RU)
+                                                </button>
+                                            </form>
+                                        </li>
+                                            
                                         @if (User.IsInRole("Admin"))
                                         {
                                             <li><hr class="dropdown-divider"></li>
@@ -103,8 +129,38 @@
                                     </button>
                                 </form>
 
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary px-2" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false"
+                                            title="Language">
+                                        @lang.ToUpperInvariant()
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <form method="post" action="/ui/language" class="m-0">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                                <input type="hidden" name="culture" value="en" />
+                                                <button type="submit" class="dropdown-item @(lang == "en" ? "active" : "")">
+                                                    EN
+                                                </button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form method="post" action="/ui/language" class="m-0">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                                <input type="hidden" name="culture" value="ru" />
+                                                <button type="submit" class="dropdown-item @(lang == "ru" ? "active" : "")">
+                                                    RU
+                                                </button>
+                                             </form>
+                                        </li>
+                                    </ul>
+                                </div>
+
                                 <a class="btn btn-outline-secondary" href="/auth/login">Login</a>
-                            <a class="btn btn-primary" href="/auth/register">Register</a>
+                                <a class="btn btn-primary" href="/auth/register">Register</a>
                             }
                         </div>
                     </div>

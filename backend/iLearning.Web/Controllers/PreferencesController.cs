@@ -23,6 +23,7 @@ namespace iLearning.Web.Controllers
                     SameSite = SameSiteMode.Lax,
                     Expires = DateTimeOffset.UtcNow.AddYears(1),
                     IsEssential = true,
+                    Path = "/"
                 });
 
             if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
