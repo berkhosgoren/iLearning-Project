@@ -285,8 +285,14 @@
   <data name="Common.Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Common.Comments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
   <data name="Common.Create" xml:space="preserve">
     <value>Create</value>
+  </data>
+  <data name="Common.CustomId" xml:space="preserve">
+    <value>Custom ID</value>
   </data>
   <data name="Common.CustomLabelOptional" xml:space="preserve">
     <value>Custom label (optional)</value>
@@ -303,6 +309,12 @@
   <data name="Common.IfEmptyDefaultLabelUsed" xml:space="preserve">
     <value>If empty, default label will be used.</value>
   </data>
+  <data name="Common.Items" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="Common.Likes" xml:space="preserve">
+    <value>Likes</value>
+  </data>
   <data name="Common.Name" xml:space="preserve">
     <value>Name</value>
   </data>
@@ -311,6 +323,12 @@
   </data>
   <data name="Common.NoMatches" xml:space="preserve">
     <value>No matches.</value>
+  </data>
+  <data name="Common.Private" xml:space="preserve">
+    <value>Private</value>
+  </data>
+  <data name="Common.Public" xml:space="preserve">
+    <value>Public</value>
   </data>
   <data name="Common.SelectAll" xml:space="preserve">
     <value>Select All</value>
@@ -323,6 +341,9 @@
   </data>
   <data name="Common.SelectedPrefix" xml:space="preserve">
     <value>Selected: </value>
+  </data>
+  <data name="Common.Title" xml:space="preserve">
+    <value>Title</value>
   </data>
   <data name="Common.Yes" xml:space="preserve">
     <value>Yes</value>
@@ -692,6 +713,30 @@
   </data>
   <data name="InventoryFields.Messages.FieldsUpdated" xml:space="preserve">
     <value>Fields updated.</value>
+  </data>
+  <data name="InventoryStats.InventoryStats" xml:space="preserve">
+    <value>Inventory Stats</value>
+  </data>
+  <data name="InventoryStats.LastItemCreated" xml:space="preserve">
+    <value>Last Item Created</value>
+  </data>
+  <data name="InventoryStats.LastItemUpdated" xml:space="preserve">
+    <value>Last Item Updated</value>
+  </data>
+  <data name="InventoryStats.NoItems" xml:space="preserve">
+    <value>No items yet.</value>
+  </data>
+  <data name="InventoryStats.PageTitleFormat" xml:space="preserve">
+    <value>Stats - {0}</value>
+  </data>
+  <data name="InventoryStats.RecentActivity" xml:space="preserve">
+    <value>Recent Activity</value>
+  </data>
+  <data name="InventoryStats.TopItemsByComments" xml:space="preserve">
+    <value>Top Items by Comments</value>
+  </data>
+  <data name="InventoryStats.TopItemsByLikes" xml:space="preserve">
+    <value>Top Items by Likes</value>
   </data>
   <data name="InvTabs.Access" xml:space="preserve">
     <value>Access</value>

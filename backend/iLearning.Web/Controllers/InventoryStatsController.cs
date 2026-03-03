@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using iLearning.Web.Data;
 using iLearning.Web.Services;
 using iLearning.Web.Models.ViewModels.Inventories;
+using Microsoft.Extensions.Localization;
 
 namespace iLearning.Web.Controllers
 {
@@ -13,11 +14,13 @@ namespace iLearning.Web.Controllers
     {
         private readonly AppDbContext _db;
         private readonly CurrentUserService _current;
+        private readonly IStringLocalizer<SharedResource> T;
 
-        public InventoryStatsController(AppDbContext db, CurrentUserService current)
+        public InventoryStatsController(AppDbContext db, CurrentUserService current, IStringLocalizer<SharedResource> t)
         {
             _db = db;
             _current = current;
+            T = t;
         }
 
         [HttpGet("")]

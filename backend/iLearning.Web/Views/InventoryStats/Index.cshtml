@@ -1,7 +1,8 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryStatsPageVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
-    ViewData["Title"] = "Stats - " + Model.InventoryTitle;
+    ViewData["Title"] = string.Format(T["InventoryStats.PageTitleFormat"], Model.InventoryTitle);
 }
 
 <div class="container py-4">
@@ -9,14 +10,14 @@
         <div>
             <h2 class="mb-1">@Model.InventoryTitle</h2>
             <div class="text-muted small">
-                Inventory Stats
+                @T["InventoryStats.InventoryStats"]
                 @if (Model.IsPublic)
                 {
-                    <span class="badge text-bg-success ms-2">Public</span>
+                    <span class="badge text-bg-success ms-2">@T["Common.Public"]</span>
                 }
                 else
                 {
-                    <span class="bade text-bg-secondary ms-2">Private</span>
+                    <span class="bade text-bg-secondary ms-2">@T["Common.Private"]</span>
                 }
             </div>
         </div>
@@ -24,7 +25,7 @@
         <div class="d-flex gap-2">
             <a class="btn btn-outline-secondary" asp-controller="Inventories" asp-action="Details" 
                asp-route-id="@Model.InventoryId" asp-route-tab="Items">
-                Back To Inventory
+                @T["Common.BackToInventory"]
             </a>
         </div>
     </div>

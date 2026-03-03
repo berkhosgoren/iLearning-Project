@@ -285,8 +285,14 @@
   <data name="Common.Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="Common.Comments" xml:space="preserve">
+    <value>Комментарии</value>
+  </data>
   <data name="Common.Create" xml:space="preserve">
     <value>Создать</value>
+  </data>
+  <data name="Common.CustomId" xml:space="preserve">
+    <value>Пользовательский ID</value>
   </data>
   <data name="Common.CustomLabelOptional" xml:space="preserve">
     <value>Пользовательская подпись (необязательно)</value>
@@ -303,6 +309,12 @@
   <data name="Common.IfEmptyDefaultLabelUsed" xml:space="preserve">
     <value>Если оставить пустым, будет использована подпись по умолчанию.</value>
   </data>
+  <data name="Common.Items" xml:space="preserve">
+    <value>Элементы</value>
+  </data>
+  <data name="Common.Likes" xml:space="preserve">
+    <value>Лайки</value>
+  </data>
   <data name="Common.Name" xml:space="preserve">
     <value>Имя</value>
   </data>
@@ -311,6 +323,12 @@
   </data>
   <data name="Common.NoMatches" xml:space="preserve">
     <value>Совпадений нет.</value>
+  </data>
+  <data name="Common.Private" xml:space="preserve">
+    <value>Приватный</value>
+  </data>
+  <data name="Common.Public" xml:space="preserve">
+    <value>Публичный</value>
   </data>
   <data name="Common.SelectAll" xml:space="preserve">
     <value>Выбрать все</value>
@@ -323,6 +341,9 @@
   </data>
   <data name="Common.SelectedPrefix" xml:space="preserve">
     <value>Выбрано:</value>
+  </data>
+  <data name="Common.Title" xml:space="preserve">
+    <value>Название</value>
   </data>
   <data name="Common.Yes" xml:space="preserve">
     <value>Да</value>
@@ -692,6 +713,30 @@
   </data>
   <data name="InventoryFields.Messages.FieldsUpdated" xml:space="preserve">
     <value>Поля обновлены.</value>
+  </data>
+  <data name="InventoryStats.InventoryStats" xml:space="preserve">
+    <value>Статистика инвентаря</value>
+  </data>
+  <data name="InventoryStats.LastItemCreated" xml:space="preserve">
+    <value>Последний созданный элемент</value>
+  </data>
+  <data name="InventoryStats.LastItemUpdated" xml:space="preserve">
+    <value>Последнее обновление элемента</value>
+  </data>
+  <data name="InventoryStats.NoItems" xml:space="preserve">
+    <value>Пока нет элементов.</value>
+  </data>
+  <data name="InventoryStats.PageTitleFormat" xml:space="preserve">
+    <value>Статистика - {0}</value>
+  </data>
+  <data name="InventoryStats.RecentActivity" xml:space="preserve">
+    <value>Последняя активность</value>
+  </data>
+  <data name="InventoryStats.TopItemsByComments" xml:space="preserve">
+    <value>Топ элементов по комментариям</value>
+  </data>
+  <data name="InventoryStats.TopItemsByLikes" xml:space="preserve">
+    <value>Топ элементов по лайкам</value>
   </data>
   <data name="InvTabs.Access" xml:space="preserve">
     <value>Доступ</value>
