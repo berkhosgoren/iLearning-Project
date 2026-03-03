@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using iLearning.Web;
+using Microsoft.Extensions.Localization;
 
 
 namespace iLearning.Web.Controllers
@@ -15,10 +17,12 @@ namespace iLearning.Web.Controllers
     public class AuthController : Controller
     {
         private readonly AppDbContext _db;
+        private readonly IStringLocalizer<SharedResource> _t;
 
-        public AuthController(AppDbContext db)
+        public AuthController(AppDbContext db, IStringLocalizer<SharedResource> t)
         {
-            _db = db; 
+            _db = db;
+            _t = t;
         }
 
         [HttpGet("login")]
@@ -44,13 +48,13 @@ namespace iLearning.Web.Controllers
             if (user is null || user.PasswordHash is null || string.IsNullOrWhiteSpace(vm.Password) 
                 || !PasswordHasher.Verify(vm.Password, user.PasswordHash))
             {
-                ModelState.AddModelError("", "Invalid credentials.");
+                ModelState.AddModelError("", _t["Auth.Errors.InvalidCredentials"]);
                 return View(vm);
             }
 
             if (user.IsBlocked)
             {
-                ModelState.AddModelError("", "User is blocked.");
+                ModelState.AddModelError("", _t["Auth.Errors.UserBlocked"]);
                 return View(vm); 
             }
 
@@ -104,7 +108,7 @@ namespace iLearning.Web.Controllers
             var exists = await _db.Users.AnyAsync(u => u.Email == email);
             if (exists)
             {
-                ModelState.AddModelError(nameof(vm.Email), "Email is already registered.");
+                ModelState.AddModelError(nameof(vm.Email), _t["Auth.Errors.EmailExists"]);
                 return View(vm);
             }
 

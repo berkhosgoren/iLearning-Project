@@ -120,6 +120,57 @@
   <data name="App.Title" xml:space="preserve">
     <value>iLearning</value>
   </data>
+  <data name="Auth.Denied.Body" xml:space="preserve">
+    <value>У вас нет прав для просмотра этой страницы.</value>
+  </data>
+  <data name="Auth.Denied.Heading" xml:space="preserve">
+    <value>Доступ запрещён</value>
+  </data>
+  <data name="Auth.Denied.Title" xml:space="preserve">
+    <value>Доступ запрещён</value>
+  </data>
+  <data name="Auth.Errors.EmailExists" xml:space="preserve">
+    <value>Этот email уже зарегистрирован.</value>
+  </data>
+  <data name="Auth.Errors.InvalidCredentials" xml:space="preserve">
+    <value>Неверные учетные данные.</value>
+  </data>
+  <data name="Auth.Errors.UserBlocked" xml:space="preserve">
+    <value>Пользователь заблокирован.</value>
+  </data>
+  <data name="Auth.Login.BackHome" xml:space="preserve">
+    <value>На главную</value>
+  </data>
+  <data name="Auth.Login.Button" xml:space="preserve">
+    <value>Войти</value>
+  </data>
+  <data name="Auth.Login.Footer" xml:space="preserve">
+    <value> Вход означает согласие с базовыми правилами использования.</value>
+  </data>
+  <data name="Auth.Login.NoAccount" xml:space="preserve">
+    <value>Нет аккаунта?</value>
+  </data>
+  <data name="Auth.Login.RegisterLink" xml:space="preserve">
+    <value>Регистрация</value>
+  </data>
+  <data name="Auth.Login.Title" xml:space="preserve">
+    <value>Вход</value>
+  </data>
+  <data name="Auth.Register.AlreadyHave" xml:space="preserve">
+    <value>Уже есть аккаунт? Войти</value>
+  </data>
+  <data name="Auth.Register.BackHome" xml:space="preserve">
+    <value>На главную</value>
+  </data>
+  <data name="Auth.Register.Button" xml:space="preserve">
+    <value>Создать аккаунт</value>
+  </data>
+  <data name="Auth.Register.Footer" xml:space="preserve">
+    <value> Вход через Google и Facebook добавим позже.</value>
+  </data>
+  <data name="Auth.Register.Title" xml:space="preserve">
+    <value>Регистрация</value>
+  </data>
   <data name="Nav.AdminPanel" xml:space="preserve">
     <value>Админ панель</value>
   </data>

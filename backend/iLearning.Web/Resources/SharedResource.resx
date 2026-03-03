@@ -120,6 +120,57 @@
   <data name="App.Title" xml:space="preserve">
     <value>iLearning</value>
   </data>
+  <data name="Auth.Denied.Body" xml:space="preserve">
+    <value>You do not have permission to view this page.</value>
+  </data>
+  <data name="Auth.Denied.Heading" xml:space="preserve">
+    <value>Access Denied</value>
+  </data>
+  <data name="Auth.Denied.Title" xml:space="preserve">
+    <value>Access Denied</value>
+  </data>
+  <data name="Auth.Errors.EmailExists" xml:space="preserve">
+    <value>Email is already registered.</value>
+  </data>
+  <data name="Auth.Errors.InvalidCredentials" xml:space="preserve">
+    <value>Invalid credentials.</value>
+  </data>
+  <data name="Auth.Errors.UserBlocked" xml:space="preserve">
+    <value>User is blocked.</value>
+  </data>
+  <data name="Auth.Login.BackHome" xml:space="preserve">
+    <value>Back to Home</value>
+  </data>
+  <data name="Auth.Login.Button" xml:space="preserve">
+    <value>Sign In</value>
+  </data>
+  <data name="Auth.Login.Footer" xml:space="preserve">
+    <value>By signing in you accept the basic usage rules.</value>
+  </data>
+  <data name="Auth.Login.NoAccount" xml:space="preserve">
+    <value>No Account? </value>
+  </data>
+  <data name="Auth.Login.RegisterLink" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="Auth.Login.Title" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="Auth.Register.AlreadyHave" xml:space="preserve">
+    <value>Already have an Account? Login</value>
+  </data>
+  <data name="Auth.Register.BackHome" xml:space="preserve">
+    <value>Back to Home</value>
+  </data>
+  <data name="Auth.Register.Button" xml:space="preserve">
+    <value>Create Account </value>
+  </data>
+  <data name="Auth.Register.Footer" xml:space="preserve">
+    <value>Google and Facebook will come after</value>
+  </data>
+  <data name="Auth.Register.Title" xml:space="preserve">
+    <value>Register</value>
+  </data>
   <data name="Nav.AdminPanel" xml:space="preserve">
     <value>Admin Panel</value>
   </data>
