@@ -1,4 +1,7 @@
 ﻿@using System.Globalization;
+@using iLearning.Web;
+
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
     var theme = (Context.Request.Cookies["ilearning_theme"] ?? "light").Trim().ToLowerInvariant();
@@ -21,7 +24,7 @@
         <header class="border-bottom bg-body">
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                 <div class="container">
-                    <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">iLearning</a>
+                    <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">@T["App.Title"]</a>
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav"
                             aria-controls="topNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,21 +34,21 @@
                     <div class="collapse navbar-collapse gap-3" id="topNav">
                         <ul class="navbar-nav me-auto">
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">@T["Nav.Home"]</a>
                             </li>
                         </ul>
 
                         <form class="d-flex flex-grow-1" method="get" action="/search" role="search">
-                             <input class="form-control me-2" name="q" type="search" placeholder="Search inventories & items..."
+                        <input class="form-control me-2" name="q" type="search" placeholder="@T["Nav.SearchPlaceholder"]"
                                     value="@Context.Request.Query["q"]" aria-label="Search">
-                             <button class="btn btn-outline-primary" type="submit">Search</button>
+                        <button class="btn btn-outline-primary" type="submit">@T["Nav.SearchButton"]</button>
                         </form>
 
                         <div class="d-flex align-items-center gap-2 ms-5">
                         @if (User?.Identity?.IsAuthenticated == true)
                             {
                                 <a class="btn btn-success" asp-controller="Inventories" asp-action="Create">
-                                    Create Inventory
+                                @T["Nav.CreateInventory"]
                                 </a>
 
                                 <div class="dropdown">
@@ -57,7 +60,7 @@
                                     <ul class="dropdown-menu dropdown-menu-end" style="min-width: 16rem;">
                                         <li>
                                             <a class="dropdown-item" asp-controller="Account" asp-action="Index">
-                                                Profile
+                                                @T["Nav.Profile"]
                                             </a>
                                         </li>                                        
 
@@ -66,8 +69,13 @@
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="returnUrl" value="@returnUrl" />
                                                 <input type="hidden" name="theme" value="@(theme == "dark" ? "light" : "dark")" />
+                                                @{
+                                                        var nextTheme = theme == "dark" ? "light" : "dark";
+                                                        var nextThemeLabel = nextTheme == "dark" ? T["Theme.Dark"] : T["Theme.Light"];
+                                                 }
                                                 <button class="dropdown-item" type="submit">
-                                                     @(theme == "dark" ? "☀️ Switch to Light" : "🌙 Switch to Dark")
+                                                @(theme == "dark" ? $"☀️ {string.Format(T["Nav.ThemeToggle"], nextThemeLabel)}" 
+                                                                  : $"🌙 {string.Format(T["Nav.ThemeToggle"], nextThemeLabel)}")
                                                 </button>
                                             </form>
                                         </li>
@@ -101,7 +109,7 @@
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <a class="dropdown-item" href="/admin/users">
-                                                    Admin Panel
+                                                @T["Nav.AdminPanel"]
                                                 </a>
                                             </li>
                                         }
@@ -111,7 +119,7 @@
                                             <form method="post" action="/auth/logout" class="m-0">
                                                 @Html.AntiForgeryToken()
                                                 <button class="dropdown-item text-danger" type="submit">
-                                                    Logout
+                                                @T["Nav.Logout"]
                                                 </button>
                                             </form>
                                         </li>
@@ -159,8 +167,8 @@
                                     </ul>
                                 </div>
 
-                                <a class="btn btn-outline-secondary" href="/auth/login">Login</a>
-                                <a class="btn btn-primary" href="/auth/register">Register</a>
+                            <a class="btn btn-outline-secondary" href="/auth/login">@T["Nav.Login"]</a>
+                            <a class="btn btn-primary" href="/auth/register">@T["Nav.Register"]</a>
                             }
                         </div>
                     </div>

@@ -57,7 +57,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 
 var supportedCultures = new[]
 {
@@ -72,7 +71,13 @@ var localizationOptions = new RequestLocalizationOptions
     SupportedUICultures = supportedCultures
 };
 
-localizationOptions.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
+localizationOptions.RequestCultureProviders = new List<IRequestCultureProvider>
+{
+    new CookieRequestCultureProvider(),
+    new AcceptLanguageHeaderRequestCultureProvider()
+};
+
+app.UseRouting();
 
 app.UseRequestLocalization(localizationOptions);
 
