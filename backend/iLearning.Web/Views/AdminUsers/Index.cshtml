@@ -1,12 +1,14 @@
 ﻿@model iLearning.Web.Models.ViewModels.Admin.AdminUsersIndexVm
+@using iLearning.Web
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
-    ViewData["Title"] = "Admin Panel";
+    ViewData["Title"] = T["Nav.AdminPanel"];
 }
 
 <div class="container py-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-        <h2 class="mb-0">User Management</h2>
+        <h2 class="mb-0">@T["Admin.Users.Title"]</h2>
         </div>  
         
         @if (!string.IsNullOrWhiteSpace(Model.Message))
@@ -16,25 +18,25 @@
 
     <div class="card">
         <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
-            <div class="fw-semibold">Users</div>
+            <div class="fw-semibold">@T["Admin.Users.CardTitle"]</div>
 
             <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
                 <input class="form-control form-control-sm" style="width: 280px"
-                       name="q" value="@Model.Q" placeholder="Filter (name/email)" />
+                       name="q" value="@Model.Q" placeholder="@T["Admin.Users.FilterPlaceholder"]" />
                 
                 <select class="form-select form-select-sm" name="s" style="width: 160px">
-                    <option value="created" selected="@(Model.Sort=="created")">Sort: Created</option>
-                    <option value="name" selected="@(Model.Sort == "name")">Sort: Name</option>
-                    <option value="email" selected="@(Model.Sort == "email")">Sort: Email</option>
-                    <option value="blocked" selected="@(Model.Sort == "blocked")">Sort: Blocked</option>
+                    <option value="created" selected="@(Model.Sort == "created")">@T["Admin.Users.Sort.Created"]</option>
+                    <option value="name" selected="@(Model.Sort == "name")">@T["Admin.Users.Sort.Name"]</option>
+                    <option value="email" selected="@(Model.Sort == "email")">@T["Admin.Users.Sort.Email"]</option>
+                    <option value="blocked" selected="@(Model.Sort == "blocked")">@T["Admin.Users.Sort.Blocked"]</option>
                 </select>
 
                 <select class="form-select form-select-sm" name="d" style="width: 120px">
-                    <option value="desc" selected="@(Model.Dir=="desc")">Desc</option>
-                    <option value="asc" selected="@(Model.Dir=="asc")">Asc</option>
+                    <option value="desc" selected="@(Model.Dir == "desc")">@T["Admin.Users.Dir.Desc"]</option>
+                    <option value="asc" selected="@(Model.Dir == "asc")">@T["Admin.Users.Dir.Asc"]</option>
                 </select>
 
-                <button class="btn btn-outline-secondary btn-sm" type="submit">Apply</button>              
+                <button class="btn btn-outline-secondary btn-sm" type="submit">@T["Admin.Users.Apply"]</button>
             </form>
         </div>
 
@@ -43,13 +45,13 @@
                 @Html.AntiForgeryToken()
 
                 <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
-                    <div class="text-muted small" id="selLabel">Selected: 0</div>
+                    <div class="text-muted small" id="selLabel">@T["Admin.Users.Selected"]</div>
 
                     <div class="d-flex flex-wrap gap-2">
-                        <button class="btn btn-warning btn-sm" type="submit" name="cmd" value="block" id="blockBtn" disabled>Block</button>
-                        <button class="btn btn-success btn-sm" type="submit" name="cmd" value="unblock" id="unblockBtn" disabled>Unblock</button>
-                        <button class="btn btn-outline-primary btn-sm" type="submit" name="cmd" value="toggle-admin" id="toggleAdminBtn" disabled>Toggle Admin</button>
-                        <button class="btn btn-danger btn-sm" type="submit" name="cmd" value="delete" id="deleteBtn" disabled>Delete</button>
+                        <button class="btn btn-warning btn-sm" type="submit" name="cmd" value="block" id="blockBtn" disabled>@T["Admin.Users.Block"]</button>
+                        <button class="btn btn-success btn-sm" type="submit" name="cmd" value="unblock" id="unblockBtn" disabled>@T["Admin.Users.Unblock"]</button>
+                        <button class="btn btn-outline-primary btn-sm" type="submit" name="cmd" value="toggle-admin" id="toggleAdminBtn" disabled>@T["Admin.Users.ToggleAdmin"]</button>
+                        <button class="btn btn-danger btn-sm" type="submit" name="cmd" value="delete" id="deleteBtn" disabled>@T["Admin.Users.Delete"]</button>
                     </div>
                 </div>
 
@@ -60,19 +62,19 @@
                             <th style="width:44px;" class="text-center align-middle p-0">
                                 <input type="checkbox" id="all" class="form-check-input d-block mx-auto my-2" aria-label="Select all" />
                             </th>
-                            <th>Name</th>
-                            <th style="width:260px;">Email</th>
-                            <th style="width:120px;">Blocked</th>
-                            <th style="width:120px;">Admin</th>
-                            <th style="width:140px;">Owned</th>
-                            <th style="width:170px;">Created</th>
+                                <th>@T["Admin.Users.Col.Name"]</th>
+                                <th style="width:260px;">@T["Admin.Users.Col.Email"]</th>
+                                <th style="width:120px;">@T["Admin.Users.Col.Blocked"]</th>
+                                <th style="width:120px;">@T["Admin.Users.Col.Admin"]</th>
+                                <th style="width:140px;">@T["Admin.Users.Col.Owned"]</th>
+                                <th style="width:170px;">@T["Admin.Users.Col.Created"]</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if (Model.Users.Count == 0)
                         {
                             <tr>
-                                <td colspan="7" class="text-muted text-center py-4">No users found.</td>
+                                    <td colspan="7" class="text-muted text-center py-4">@T["Admin.Users.NoneFound"]</td>
                             </tr>
                         }
                         else
@@ -88,21 +90,21 @@
                                     <td>
                                         @if (u.IsBlocked)
                                         {
-                                            <span class="badge text-bg-warning">Yes</span>
+                                                <span class="badge text-bg-warning">@T["Admin.Users.Yes"]</span>
                                         }
                                         else
                                         {
-                                            <span class="badge text-bg-secondary">No</span>
+                                                <span class="badge text-bg-secondary">@T["Admin.Users.No"]</span>
                                         }
                                     </td>
                                     <td>
                                         @if (u.IsAdmin)
                                         {
-                                            <span class="badge text-bg-primary">Admin</span>
+                                                <span class="badge text-bg-primary">@T["Admin.Users.Role.Admin"]</span>
                                         }
                                         else
                                         {
-                                            <span class="badge bg-body-secondary text-body border">User</span>
+                                                <span class="badge bg-body-secondary text-body border">@T["Admin.Users.Role.User"]</span>
                                         }
                                     </td>
                                     <td>@u.OwnedInventoriesCount</td>
@@ -119,6 +121,8 @@
 </div>
 
 @section Scripts {
+    @using System.Text.Json
+
     <script>
         (function () {
             const all = document.getElementById('all');
@@ -131,6 +135,8 @@
 
             const rows = () => Array.from(document.querySelectorAll('input.row'));
 
+            const selectedTemplate = @Html.Raw(JsonSerializer.Serialize(T["Admin.Users.Selected", "__COUNT__"].Value));
+
             function setButtonsEnabled(enabled) {
                 blockBtn.disabled = !enabled;
                 unblockBtn.disabled = !enabled;
@@ -142,7 +148,8 @@
                 const rowCbs = rows();
                 const checkedCount = rowCbs.filter(x => x.checked).length;
 
-                label.textContent = 'Selected: ' + checkedCount;
+                label.textContent = selectedTemplate.replace('__COUNT__', checkedCount);
+
                 setButtonsEnabled(checkedCount > 0);
 
                 const totalCount = rowCbs.length;

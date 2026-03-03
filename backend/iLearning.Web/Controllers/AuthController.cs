@@ -17,12 +17,12 @@ namespace iLearning.Web.Controllers
     public class AuthController : Controller
     {
         private readonly AppDbContext _db;
-        private readonly IStringLocalizer<SharedResource> _t;
+        private readonly IStringLocalizer<SharedResource> T;
 
         public AuthController(AppDbContext db, IStringLocalizer<SharedResource> t)
         {
             _db = db;
-            _t = t;
+            T = t;
         }
 
         [HttpGet("login")]
@@ -48,13 +48,13 @@ namespace iLearning.Web.Controllers
             if (user is null || user.PasswordHash is null || string.IsNullOrWhiteSpace(vm.Password) 
                 || !PasswordHasher.Verify(vm.Password, user.PasswordHash))
             {
-                ModelState.AddModelError("", _t["Auth.Errors.InvalidCredentials"]);
+                ModelState.AddModelError("", T["Auth.Errors.InvalidCredentials"]);
                 return View(vm);
             }
 
             if (user.IsBlocked)
             {
-                ModelState.AddModelError("", _t["Auth.Errors.UserBlocked"]);
+                ModelState.AddModelError("", T["Auth.Errors.UserBlocked"]);
                 return View(vm); 
             }
 
@@ -108,7 +108,7 @@ namespace iLearning.Web.Controllers
             var exists = await _db.Users.AnyAsync(u => u.Email == email);
             if (exists)
             {
-                ModelState.AddModelError(nameof(vm.Email), _t["Auth.Errors.EmailExists"]);
+                ModelState.AddModelError(nameof(vm.Email), T["Auth.Errors.EmailExists"]);
                 return View(vm);
             }
 

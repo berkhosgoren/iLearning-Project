@@ -5,6 +5,7 @@ using iLearning.Web.Models.ViewModels.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.Extensions.Localization;
 
 
 namespace iLearning.Web.Controllers
@@ -14,10 +15,12 @@ namespace iLearning.Web.Controllers
     public class AdminUsersController : Controller
     {
         private readonly AppDbContext _db;
+        private readonly IStringLocalizer<SharedResource> T;
 
-        public AdminUsersController(AppDbContext db)
+        public AdminUsersController(AppDbContext db, IStringLocalizer<SharedResource> t)
         {
             _db = db;
+            T = t;
         }
 
         [HttpGet("")]
@@ -118,7 +121,7 @@ namespace iLearning.Web.Controllers
                     return await DeleteInternal(ids);
 
                 default:
-                    TempData["AdminUsersMessage"] = "Unknown action.";
+                    TempData["AdminUsersMessage"] = T["Admin.Users.UnknownAction"];
                     return RedirectToAction(nameof(Index));
             }
         }
@@ -135,7 +138,7 @@ namespace iLearning.Web.Controllers
             _db.Users.RemoveRange(users);
             await _db.SaveChangesAsync();
 
-            TempData["AdminUsersMessage"] = $"Deleted {users.Count} user(s).";
+            TempData["AdminUsersMessage"] = T["Admin.Users.Deleted", users.Count].Value;
             return RedirectToAction(nameof(Index));
         }
 
@@ -144,7 +147,7 @@ namespace iLearning.Web.Controllers
             var adminRole = await _db.Roles.FirstOrDefaultAsync(r => r.Name == "Admin");
             if (adminRole == null)
             {
-                TempData["AdminUsersMessage"] = "Admin role not found.";
+                TempData["AdminUsersMessage"] = T["Admin.Users.AdminRoleNotFound"].Value;
                 return RedirectToAction(nameof(Index));
             }
 
@@ -168,19 +171,19 @@ namespace iLearning.Web.Controllers
 
             if (added > 0 && removed > 0)
             {
-                TempData["AdminUsersMessage"] = $"Admin role updated. Added: {added}, removed {removed}.";
+                TempData["AdminUsersMessage"] = T["Admin.Users.AdminRoleUpdated", added, removed].Value;
             }
             else if (added > 0)
             {
-                TempData["AdminUsersMessage"] = $"Granted admin role to {added} user(s).";
+                TempData["AdminUsersMessage"] = T["Admin.Users.AdminRoleGranted", added].Value;
             }
             else if (removed > 0)
             {
-                TempData["AdminUsersMessage"] = $"Removed admin role from {removed} user(s).";
+                TempData["AdminUsersMessage"] = T["Admin.Users.AdminRoleRemoved", removed].Value;
             }
             else
             {
-                TempData["AdminUsersMessage"] = $"No admin role changes.";
+                TempData["AdminUsersMessage"] = T["Admin.Users.AdminRoleNoChanges"].Value;
             }
            
             return RedirectToAction(nameof(Index));
@@ -200,8 +203,8 @@ namespace iLearning.Web.Controllers
 
             await _db.SaveChangesAsync();
 
-            TempData["AdminUsersMessage"] = blocked ? $"Blocked {users.Count} user(s)."
-                                                    : $"Unblocked {users.Count} user(s).";
+            TempData["AdminUsersMessage"] = blocked ? T["Admin.Users.BlockedMsg", users.Count].Value
+                                                    : T["Admin.Users.UnblockedMsg", users.Count].Value;
 
             return RedirectToAction(nameof(Index));
         }

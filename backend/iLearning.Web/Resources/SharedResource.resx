@@ -117,6 +117,105 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Admin.Users.AdminRoleGranted" xml:space="preserve">
+    <value>Granted admin role to {0} user(s).</value>
+  </data>
+  <data name="Admin.Users.AdminRoleNoChanges" xml:space="preserve">
+    <value>No admin role changes.</value>
+  </data>
+  <data name="Admin.Users.AdminRoleNotFound" xml:space="preserve">
+    <value>Admin role not found.</value>
+  </data>
+  <data name="Admin.Users.AdminRoleRemoved" xml:space="preserve">
+    <value>Removed admin role from {0} user(s). </value>
+  </data>
+  <data name="Admin.Users.AdminRoleUpdated" xml:space="preserve">
+    <value>Admin role updated. Added: [0}, removed {1}.</value>
+  </data>
+  <data name="Admin.Users.Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Admin.Users.Block" xml:space="preserve">
+    <value>Block</value>
+  </data>
+  <data name="Admin.Users.CardTitle" xml:space="preserve">
+    <value>Users</value>
+  </data>
+  <data name="Admin.Users.Col.Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Admin.Users.Col.Blocked" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
+  <data name="Admin.Users.Col.Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="Admin.Users.Col.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Admin.Users.Col.Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Admin.Users.Col.Owned" xml:space="preserve">
+    <value>Owned</value>
+  </data>
+  <data name="Admin.Users.Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Admin.Users.Deleted" xml:space="preserve">
+    <value>Deleted {0} user(s). </value>
+  </data>
+  <data name="Admin.Users.Dir.Asc" xml:space="preserve">
+    <value>Asc</value>
+  </data>
+  <data name="Admin.Users.Dir.Desc" xml:space="preserve">
+    <value>Desc </value>
+  </data>
+  <data name="Admin.Users.FilterPlaceholder" xml:space="preserve">
+    <value>Filter (name/email)</value>
+  </data>
+  <data name="Admin.Users.No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Admin.Users.NoneFound" xml:space="preserve">
+    <value>No users found.</value>
+  </data>
+  <data name="Admin.Users.Role.Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Admin.Users.Role.User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="Admin.Users.Selected" xml:space="preserve">
+    <value>Selected: {0}</value>
+  </data>
+  <data name="Admin.Users.Sort.Blocked" xml:space="preserve">
+    <value>Sort: Blocked</value>
+  </data>
+  <data name="Admin.Users.Sort.Created" xml:space="preserve">
+    <value>Sort: Created</value>
+  </data>
+  <data name="Admin.Users.Sort.Email" xml:space="preserve">
+    <value>Sort: Email </value>
+  </data>
+  <data name="Admin.Users.Sort.Name" xml:space="preserve">
+    <value>Sort: Name</value>
+  </data>
+  <data name="Admin.Users.Title" xml:space="preserve">
+    <value>User Management</value>
+  </data>
+  <data name="Admin.Users.ToggleAdmin" xml:space="preserve">
+    <value>Toggle Admin</value>
+  </data>
+  <data name="Admin.Users.Unblock" xml:space="preserve">
+    <value>Unblock</value>
+  </data>
+  <data name="Admin.Users.UnknownAction" xml:space="preserve">
+    <value>Unknown action.</value>
+  </data>
+  <data name="Admin.Users.Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
   <data name="App.Title" xml:space="preserve">
     <value>iLearning</value>
   </data>

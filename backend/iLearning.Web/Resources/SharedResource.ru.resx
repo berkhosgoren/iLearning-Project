@@ -117,6 +117,111 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Admin.Users.AdminRoleGranted" xml:space="preserve">
+    <value>Роль Admin выдана пользователям: {0}.</value>
+  </data>
+  <data name="Admin.Users.AdminRoleNoChanges" xml:space="preserve">
+    <value>Изменений роли Admin нет.</value>
+  </data>
+  <data name="Admin.Users.AdminRoleNotFound" xml:space="preserve">
+    <value>Роль Admin не найдена.</value>
+  </data>
+  <data name="Admin.Users.AdminRoleRemoved" xml:space="preserve">
+    <value>Роль Admin снята с пользователей: {0}.</value>
+  </data>
+  <data name="Admin.Users.AdminRoleUpdated" xml:space="preserve">
+    <value>Роль Admin обновлена. Добавлено: {0}, удалено: {1}.</value>
+  </data>
+  <data name="Admin.Users.Apply" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="Admin.Users.Block" xml:space="preserve">
+    <value>Блокировать</value>
+  </data>
+  <data name="Admin.Users.BlockedMsg" xml:space="preserve">
+    <value>Заблокировано пользователей: {0}.</value>
+  </data>
+  <data name="Admin.Users.CardTitle" xml:space="preserve">
+    <value>Пользователи</value>
+  </data>
+  <data name="Admin.Users.Col.Admin" xml:space="preserve">
+    <value>Админ</value>
+  </data>
+  <data name="Admin.Users.Col.Blocked" xml:space="preserve">
+    <value> Блок</value>
+  </data>
+  <data name="Admin.Users.Col.Created" xml:space="preserve">
+    <value>Создан</value>
+  </data>
+  <data name="Admin.Users.Col.Email" xml:space="preserve">
+    <value>Почта</value>
+  </data>
+  <data name="Admin.Users.Col.Name" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="Admin.Users.Col.Owned" xml:space="preserve">
+    <value>Владение</value>
+  </data>
+  <data name="Admin.Users.Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Admin.Users.Deleted" xml:space="preserve">
+    <value>Удалено пользователей: {0}.</value>
+  </data>
+  <data name="Admin.Users.Dir.Asc" xml:space="preserve">
+    <value>По возр.</value>
+  </data>
+  <data name="Admin.Users.Dir.Desc" xml:space="preserve">
+    <value>По убыв.</value>
+  </data>
+  <data name="Admin.Users.FilterPlaceholder" xml:space="preserve">
+    <value>Фильтр (имя/почта)</value>
+  </data>
+  <data name="Admin.Users.No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Admin.Users.NoneFound" xml:space="preserve">
+    <value>Пользователи не найдены.</value>
+  </data>
+  <data name="Admin.Users.Role.Admin" xml:space="preserve">
+    <value>Админ</value>
+  </data>
+  <data name="Admin.Users.Role.User" xml:space="preserve">
+    <value>Пользователь</value>
+  </data>
+  <data name="Admin.Users.Selected" xml:space="preserve">
+    <value>Выбрано: {0}</value>
+  </data>
+  <data name="Admin.Users.Sort.Blocked" xml:space="preserve">
+    <value>Сортировка: Блокировка</value>
+  </data>
+  <data name="Admin.Users.Sort.Created" xml:space="preserve">
+    <value>Сортировка: Создан</value>
+  </data>
+  <data name="Admin.Users.Sort.Email" xml:space="preserve">
+    <value>Сортировка: Почта</value>
+  </data>
+  <data name="Admin.Users.Sort.Name" xml:space="preserve">
+    <value>Сортировка: Имя</value>
+  </data>
+  <data name="Admin.Users.Title" xml:space="preserve">
+    <value>Управление пользователями</value>
+  </data>
+  <data name="Admin.Users.ToggleAdmin" xml:space="preserve">
+    <value>Переключить админа</value>
+  </data>
+  <data name="Admin.Users.Unblock" xml:space="preserve">
+    <value>Разблокировать</value>
+  </data>
+  <data name="Admin.Users.UnblockedMsg" xml:space="preserve">
+    <value>Разблокировано пользователей: {0}.</value>
+  </data>
+  <data name="Admin.Users.UnknownAction" xml:space="preserve">
+    <value>Неизвестное действие.</value>
+  </data>
+  <data name="Admin.Users.Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
   <data name="App.Title" xml:space="preserve">
     <value>iLearning</value>
   </data>
