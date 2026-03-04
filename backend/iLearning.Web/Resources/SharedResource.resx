@@ -117,6 +117,45 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Account.Filters.AccessPlaceholder" xml:space="preserve">
+    <value>Filter (title/owner/desc)</value>
+  </data>
+  <data name="Account.Filters.OwnedAdminPlaceholder" xml:space="preserve">
+    <value>Filter (title/description/owner)</value>
+  </data>
+  <data name="Account.Filters.OwnedPlaceholder" xml:space="preserve">
+    <value>Filter (title/description)</value>
+  </data>
+  <data name="Account.Hints.AdminEditAny" xml:space="preserve">
+    <value>Admins can edit any inventory.</value>
+  </data>
+  <data name="Account.Hints.OpenInventory" xml:space="preserve">
+    <value>Click any title to open the inventory page.</value>
+  </data>
+  <data name="Account.Hints.ReadOnlyExplainer" xml:space="preserve">
+    <value>This list shows private inventories where you have view access but no write permission.</value>
+  </data>
+  <data name="Account.Hints.WriteAccessExplainer" xml:space="preserve">
+    <value>This list shows inventories where you were granted explicit write access.</value>
+  </data>
+  <data name="Account.Messages.OwnedDeleted" xml:space="preserve">
+    <value>Deleted {0} inventory(ies).</value>
+  </data>
+  <data name="Account.Sections.AllInventories" xml:space="preserve">
+    <value>All Inventories</value>
+  </data>
+  <data name="Account.Sections.InventoriesICanEdit" xml:space="preserve">
+    <value>Inventories I Can Edit</value>
+  </data>
+  <data name="Account.Sections.InventoriesIOwn" xml:space="preserve">
+    <value>Inventories I Own</value>
+  </data>
+  <data name="Account.Sections.ReadOnlyInventories" xml:space="preserve">
+    <value>Read-Only Inventories</value>
+  </data>
+  <data name="Account.Title" xml:space="preserve">
+    <value>My Account</value>
+  </data>
   <data name="Admin.Users.AdminRoleGranted" xml:space="preserve">
     <value>Granted admin role to {0} user(s).</value>
   </data>
@@ -276,6 +315,12 @@
   <data name="Auth.Register.Title" xml:space="preserve">
     <value>Register</value>
   </data>
+  <data name="Common.Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Common.Asc" xml:space="preserve">
+    <value>Asc</value>
+  </data>
   <data name="Common.Back" xml:space="preserve">
     <value>Back</value>
   </data>
@@ -297,6 +342,9 @@
   <data name="Common.Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Common.Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
   <data name="Common.Comments" xml:space="preserve">
     <value>Comments</value>
   </data>
@@ -315,6 +363,12 @@
   <data name="Common.Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Common.DeleteSelected" xml:space="preserve">
+    <value>Delete Selected</value>
+  </data>
+  <data name="Common.Desc" xml:space="preserve">
+    <value>Desc</value>
+  </data>
   <data name="Common.Email" xml:space="preserve">
     <value>Email</value>
   </data>
@@ -329,6 +383,9 @@
   </data>
   <data name="Common.Fields" xml:space="preserve">
     <value>Fields</value>
+  </data>
+  <data name="Common.Filter" xml:space="preserve">
+    <value>Filter</value>
   </data>
   <data name="Common.IfEmptyDefaultLabelUsed" xml:space="preserve">
     <value>If empty, default label will be used.</value>
@@ -354,6 +411,9 @@
   <data name="Common.No" xml:space="preserve">
     <value>No</value>
   </data>
+  <data name="Common.NoInventories" xml:space="preserve">
+    <value>No inventories found.</value>
+  </data>
   <data name="Common.NoMatches" xml:space="preserve">
     <value>No matches.</value>
   </data>
@@ -365,6 +425,12 @@
   </data>
   <data name="Common.Number3" xml:space="preserve">
     <value>Number 3</value>
+  </data>
+  <data name="Common.Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="Common.Owner" xml:space="preserve">
+    <value>Owner</value>
   </data>
   <data name="Common.Private" xml:space="preserve">
     <value>Private</value>
@@ -384,8 +450,23 @@
   <data name="Common.SelectedCount" xml:space="preserve">
     <value>Selected: {0}</value>
   </data>
+  <data name="Common.SelectedLabel" xml:space="preserve">
+    <value>Selected:</value>
+  </data>
   <data name="Common.SelectedPrefix" xml:space="preserve">
     <value>Selected: </value>
+  </data>
+  <data name="Common.SortCategory" xml:space="preserve">
+    <value>Sort: Category</value>
+  </data>
+  <data name="Common.SortCreated" xml:space="preserve">
+    <value>Sort: Created</value>
+  </data>
+  <data name="Common.SortPublic" xml:space="preserve">
+    <value>Sort: Public</value>
+  </data>
+  <data name="Common.SortTitle" xml:space="preserve">
+    <value>Sort: Title</value>
   </data>
   <data name="Common.String1" xml:space="preserve">
     <value>String 1</value>
@@ -416,6 +497,9 @@
   </data>
   <data name="Common.Updated" xml:space="preserve">
     <value>Updated</value>
+  </data>
+  <data name="Common.Visibility" xml:space="preserve">
+    <value>Visibility</value>
   </data>
   <data name="Common.Yes" xml:space="preserve">
     <value>Yes</value>

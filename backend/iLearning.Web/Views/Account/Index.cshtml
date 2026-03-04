@@ -1,14 +1,18 @@
 ﻿@model iLearning.Web.Models.ViewModels.Account.AccountIndexVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
-    ViewData["Title"] = "My Account";
+    ViewData["Title"] = T["Account.Title"].Value;
     var msg = TempData["AccountMessage"] as string;
+
+    var ownedPlaceholder = Model.IsAdmin ? T["Account.Filters.OwnedAdminPlaceholder"].Value : T["Account.Filters.OwnedPlaceholder"].Value;
+    var selectedLabel = T["Common.SelectedLabel"].Value;
 }
 
 <div class="container py-4">
     
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-        <h2 class="mb-0">My Account</h2>
+        <h2 class="mb-0">@T["Account.Title"]</h2>
     </div>
 
     @if (!string.IsNullOrWhiteSpace(msg))
@@ -19,42 +23,42 @@
     <div class="card mb-4">
         <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
             <div class="fw-semibold">
-                @(Model.IsAdmin ? "All Inventories" : "Inventories I Own")
+                @(Model.IsAdmin? T["Account.Sections.AllInventories"].Value : T["Account.Sections.InventoriesIOwn"].Value)
             </div>
 
             <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
                 <input class="form-control form-control-sm" style="width: 260px"
-                       name="oq" value="@Model.OwnedQuery" placeholder="Filter (title/description@(Model.IsAdmin ? "/owner" : "")" />
+                       name="oq" value="@Model.OwnedQuery" placeholder="@ownedPlaceholder" />
 
                  <select class="form-select form-select-sm" name="os" style="width: 160px">
-                     <option value="created" selected="@(Model.OwnedSort=="created")">Sort: Created </option>
-                    <option value="title" selected="@(Model.OwnedSort == "title")">Sort: Title </option>
-                    <option value="category" selected="@(Model.OwnedSort == "category")">Sort: Category </option>
-                    <option value="public" selected="@(Model.OwnedSort == "public")">Sort: Public </option>
+                    <option value="created" selected="@(Model.OwnedSort == "created")">@T["Common.SortCreated"]</option>
+                    <option value="title" selected="@(Model.OwnedSort == "title")">@T["Common.SortTitle"]</option>
+                    <option value="category" selected="@(Model.OwnedSort == "category")">@T["Common.SortCategory"]</option>
+                    <option value="public" selected="@(Model.OwnedSort == "public")">@T["Common.SortPublic"]</option>
                  </select>
 
                  <select class="form-select form-select-sm" name="od" style="width: 120px">
-                     <option value="desc" selected="@(Model.OwnedDir=="desc")">Desc</option>
-                    <option value="asc" selected="@(Model.OwnedDir == "asc")">Asc</option>
+                    <option value="desc" selected="@(Model.OwnedDir == "desc")">@T["Common.Desc"]</option>
+                    <option value="asc" selected="@(Model.OwnedDir == "asc")">@T["Common.Asc"]</option>
                  </select>
 
                  <input type="hidden" name="aq" value="@Model.AccessQuery" />
                  <input type="hidden" name="as" value="@Model.AccessSort" />
                  <input type="hidden" name="ad" value="@Model.AccessDir" />
 
-                 <button class="btn btn-outline-secondary btn-sm" type="submit">Apply</button>
+                <button class="btn btn-outline-secondary btn-sm" type="submit">@T["Common.Apply"]</button>
             </form>
         </div>
 
         <div class="card-body">
 
             <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
-                <div class="text-muted small" id="ownedSelectedLabel">Selected: 0</div>
+                <div class="text-muted small" id="ownedSelectedLabel">@selectedLabel 0</div>
 
                 <form method="post" asp-action="DeleteOwned" asp-controller="Account" id="ownedDeleteForm" class="d-flex gap-2">
                     @Html.AntiForgeryToken()
                     <button class="btn btn-danger btn-sm" type="submit" id="ownedDeleteBtn" disabled>
-                        Delete Selected
+                        @T["Common.DeleteSelected"]
                     </button>
                 </form>
             </div>
@@ -64,24 +68,24 @@
                     <thead class="table table-hover">
                         <tr>
                             <th style="width:44px;">
-                                <input type="checkbox" id="ownedAll" aria-label="Select all" />
+                                <input type="checkbox" id="ownedAll" aria-label="@T["Common.SelectAll"]" />
                             </th>
-                            <th>Title</th>
+                            <th>@T["Common.Title"]</th>
                             
                             @if (Model.IsAdmin)
                             {
-                                <th style="width:220px;">Owner</th>
+                                <th style="width:220px;">@T["Common.Owner"]</th>
                             }
-                            <th style="width:180px;">Category</th>
-                            <th style="width:120px;">Visibility</th>
-                            <th style="width:170px;">Created</th>
+                            <th style="width:180px;">@T["Common.Category"]</th>
+                            <th style="width:120px;">@T["Common.Visibility"]</th>
+                            <th style="width:170px;">@T["Common.Created"]</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if (Model.Owned.Count == 0)
                         {
                             <tr>
-                                <td colspan="5" class="text-muted text-center py-4">No inventories found.</td>
+                                <td colspan="5" class="text-muted text-center py-4">@T["Common.NoInventories"]</td>
                             </tr>
                         }
                         else
@@ -100,18 +104,18 @@
 
                                     @if (Model.IsAdmin)
                                     {
-                                        <td>@(inv.OwnerName ?? "Unknown")</td>
+                                        <td>@(!string.IsNullOrWhiteSpace(inv.OwnerName) ? inv.OwnerName : T["Common.Unknown"].Value)</td>
                                     }
 
                                     <td>@inv.CategoryName</td>
                                     <td>
                                         @if (inv.IsPublic)
                                         {
-                                            <span class="badge text-bg-success">Public</span>
+                                            <span class="badge text-bg-success">@T["Common.Public"]</span>
                                         }
                                         else
                                         {
-                                            <span class="badge text-bg-secondary">Private</span>
+                                            <span class="badge text-bg-secondary">@T["Common.Private"]</span>
                                         }
                                     </td>
                                     <td>@inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
@@ -123,10 +127,10 @@
             </div>
 
             <div class="text-muted small mt-2">
-                Click any title to open the inventory page.
+                @T["Account.Hints.OpenInventory"]
                 @if (Model.IsAdmin)
                 {
-                    <span>Admins can edit any inventory.</span>
+                    <span>@T["Account.Hints.AdminEditAny"]</span>
                 }
             </div>
         </div>
@@ -136,29 +140,29 @@
     {
         <div class="card mb-4">
             <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
-                <div class="fw-semibold">Inventories I Can Edit</div>
+                <div class="fw-semibold">@T["Account.Sections.InventoriesICanEdit"]</div>
 
                 <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
                     <input class="form-control form-control-sm" style="width: 260px"
-                           name="aq" value="@Model.AccessQuery" placeholder="Filter (title/owner/desc)" />
+                           name="aq" value="@Model.AccessQuery" placeholder="@T["Account.Filters.AccessPlaceholder"]" />
 
                     <select class="form-select form-select-sm" name="as" style="width: 160px">
-                        <option value="created" selected="@(Model.AccessSort == "created")">Sort: Created</option>
-                        <option value="title" selected="@(Model.AccessSort == "title")">Sort: Title</option>
-                        <option value="category" selected="@(Model.AccessSort == "category")">Sort: Category</option>
-                        <option value="public" selected="@(Model.AccessSort == "public")">Sort: Public</option>
+                        <option value="created" selected="@(Model.AccessSort == "created")">@T["Common.SortCreated"]</option>
+                        <option value="title" selected="@(Model.AccessSort == "title")">@T["Common.SortTitle"]</option>
+                        <option value="category" selected="@(Model.AccessSort == "category")">@T["Common.SortCategory"]</option>
+                        <option value="public" selected="@(Model.AccessSort == "public")">@T["Common.SortPublic"]</option>
                     </select>
 
                     <select class="form-select form-select-sm" name="ad" style="width: 120px">
-                        <option value="desc" selected="@(Model.AccessDir == "desc")">Desc</option>
-                        <option value="asc" selected="@(Model.AccessDir == "asc")">Asc</option>
+                        <option value="desc" selected="@(Model.AccessDir == "desc")">@T["Common.Desc"]</option>
+                        <option value="asc" selected="@(Model.AccessDir == "asc")">@T["Common.Asc"]</option>
                     </select>
 
                     <input type="hidden" name="oq" value="@Model.OwnedQuery" />
                     <input type="hidden" name="os" value="@Model.OwnedSort" />
                     <input type="hidden" name="od" value="@Model.OwnedDir" />
 
-                    <button class="btn btn-outline-secondary btn-sm" type="submit">Apply</button>
+                    <button class="btn btn-outline-secondary btn-sm" type="submit">@T["Common.Apply"]</button>
                 </form>
             </div>
 
@@ -167,18 +171,18 @@
                     <table class="table table-sm align-middle mb-0">
                         <thead class="table table-hover">
                             <tr>
-                                <th>Title</th>
-                                <th style="width:220px;">Owner</th>
-                                <th style="width:180px;">Category</th>
-                                <th style="width:120px;">Visibility</th>
-                                <th style="width:170px;">Created</th>
+                                <th>@T["Common.Title"]</th>
+                                <th style="width:220px;">@T["Common.Owner"]</th>
+                                <th style="width:180px;">@T["Common.Category"]</th>
+                                <th style="width:120px;">@T["Common.Visibility"]</th>
+                                <th style="width:170px;">@T["Common.Created"]</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (Model.Access.Count == 0)
                             {
                                 <tr>
-                                    <td colspan="5" class="text-muted text-center py-4">No inventories found.</td>
+                                    <td colspan="5" class="text-muted text-center py-4">@T["Common.NoInventories"]</td>
                                 </tr>
                             }
                             else
@@ -196,11 +200,11 @@
                                         <td>
                                             @if (inv.IsPublic)
                                             {
-                                                <span class="badge text-bg-success">Public</span>
+                                                <span class="badge text-bg-success">@T["Common.Public"]</span>
                                             }
                                             else
                                             {
-                                                <span class="badge text-bg-secondary">Private</span>
+                                                <span class="badge text-bg-secondary">@T["Common.Private"]</span>
                                             }
                                         </td>
                                         <td>@inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
@@ -212,7 +216,7 @@
                 </div>
 
                 <div class="text-muted small mt-2">
-                    This list shows inventories where you were granted explicit write access.
+                    @T["Account.Hints.WriteAccessExplainer"]
                 </div>
             </div>
         </div>
@@ -221,21 +225,21 @@
 
         <div class="card">
             <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
-                <div class="fw-semibold">Read-Only Inventories</div>
+                <div class="fw-semibold">@T["Accounts.Sections.ReadOnlyInventories"]</div>
 
                 <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
                     <input class="form-control form-control-sm" style="width: 260px"
-                           name="rq" value="@Model.ReadQuery" placeholder="Filter" />
+                           name="rq" value="@Model.ReadQuery" placeholder="@T["Common.Filter"]" />
 
                            <select class="form-select form-select-sm" name="rs" style="width: 160px">
-                               <option value="created" selected="@(Model.ReadSort == "created")">Sort: Created</option>
-                               <option value="title" selected="@(Model.ReadSort == "title")">Sort: Title</option>
-                               <option value="category" selected="@(Model.ReadSort == "category")">Sort: Category</option>
+                               <option value="created" selected="@(Model.ReadSort == "created")">@T["Common.SortCreated"]</option>
+                               <option value="title" selected="@(Model.ReadSort == "title")">@T["Common.SortTitle"]</option>
+                               <option value="category" selected="@(Model.ReadSort == "category")">@T["Common.SortCategory"]</option>
                            </select>
 
                            <select class="form-select form-select-sm" name="rd" style="width: 120px">
-                               <option value="desc" selected="@(Model.ReadDir == "desc")">Desc</option>
-                               <option value="asc" selected="@(Model.ReadDir == "asc")">Asc</option>
+                               <option value="desc" selected="@(Model.ReadDir == "desc")">@T["Common.Desc"]</option>
+                               <option value="asc" selected="@(Model.ReadDir == "asc")">@T["Common.Asc"]</option>
                            </select>
 
                            <input type="hidden" name="oq" value="@Model.OwnedQuery" />
@@ -246,7 +250,7 @@
                            <input type="hidden" name="as" value="@Model.AccessSort" />
                            <input type="hidden" name="ad" value="@Model.AccessDir" />
 
-                           <button class="btn btn-outline-secondary btn-sm" type="submit">Apply</button>
+                           <button class="btn btn-outline-secondary btn-sm" type="submit">@T["Common.Apply"]</button>
                 </form>
             </div>
             
@@ -255,18 +259,18 @@
                     <table class="table table-sm align-middle mb-0">
                         <thead class="table table-hover">
                             <tr>
-                                <th>Title</th>
-                                <th style="width:220px;">Owner</th>
-                                <th style="width:180px;">Category</th>
-                                <th style="width:120px;">Visibility</th>
-                                <th style="width:170px;">Created</th>
+                                <th>@T["Common.Title"]</th>
+                                <th style="width:220px;">@T["Common.Owner"]</th>
+                                <th style="width:180px;">@T["Common.Category"]</th>
+                                <th style="width:120px;">@T["Common.Visibility"]</th>
+                                <th style="width:170px;">@T["Common.Created"]</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (Model.ReadOnly.Count == 0)
                             {
                                 <tr>
-                                    <td colspan="5" class="text-muted text-center py-4">No inventories found.</td>
+                                    <td colspan="5" class="text-muted text-center py-4">@T["Common.NoInventories"]</td>
                                 </tr>
                             }
                             else
@@ -284,11 +288,11 @@
                                         <td>
                                             @if (inv.IsPublic)
                                             {
-                                                <span class="badge text-bg-success">Public</span>
+                                                <span class="badge text-bg-success">@T["Common.Public"]</span>
                                             }
                                             else
                                             {
-                                                <span class="badge text-bg-secondary">Private</span>
+                                                <span class="badge text-bg-secondary">@T["Common.Private"]</span>
                                             }
                                         </td>
                                         <td>@inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
@@ -300,7 +304,7 @@
                 </div>
 
                 <div class="text-muted small mt-2">
-                    This list shows private inventories where you have view access but no write permission.
+                    @T["Account.Hints.ReadOnlyExplainer"]
                 </div>
             </div>
 
@@ -310,6 +314,8 @@
 </div>
 
 @section Scripts{
+    @using System.Text.Json
+
     <script>
         (function () {
             const all = document.getElementById('ownedAll');
@@ -318,9 +324,11 @@
             const delBtn = document.getElementById('ownedDeleteBtn');
             const form = document.getElementById('ownedDeleteForm');
 
+            const selectedLabel = @Html.Raw(JsonSerializer.Serialize(T["Common.SelectedLabel"].Value));
+
             function update(){
                 const checked = rows().filter(x => x.checked).length;
-                label.textContent = 'Selected: ' + checked;
+                label.textContent = `${selectedLabel} ${checked}`;
                 delBtn.disabled = checked === 0;
 
                 if (!all) return;

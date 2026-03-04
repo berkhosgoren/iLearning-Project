@@ -4,6 +4,7 @@ using iLearning.Web.Models.ViewModels.Account;
 using iLearning.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 
 namespace iLearning.Web.Controllers
@@ -14,11 +15,13 @@ namespace iLearning.Web.Controllers
     {
         private readonly AppDbContext _db;
         private readonly CurrentUserService _current;
+        private readonly IStringLocalizer<SharedResource> T;
 
-        public AccountController(AppDbContext db, CurrentUserService current)
+        public AccountController(AppDbContext db, CurrentUserService current, IStringLocalizer<SharedResource> t)
         {
             _db = db;
             _current = current;
+            T = t;
         }
 
         [HttpGet("")]
@@ -90,10 +93,10 @@ namespace iLearning.Web.Controllers
                 {
                     Id = i.Id,
                     Title = i.Title,
-                    CategoryName = i.Category != null ? i.Category.Name : "Other",
+                    CategoryName = i.Category != null ? i.Category.Name : T["Common.Other"],
                     IsPublic = i.IsPublic,
                     CreatedAtUtc = i.CreatedAtUtc,
-                    OwnerName = isAdmin ? (i.Creator != null ? i.Creator.Name : "Unknown")
+                    OwnerName = isAdmin ? (i.Creator != null ? i.Creator.Name : T["Common.Unknown"])
                     : ""
                 })
                 .ToListAsync();
@@ -129,10 +132,10 @@ namespace iLearning.Web.Controllers
                     {
                         Id = i.Id,
                         Title = i.Title,
-                        CategoryName = i.Category != null ? i.Category.Name : "Other",
+                        CategoryName = i.Category != null ? i.Category.Name : T["Common.Other"],
                         IsPublic = i.IsPublic,
                         CreatedAtUtc = i.CreatedAtUtc,
-                        OwnerName = i.Creator != null ? i.Creator.Name : "Unknown"
+                        OwnerName = i.Creator != null ? i.Creator.Name : T["Common.Unknown"]
                     })
                     .ToListAsync();
 
@@ -165,10 +168,10 @@ namespace iLearning.Web.Controllers
                     {
                         Id = i.Id,
                         Title = i.Title,
-                        CategoryName = i.Category != null ? i.Category.Name : "Other",
+                        CategoryName = i.Category != null ? i.Category.Name : T["Common.Other"],
                         IsPublic = i.IsPublic,
                         CreatedAtUtc = i.CreatedAtUtc,
-                        OwnerName = i.Creator != null ? i.Creator.Name : "Unknown"
+                        OwnerName = i.Creator != null ? i.Creator.Name : T["Common.Unknown"]
                     })
                     .ToListAsync();
             }      
@@ -196,7 +199,7 @@ namespace iLearning.Web.Controllers
             _db.Inventories.RemoveRange(ownedToDelete);
             await _db.SaveChangesAsync();
 
-            TempData["AccountMessage"] = $"Deleted {ownedToDelete.Count} inventory(ies).";
+            TempData["AccountMessage"] = T["Account.Message.OwnedDeleted", ownedToDelete.Count].Value;
             return RedirectToAction(nameof(Index));
         }
 

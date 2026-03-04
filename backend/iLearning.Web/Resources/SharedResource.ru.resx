@@ -117,6 +117,45 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Account.Filters.AccessPlaceholder" xml:space="preserve">
+    <value>Фильтр (название/владелец/описание)</value>
+  </data>
+  <data name="Account.Filters.OwnedAdminPlaceholder" xml:space="preserve">
+    <value>Фильтр (название/описание/владелец)</value>
+  </data>
+  <data name="Account.Filters.OwnedPlaceholder" xml:space="preserve">
+    <value>Фильтр (название/описание)</value>
+  </data>
+  <data name="Account.Hints.AdminEditAny" xml:space="preserve">
+    <value>Администраторы могут редактировать любой инвентарь.</value>
+  </data>
+  <data name="Account.Hints.OpenInventory" xml:space="preserve">
+    <value>Нажмите на название, чтобы открыть страницу инвентаря.</value>
+  </data>
+  <data name="Account.Hints.ReadOnlyExplainer" xml:space="preserve">
+    <value>Список приватных инвентарей, к которым у вас есть доступ на просмотр без права редактирования.</value>
+  </data>
+  <data name="Account.Hints.WriteAccessExplainer" xml:space="preserve">
+    <value>Список инвентарей, где вам выдан явный доступ на редактирование.</value>
+  </data>
+  <data name="Account.Messages.OwnedDeleted" xml:space="preserve">
+    <value>Удалено инвентарей: {0}.</value>
+  </data>
+  <data name="Account.Sections.AllInventories" xml:space="preserve">
+    <value>Все инвентари</value>
+  </data>
+  <data name="Account.Sections.InventoriesICanEdit" xml:space="preserve">
+    <value>Инвентари, которые я могу редактировать</value>
+  </data>
+  <data name="Account.Sections.InventoriesIOwn" xml:space="preserve">
+    <value>Мои инвентари</value>
+  </data>
+  <data name="Account.Sections.ReadOnlyInventories" xml:space="preserve">
+    <value>Инвентари только для чтения</value>
+  </data>
+  <data name="Account.Title" xml:space="preserve">
+    <value>Мой аккаунт</value>
+  </data>
   <data name="Admin.Users.AdminRoleGranted" xml:space="preserve">
     <value>Роль Admin выдана пользователям: {0}.</value>
   </data>
@@ -276,6 +315,12 @@
   <data name="Auth.Register.Title" xml:space="preserve">
     <value>Регистрация</value>
   </data>
+  <data name="Common.Apply" xml:space="preserve">
+    <value>Применить</value>
+  </data>
+  <data name="Common.Asc" xml:space="preserve">
+    <value>Возр.</value>
+  </data>
   <data name="Common.Back" xml:space="preserve">
     <value>Назад</value>
   </data>
@@ -297,6 +342,9 @@
   <data name="Common.Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
+  <data name="Common.Category" xml:space="preserve">
+    <value>Категория</value>
+  </data>
   <data name="Common.Comments" xml:space="preserve">
     <value>Комментарии</value>
   </data>
@@ -315,6 +363,12 @@
   <data name="Common.Delete" xml:space="preserve">
     <value>Удалить</value>
   </data>
+  <data name="Common.DeleteSelected" xml:space="preserve">
+    <value>Удалить выбранные</value>
+  </data>
+  <data name="Common.Desc" xml:space="preserve">
+    <value>Убыв.</value>
+  </data>
   <data name="Common.Email" xml:space="preserve">
     <value>Email</value>
   </data>
@@ -329,6 +383,9 @@
   </data>
   <data name="Common.Fields" xml:space="preserve">
     <value>Поля</value>
+  </data>
+  <data name="Common.Filter" xml:space="preserve">
+    <value>Фильтр</value>
   </data>
   <data name="Common.IfEmptyDefaultLabelUsed" xml:space="preserve">
     <value>Если оставить пустым, будет использована подпись по умолчанию.</value>
@@ -354,6 +411,9 @@
   <data name="Common.No" xml:space="preserve">
     <value>Нет</value>
   </data>
+  <data name="Common.NoInventories" xml:space="preserve">
+    <value>Инвентари не найдены.</value>
+  </data>
   <data name="Common.NoMatches" xml:space="preserve">
     <value>Совпадений нет.</value>
   </data>
@@ -365,6 +425,12 @@
   </data>
   <data name="Common.Number3" xml:space="preserve">
     <value>Число 3</value>
+  </data>
+  <data name="Common.Other" xml:space="preserve">
+    <value>Другое</value>
+  </data>
+  <data name="Common.Owner" xml:space="preserve">
+    <value>Владелец</value>
   </data>
   <data name="Common.Private" xml:space="preserve">
     <value>Приватный</value>
@@ -384,8 +450,23 @@
   <data name="Common.SelectedCount" xml:space="preserve">
     <value>Выбрано: {0}</value>
   </data>
+  <data name="Common.SelectedLabel" xml:space="preserve">
+    <value>Выбрано:</value>
+  </data>
   <data name="Common.SelectedPrefix" xml:space="preserve">
     <value>Выбрано:</value>
+  </data>
+  <data name="Common.SortCategory" xml:space="preserve">
+    <value>Сортировка: Категория</value>
+  </data>
+  <data name="Common.SortCreated" xml:space="preserve">
+    <value>Сортировка: Создано</value>
+  </data>
+  <data name="Common.SortPublic" xml:space="preserve">
+    <value>Сортировка: Публичность</value>
+  </data>
+  <data name="Common.SortTitle" xml:space="preserve">
+    <value>Сортировка: Название</value>
   </data>
   <data name="Common.String1" xml:space="preserve">
     <value>Строка 1</value>
@@ -416,6 +497,9 @@
   </data>
   <data name="Common.Updated" xml:space="preserve">
     <value>Обновлено</value>
+  </data>
+  <data name="Common.Visibility" xml:space="preserve">
+    <value>Доступ</value>
   </data>
   <data name="Common.Yes" xml:space="preserve">
     <value>Да</value>
