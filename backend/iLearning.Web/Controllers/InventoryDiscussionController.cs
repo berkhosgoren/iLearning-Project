@@ -4,6 +4,7 @@ using iLearning.Web.Models.Domain;
 using iLearning.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace iLearning.Web.Controllers
 {
@@ -13,11 +14,13 @@ namespace iLearning.Web.Controllers
     {
         private readonly AppDbContext _db;
         private readonly CurrentUserService _current;
+        private readonly IStringLocalizer<SharedResource> T;
 
-        public InventoryDiscussionController(AppDbContext db, CurrentUserService current)
+        public InventoryDiscussionController(AppDbContext db, CurrentUserService current, IStringLocalizer<SharedResource> t)
         {
             _db = db;
             _current = current;
+            T = t;
         }
 
         [ValidateAntiForgeryToken]
@@ -33,7 +36,7 @@ namespace iLearning.Web.Controllers
             var text = (body ?? "").Trim();
             if (string.IsNullOrWhiteSpace(text))
             {
-                TempData["InventoryMessage"] = "Comment cannot be empty.";
+                TempData["InventoryMessage"] = T["Items.Messages.CommentEmpty"].Value;
                 return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "discussion" });
             }
 
@@ -50,7 +53,7 @@ namespace iLearning.Web.Controllers
 
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = "Comment added.";
+            TempData["InventoryMessage"] = T["Items.Messages.CommentAdded"].Value;
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "discussion" });
         }
 
@@ -88,7 +91,7 @@ namespace iLearning.Web.Controllers
             _db.InventoryComments.Remove(comment);
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = "Comment Deleted.";
+            TempData["InventoryMessage"] = T["Items.Messages.CommentDeleted"].Value;
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "discussion" });
         }
         
