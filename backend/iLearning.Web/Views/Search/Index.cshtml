@@ -1,21 +1,22 @@
 ﻿@model iLearning.Web.Models.ViewModels.Search.SearchResultsVm 
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
-    ViewData["Title"] = "Search";
+    ViewData["Title"] = T["Search.Title"];
 }
 
 <div class="container py-4">
 
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
         <div>
-            <h2 class="mb-0">Search</h2>
+            <h2 class="mb-0">@T["Search.Title"]</h2>
             @if (!string.IsNullOrWhiteSpace(Model.Q))
             {
-                <div class="text-muted">Results for: <span class="fw-semibold">@Model.Q</span></div>
+                <div class="text-muted">@T["Search.ResultsFor"] <span class="fw-semibold">@Model.Q</span></div>
             }
             else
             {
-                <div class="text-muted">Type a query in the search box above.</div>
+                <div class="text-muted">@T["Search.EmptyHint"]</div>
             }
         </div>
     </div>
@@ -26,12 +27,12 @@
 
             <div class="col-lg-6">
                 <div class="card h-100">
-                    <div class="card-header fw-semibold">Inventories (@Model.Inventories.Count)</div>
+                    <div class="card-header fw-semibold">@T["Search.InventoriesHeader", Model.Inventories.Count]</div>
                     <div class="card-body">
 
                         @if (Model.Inventories.Count == 0)
                         {
-                            <div class="text-muted">No inventories found.</div>
+                            <div class="text-muted">@T["Search.NoInventoriesFound"]</div>
                         }
                         else
                         {
@@ -44,14 +45,14 @@
                                            <div class="me-auto">
                                                <div class="fw-semibold">@inv.Title</div>
                                                <div class="text-muted small">
-                                                    @inv.CategoryName · by @inv.CreatorName
+                                                    @inv.CategoryName · @T["Common.By"] @inv.CreatorName
                                                     @if (inv.IsPublic)
                                                         {
-                                                            <span class="badge text-bg-success m-sm-2">Public</span>
+                                                            <span class="badge text-bg-success m-sm-2">@T["Common.Public"]</span>
                                                         }
                                                         else
                                                         {
-                                                            <span class="badge text-bg-secondary m-sm-2">Private</span>
+                                                            <span class="badge text-bg-secondary m-sm-2">@T["Common.Private"]</span>
                                                         }
                                                     </div>
 
@@ -77,15 +78,16 @@
 
             <div class="col-lg-6">
                 <div class="card h-100">
-                    <div class="card-header fw-semibold">Items (@Model.Items.Count)</div>
+                    <div class="card-header fw-semibold">@T["Search.ItemsHeader", Model.Items.Count]</div>
                     <div class="card-body">
 
                         @if (Model.Items.Count == 0)
                         {
-                            <div class="text-muted">No items found.</div>
+                            <div class="text-muted">@T["Search.NoItemsFound"]</div>
                         }
                         else
                         {
+                          <div class="list-group">
                             @foreach (var it in Model.Items)
                             {
                                 <a class="list-group-item list-group-item-action" asp-controller="Items" asp-action="Details"
@@ -94,7 +96,7 @@
                                         <div class="me-auto">
                                             <div class="fw-semibold">@it.CustomId</div>
                                             <div class="text-muted small">@it.Title</div>
-                                            <div class="text-muted small mt-1">Inventory: @it.InventoryTitle</div>
+                                            <div class="text-muted small mt-1">@T["Search.InventoryLabel"] @it.InventoryTitle</div>
                                         </div>
                                         <div class="text-muted small text-nowrap">
                                             @it.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy")
@@ -102,6 +104,7 @@
                                     </div>
                                </a>
                             }
+                          </div>
                         }
                     </div>
                 </div>

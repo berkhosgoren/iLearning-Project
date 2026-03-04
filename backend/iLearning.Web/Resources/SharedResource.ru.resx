@@ -354,6 +354,9 @@
   <data name="Common.Created" xml:space="preserve">
     <value>Создано</value>
   </data>
+  <data name="Common.CreatedLabel" xml:space="preserve">
+    <value>Создано:</value>
+  </data>
   <data name="Common.CustomId" xml:space="preserve">
     <value>Пользовательский ID</value>
   </data>
@@ -503,6 +506,18 @@
   </data>
   <data name="Common.Yes" xml:space="preserve">
     <value>Да</value>
+  </data>
+  <data name="Home.PublicInventories.Empty" xml:space="preserve">
+    <value>Инвентари не найдены.</value>
+  </data>
+  <data name="Home.PublicInventories.Heading" xml:space="preserve">
+    <value>Публичные инвентари</value>
+  </data>
+  <data name="Home.PublicInventories.Title" xml:space="preserve">
+    <value>Инвентари</value>
+  </data>
+  <data name="Home.PublicInventories.ViewInventory" xml:space="preserve">
+    <value>Открыть инвентарь</value>
   </data>
   <data name="Inv.Access.ActionLabel" xml:space="preserve">
     <value>Действие</value>
@@ -1043,6 +1058,30 @@
   </data>
   <data name="Nav.ThemeToggle" xml:space="preserve">
     <value>Переключить на {0}</value>
+  </data>
+  <data name="Search.EmptyHint" xml:space="preserve">
+    <value>Введите запрос в поле поиска выше.</value>
+  </data>
+  <data name="Search.InventoriesHeader" xml:space="preserve">
+    <value>Инвентари ({0})</value>
+  </data>
+  <data name="Search.InventoryLabel" xml:space="preserve">
+    <value>Инвентарь:</value>
+  </data>
+  <data name="Search.ItemsHeader" xml:space="preserve">
+    <value>Элементы ({0})</value>
+  </data>
+  <data name="Search.NoInventoriesFound" xml:space="preserve">
+    <value>Инвентари не найдены.</value>
+  </data>
+  <data name="Search.NoItemsFound" xml:space="preserve">
+    <value>Элементы не найдены.</value>
+  </data>
+  <data name="Search.ResultsFor" xml:space="preserve">
+    <value>Результаты для:</value>
+  </data>
+  <data name="Search.Title" xml:space="preserve">
+    <value>Поиск</value>
   </data>
   <data name="Theme.Dark" xml:space="preserve">
     <value>Тёмную</value>

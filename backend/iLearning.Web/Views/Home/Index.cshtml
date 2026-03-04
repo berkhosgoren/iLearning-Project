@@ -1,16 +1,17 @@
 ﻿@model List<iLearning.Web.Models.ViewModels.Home.HomeInventoryCardVm>
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
-    ViewData["Title"] = "Inventories";
+    ViewData["Title"] = T["Home.PublicInventories.Title"];
 }
 
 <div class="container mt-4">
-    <h3 class="mb-4">Public Inventories</h3>
+    <h3 class="mb-4">@T["Home.PublicInventories.Heading"]</h3>
 
     @if (!Model.Any())
     {
         <div class="alert alert-secondary">
-            No inventories found.
+            @T["Home.PublicInventories.Empty"]
         </div>
     }
     else
@@ -34,11 +35,11 @@
                             </h5>
 
                             <p class="text-muted small mb-2">
-                                @inv.CategoryName • by @inv.CreatorName
+                                @inv.CategoryName • @T["Common.By"] @inv.CreatorName
                             </p>
 
                             <p class="text-muted small mb-2">
-                                Created: @inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                @T["Common.CreatedLabel"] @inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
                             </p>
 
                             <div class="markdown-preview text-muted small">
@@ -52,7 +53,7 @@
                             asp-controller="Inventories"
                             asp-action="Details"
                             asp-route-id="@inv.Id">
-                                View Inventory
+                                @T["Home.PublicInventories.ViewInventory"]
                             </a>
                         </div>
 

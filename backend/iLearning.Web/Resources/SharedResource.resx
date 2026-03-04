@@ -354,6 +354,9 @@
   <data name="Common.Created" xml:space="preserve">
     <value>Created</value>
   </data>
+  <data name="Common.CreatedLabel" xml:space="preserve">
+    <value>Created:</value>
+  </data>
   <data name="Common.CustomId" xml:space="preserve">
     <value>Custom ID</value>
   </data>
@@ -503,6 +506,18 @@
   </data>
   <data name="Common.Yes" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="Home.PublicInventories.Empty" xml:space="preserve">
+    <value>No inventories found.</value>
+  </data>
+  <data name="Home.PublicInventories.Heading" xml:space="preserve">
+    <value>Public Inventories</value>
+  </data>
+  <data name="Home.PublicInventories.Title" xml:space="preserve">
+    <value>Inventories</value>
+  </data>
+  <data name="Home.PublicInventories.ViewInventory" xml:space="preserve">
+    <value>View Inventory</value>
   </data>
   <data name="Inv.Access.ActionLabel" xml:space="preserve">
     <value>Action</value>
@@ -1043,6 +1058,30 @@
   </data>
   <data name="Nav.ThemeToggle" xml:space="preserve">
     <value>Switch to {0}</value>
+  </data>
+  <data name="Search.EmptyHint" xml:space="preserve">
+    <value>Type a query in the search box above.</value>
+  </data>
+  <data name="Search.InventoriesHeader" xml:space="preserve">
+    <value>Inventories ({0})</value>
+  </data>
+  <data name="Search.InventoryLabel" xml:space="preserve">
+    <value>Inventory:</value>
+  </data>
+  <data name="Search.ItemsHeader" xml:space="preserve">
+    <value>Items ({0})</value>
+  </data>
+  <data name="Search.NoInventoriesFound" xml:space="preserve">
+    <value>No inventories found.</value>
+  </data>
+  <data name="Search.NoItemsFound" xml:space="preserve">
+    <value>No items found.</value>
+  </data>
+  <data name="Search.ResultsFor" xml:space="preserve">
+    <value>Results for:</value>
+  </data>
+  <data name="Search.Title" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="Theme.Dark" xml:space="preserve">
     <value>Dark</value>

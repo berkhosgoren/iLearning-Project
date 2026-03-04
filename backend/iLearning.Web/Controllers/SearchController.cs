@@ -4,6 +4,7 @@ using iLearning.Web.Models.ViewModels.Search;
 using iLearning.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace iLearning.Web.Controllers
 {
@@ -13,11 +14,13 @@ namespace iLearning.Web.Controllers
     {
         private readonly AppDbContext _db;
         private readonly CurrentUserService _current;
+        private readonly IStringLocalizer<SharedResource> T;
 
-        public SearchController(AppDbContext db, CurrentUserService current)
+        public SearchController(AppDbContext db, CurrentUserService current, IStringLocalizer<SharedResource> t)
         {
             _db = db;
             _current = current;
+            T = t;
         }
 
         [HttpGet("")]
@@ -78,8 +81,8 @@ namespace iLearning.Web.Controllers
                     Id = i.Id,
                     Title = i.Title,
                     Description = i.Description,
-                    CategoryName = i.Category != null ? i.Category.Name : "Other",
-                    CreatorName = i.Creator != null ? i.Creator.Name : "Unknown",
+                    CategoryName = i.Category != null ? i.Category.Name : T["Common.Other"],
+                    CreatorName = i.Creator != null ? i.Creator.Name : T["Common.Unknown"],
                     IsPublic = i.IsPublic,
                     CreatedAtUtc = i.CreatedAtUtc,
                 })
