@@ -1,10 +1,11 @@
 ﻿@model iLearning.Web.Models.ViewModels.Items.ItemDetailsVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
     ViewData["Title"] = Model.CustomId;
     var msg = TempData["InventoryMessage"] as string;
 
-    string Label(string? custom, string fallback) => !string.IsNullOrWhiteSpace(custom) ? custom! : fallback;
+    string Label(string? custom, string fallbackKey) => !string.IsNullOrWhiteSpace(custom) ? custom! : T[fallbackKey].Value;
 }
 
 <div class="container py-4">
@@ -23,13 +24,13 @@
 
         <div class="d-flex gap-2">
             <a class="btn btn-outline-secondary" asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.InventoryId" asp-route-tab="items">
-                Back
+                @T["Common.Back"]
             </a>
 
             @if (Model.CanWrite)
             {
                 <a class="btn btn-outline-primary" asp-controller="Items" asp-action="Edit" asp-route-inventoryId="@Model.InventoryId"
-                   asp-route-itemId="@Model.ItemId">Edit Item</a>
+                   asp-route-itemId="@Model.ItemId">@T["Items.Details.EditItem"]</a>
             }
         </div>
     </div>
@@ -37,20 +38,22 @@
     <div class="card mb-3">
         <div class="card-body">
             <dl class="row mb-0">
-                <dt class="col-sm-3">Inventory</dt>
+                <dt class="col-sm-3">@T["Items.Details.Inventory"]</dt>
                 <dd class="col-sm-9">@Model.InventoryTitle</dd>
 
-                <dt class="col-sm-3">Created</dt>
-                <dd class="col-sm-9">@Model.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm") by @Model.CreatedByName</dd>
+                <dt class="col-sm-3">@T["Common.Created"]</dt>
+                <dd class="col-sm-9">@Model.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                    <span>@T["Common.By"] @Model.CreatedByName</span>
+                </dd>
 
-                <dt class="col-sm-3">Updated</dt>
+                <dt class="col-sm-3">@T["Common.Updated"]</dt>
                 <dd class="col-sm-9">
                     @if (Model.UpdatedAtUtc.HasValue)
                     {
                         @Model.UpdatedAtUtc.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
                         @if (!string.IsNullOrWhiteSpace(Model.UpdatedByName))
                         {
-                            <span> by @Model.UpdatedByName</span>
+                            <span> @T["Common.By"] @Model.UpdatedByName</span>
                         }
                     }
                     else
@@ -59,7 +62,7 @@
                     }
                 </dd>
 
-                <dt class="col-sm-3">Likes</dt>
+                <dt class="col-sm-3">@T["Items.Details.Likes"]</dt>
                 <dd class="col-sm-9">
                     <div class="d-flex align-items-center gap-2 flex-wrap">
                         <span class="fw-semibold">@Model.LikesCount</span>
@@ -76,95 +79,95 @@
 
                                 @if (Model.IsLikedByMe)
                                 {
-                                    <button class="btn btn-outline-secondary btn-sm" type="submit">Unlike</button>
+                                    <button class="btn btn-outline-secondary btn-sm" type="submit">@T["Items.Details.Unlike"]</button>
                                 }
                                 else
                                 {
-                                    <button class="btn btn-outline-primary btn-sm" type="submit">Like</button>
+                                    <button class="btn btn-outline-primary btn-sm" type="submit">@T["Items.Details.Like"]</button>
                                 }
                             </form>
                         }
                         else
                         {
-                            <span class="text-muted small">Login to like</span>
+                            <span class="text-muted small">@T["Items.Details.LoginToLike"]</span>
                         }
                     </div>
                 </dd>
 
-                <dt class="col-sm-3">Comments</dt>
+                <dt class="col-sm-3">@T["Items.Details.Comments"]</dt>
                 <dd class="col-sm-9">@Model.CommentsCount</dd>
             </dl>
         </div>
     </div>
 
     <div class="card mb-3">
-        <div class="card-header fw-semibold">Fields</div>
+        <div class="card-header fw-semibold">@T["Items.Details.Fields"]</div>
         <div class="card-body">
             <dl class="row mb-0">
 
                 @if (Model.Fields.String1Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.String1Name, "String 1")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.String1Name, "Common.String1")</dt>
                     <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.String1) ? Model.String1 : "-")</dd>
                 }
                 @if (Model.Fields.String2Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.String2Name, "String 2")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.String2Name, "Common.String2")</dt>
                     <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.String2) ? Model.String2 : "-")</dd>
                 }
                 @if (Model.Fields.String3Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.String3Name, "String 3")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.String3Name, "Common.String3")</dt>
                     <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.String3) ? Model.String3 : "-")</dd>
                 }
                 @if (Model.Fields.Text1Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Text1Name, "Text 1")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.Text1Name, "Common.Text1")</dt>
                     <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Text1) ? Model.Text1 : "-")</dd>
                 }
                 @if (Model.Fields.Text2Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Text2Name, "Text 2")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.Text2Name, "Common.Text2")</dt>
                     <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Text2) ? Model.Text2 : "-")</dd>
                 }
                 @if (Model.Fields.Text3Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Text3Name, "Text 3")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.Text3Name, "Common.Text3")</dt>
                     <dd class="col-sm-9">@(!string.IsNullOrWhiteSpace(Model.Text3) ? Model.Text3 : "-")</dd>
                 }
                 @if (Model.Fields.Number1Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Number1Name, "Number 1")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.Number1Name, "Common.Number1")</dt>
                     <dd class="col-sm-9">@((Model.Number1.HasValue) ? Model.Number1.Value.ToString() : "-")</dd>
                 }
                 @if (Model.Fields.Number2Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Number2Name, "Number 2")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.Number2Name, "Common.Number2")</dt>
                     <dd class="col-sm-9">@((Model.Number2.HasValue) ? Model.Number2.Value.ToString() : "-")</dd>
                 }
                 @if (Model.Fields.Number3Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Number3Name, "Number 3")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.Number3Name, "Common.Number3")</dt>
                     <dd class="col-sm-9">@((Model.Number3.HasValue) ? Model.Number3.Value.ToString() : "-")</dd>
                 }
                 @if (Model.Fields.Bool1Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Bool1Name, "Bool 1")</dt>
-                    <dd class="col-sm-9">@((Model.Bool1.HasValue) ? (Model.Bool1.Value ? "Yes" : "No") : "-")</dd>
+                    <dt class="col-sm-3">@Label(Model.Fields.Bool1Name, "Common.Bool1")</dt>
+                    <dd class="col-sm-9">@((Model.Bool1.HasValue) ? (Model.Bool1.Value ? T["Common.Yes"].Value : T["Common.No"].Value) : "-")</dd>
                 }
                 @if (Model.Fields.Bool2Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Bool2Name, "Bool 2")</dt>
-                    <dd class="col-sm-9">@((Model.Bool2.HasValue) ? (Model.Bool2.Value ? "Yes" : "No") : "-")</dd>
+                    <dt class="col-sm-3">@Label(Model.Fields.Bool2Name, "Common.Bool2")</dt>
+                    <dd class="col-sm-9">@((Model.Bool2.HasValue) ? (Model.Bool2.Value ? T["Common.Yes"].Value : T["Common.No"].Value) : "-")</dd>
                 }
                 @if (Model.Fields.Bool3Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Bool3Name, "Bool 3")</dt>
-                    <dd class="col-sm-9">@((Model.Bool3.HasValue) ? (Model.Bool3.Value ? "Yes" : "No") : "-")</dd>
+                    <dt class="col-sm-3">@Label(Model.Fields.Bool3Name, "Common.Bool3")</dt>
+                    <dd class="col-sm-9">@((Model.Bool3.HasValue) ? (Model.Bool3.Value ? T["Common.Yes"].Value : T["Common.No"].Value) : "-")</dd>
                 }
                 @if (Model.Fields.Link1Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Link1Name, "Link 1")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.Link1Name, "Common.Link1")</dt>
                     <dd class="col-sm-9">
                         @if (!string.IsNullOrWhiteSpace(Model.Link1))
                         {
@@ -178,7 +181,7 @@
                 }
                 @if (Model.Fields.Link2Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Link2Name, "Link 2")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.Link2Name, "Common.Link2")</dt>
                     <dd class="col-sm-9">
                         @if (!string.IsNullOrWhiteSpace(Model.Link2))
                         {
@@ -192,7 +195,7 @@
                 }
                 @if (Model.Fields.Link3Enabled)
                 {
-                    <dt class="col-sm-3">@Label(Model.Fields.Link3Name, "Link 3")</dt>
+                    <dt class="col-sm-3">@Label(Model.Fields.Link3Name, "Common.Link3")</dt>
                     <dd class="col-sm-9">
                         @if (!string.IsNullOrWhiteSpace(Model.Link3))
                         {
@@ -209,7 +212,7 @@
     </div>
 
     <div class="card">
-        <div class="card-header fw-semibold">Comments</div>
+        <div class="card-header fw-semibold">@T["Items.Details.CommentsSection"]</div>
         <div class="card-body">
 
             @if (Model.IsAuthenticated)
@@ -223,21 +226,21 @@
                     @Html.AntiForgeryToken()
 
                     <div class="mb-2">
-                        <textarea name="body" class="form-control" rows="3" maxlength="1000" placeholder="Write a comment..."></textarea>
-                        <div class="form-text">Max 1000 characters.</div>
+                        <textarea name="body" class="form-control" rows="3" maxlength="1000" placeholder="@T["Items.Details.CommentPlaceholder"]"></textarea>
+                        <div class="form-text">@T["Items.Details.CommentHelp"]</div>
                     </div>
 
-                    <button class="btn btn-primary btn-sm" type="submit">Post Comment</button>
+                    <button class="btn btn-primary btn-sm" type="submit">@T["Items.Details.PostComment"]</button>
                 </form>
             }
             else
             {
-                <div class="text-muted small mb-3">Login to post comments.</div>
+                <div class="text-muted small mb-3">@T["Items.Details.LoginToComment"]</div>
             }
 
             @if (Model.Comments.Count == 0)
             {
-                <div class="text-muted">No comments yet.</div>
+                <div class="text-muted">@T["Items.Details.NoComments"]</div>
             }
             else
             {
@@ -261,7 +264,7 @@
                                           asp-route-commentId="@c.Id"
                                           class="m-0">
                                         @Html.AntiForgeryToken()
-                                        <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+                                        <button class="btn btn-outline-danger btn-sm" type="submit">@T["Common.Delete"]</button>
                                     </form>
                                 }
                             </div>

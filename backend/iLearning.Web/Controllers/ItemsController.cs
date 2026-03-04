@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using iLearning.Web.Services;
-using iLearning.Web.Data;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using iLearning.Web.Models.ViewModels.Items;
+﻿using iLearning.Web.Data;
 using iLearning.Web.Models.Domain;
+using iLearning.Web.Models.ViewModels.Items;
 using iLearning.Web.Models.ViewModels.Shared;
+using iLearning.Web.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using System.Runtime.Intrinsics.Arm;
+using System.Threading.Channels;
 
 
 namespace iLearning.Web.Controllers
@@ -16,11 +19,13 @@ namespace iLearning.Web.Controllers
     {
         private readonly AppDbContext _db;
         private readonly CurrentUserService _current;
+        private readonly IStringLocalizer<SharedResource> T;
 
-        public ItemsController(AppDbContext db, CurrentUserService current)
+        public ItemsController(AppDbContext db, CurrentUserService current, IStringLocalizer<SharedResource> t)
         {
             _db = db;
             _current = current;
+            T = t;
         }
 
         [HttpGet("create")]
@@ -75,7 +80,7 @@ namespace iLearning.Web.Controllers
 
             if (customIdExists)
             {
-                ModelState.AddModelError(nameof(vm.CustomId), "Custom ID already exists in this inventory");
+                ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
                 return View(vm); 
             }
 
@@ -122,11 +127,11 @@ namespace iLearning.Web.Controllers
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError(nameof(vm.CustomId), "Custom ID already exists in this inventory.");
+                ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
                 return View(vm);
             }
 
-            TempData["InventoryMessage"] = "Item created.";
+            TempData["InventoryMessage"] = T["Items.Messages.Created"].Value;
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "items" });
         }
 
@@ -184,7 +189,7 @@ namespace iLearning.Web.Controllers
                     CreatedAtUtc = x.CreatedAtUtc,
                     UpdatedAtUtc = x.UpdatedAtUtc,
 
-                    CreatedByName = x.CreatedBy != null ? x.CreatedBy.Name : "Unknown",
+                    CreatedByName = x.CreatedBy != null ? x.CreatedBy.Name : T["Common.Unknown"],
                     UpdatedByName = x.UpdatedBy != null ? x.UpdatedBy.Name : null,
 
                     LikesCount = x.Likes.Count,
@@ -235,7 +240,7 @@ namespace iLearning.Web.Controllers
                 {
                     Id = c.Id,
                     UserId = c.UserId,
-                    UserName = c.User != null ? c.User.Name : "Unknown",
+                    UserName = c.User != null ? c.User.Name : T["Common.Unknown"],
                     Body = c.Body,
                     CreatedAtUtc = c.CreatedAtUtc,
                     CanDelete = isAdmin || (isAuthenticated && userId.HasValue && (c.UserId == userId.Value ||inv.CreatorId == userId.Value))
@@ -267,7 +272,7 @@ namespace iLearning.Web.Controllers
             if (existing != null)
             {
                 _db.ItemLikes.Remove(existing);
-                TempData["InventoryMessage"] = "Like Removed.";
+                TempData["InventoryMessage"] = T["Items.Messages.LikeRemoved"].Value;
             }
             else
             {
@@ -278,7 +283,7 @@ namespace iLearning.Web.Controllers
                     CreatedAtUtc = DateTime.UtcNow
                 });
 
-                TempData["InventoryMessage"] = "Liked.";
+                TempData["InventoryMessage"] = T["Items.Messages.Liked"].Value;
             }
 
             await _db.SaveChangesAsync();
@@ -299,7 +304,7 @@ namespace iLearning.Web.Controllers
             var text = (body ?? "").Trim();
             if (string.IsNullOrWhiteSpace(text))
             {
-                TempData["InventoryMessage"] = "Comment cannot be empty.";
+                TempData["InventoryMessage"] = T["Items.Messages.CommentEmpty"].Value;
                 return RedirectToAction(nameof(Details), new { inventoryId, itemId });
             }
 
@@ -322,7 +327,7 @@ namespace iLearning.Web.Controllers
 
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = "Comment added.";
+            TempData["InventoryMessage"] = T["Items.Messages.CommentAdded"].Value;
             return RedirectToAction(nameof(Details), new { inventoryId, itemId });
         }
 
@@ -360,7 +365,7 @@ namespace iLearning.Web.Controllers
             _db.ItemComments.Remove(comment);
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = "Comment deleted.";
+            TempData["InventoryMessage"] = T["Items.Messages.CommentDeleted"].Value;
             return RedirectToAction(nameof(Details), new { inventoryId, itemId });
         }
 
@@ -449,7 +454,7 @@ namespace iLearning.Web.Controllers
 
             if (vm.Version != item.Version)
             {
-                ModelState.AddModelError("", "This item was updated by someone else, reload and try again.");
+                ModelState.AddModelError("", T["Items.Errors.Concurrency"]);
                 vm.Version = item.Version;
                 return View(vm);
             }
@@ -460,7 +465,7 @@ namespace iLearning.Web.Controllers
 
             if (customIdTaken)
             {
-                ModelState.AddModelError(nameof(vm.CustomId), "Custom ID already exists in this inventory.");
+                ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
                 return View(vm);
             }
 
@@ -501,11 +506,11 @@ namespace iLearning.Web.Controllers
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError("", "Could not save changes. Try again.");
+                ModelState.AddModelError("", T["Common.Errors.CouldNotSave"]);
                 return View(vm);
             }
 
-            TempData["InventoryMessage"] = "Item updated.";
+            TempData["InventoryMessage"] = T["Items.Messages.Updated"].Value;
             return RedirectToAction(nameof(Details), new { inventoryId, itemId });
 
         }
@@ -552,7 +557,7 @@ namespace iLearning.Web.Controllers
             _db.Items.RemoveRange(itemsToDelete);
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = $"Deleted {itemsToDelete.Count} item(s).";
+            TempData["InventoryMessage"] = T["Items.Messages.BulkDeleted", itemsToDelete.Count];
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "items" });
         }
 

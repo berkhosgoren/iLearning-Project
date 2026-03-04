@@ -282,6 +282,18 @@
   <data name="Common.BackToInventory" xml:space="preserve">
     <value>Back to Inventory</value>
   </data>
+  <data name="Common.Bool1" xml:space="preserve">
+    <value>Bool 1</value>
+  </data>
+  <data name="Common.Bool2" xml:space="preserve">
+    <value>Bool 2</value>
+  </data>
+  <data name="Common.Bool3" xml:space="preserve">
+    <value>Bool 3</value>
+  </data>
+  <data name="Common.By" xml:space="preserve">
+    <value>by</value>
+  </data>
   <data name="Common.Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
@@ -290,6 +302,9 @@
   </data>
   <data name="Common.Create" xml:space="preserve">
     <value>Create</value>
+  </data>
+  <data name="Common.Created" xml:space="preserve">
+    <value>Created</value>
   </data>
   <data name="Common.CustomId" xml:space="preserve">
     <value>Custom ID</value>
@@ -303,6 +318,15 @@
   <data name="Common.Email" xml:space="preserve">
     <value>Email</value>
   </data>
+  <data name="Common.EmptyOption" xml:space="preserve">
+    <value>Empty Option</value>
+  </data>
+  <data name="Common.Errors.CouldNotSave" xml:space="preserve">
+    <value>Could not save. Try again.</value>
+  </data>
+  <data name="Common.False" xml:space="preserve">
+    <value>False</value>
+  </data>
   <data name="Common.Fields" xml:space="preserve">
     <value>Fields</value>
   </data>
@@ -315,6 +339,15 @@
   <data name="Common.Likes" xml:space="preserve">
     <value>Likes</value>
   </data>
+  <data name="Common.Link1" xml:space="preserve">
+    <value>Link 1</value>
+  </data>
+  <data name="Common.Link2" xml:space="preserve">
+    <value>Link 2</value>
+  </data>
+  <data name="Common.Link3" xml:space="preserve">
+    <value>Link 3</value>
+  </data>
   <data name="Common.Name" xml:space="preserve">
     <value>Name</value>
   </data>
@@ -324,11 +357,23 @@
   <data name="Common.NoMatches" xml:space="preserve">
     <value>No matches.</value>
   </data>
+  <data name="Common.Number1" xml:space="preserve">
+    <value>Number 1</value>
+  </data>
+  <data name="Common.Number2" xml:space="preserve">
+    <value>Number 2</value>
+  </data>
+  <data name="Common.Number3" xml:space="preserve">
+    <value>Number 3</value>
+  </data>
   <data name="Common.Private" xml:space="preserve">
     <value>Private</value>
   </data>
   <data name="Common.Public" xml:space="preserve">
     <value>Public</value>
+  </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Save</value>
   </data>
   <data name="Common.SelectAll" xml:space="preserve">
     <value>Select All</value>
@@ -342,8 +387,35 @@
   <data name="Common.SelectedPrefix" xml:space="preserve">
     <value>Selected: </value>
   </data>
+  <data name="Common.String1" xml:space="preserve">
+    <value>String 1</value>
+  </data>
+  <data name="Common.String2" xml:space="preserve">
+    <value>String 2</value>
+  </data>
+  <data name="Common.String3" xml:space="preserve">
+    <value>String 3</value>
+  </data>
+  <data name="Common.Text1" xml:space="preserve">
+    <value>Text 1</value>
+  </data>
+  <data name="Common.Text2" xml:space="preserve">
+    <value>Text 2</value>
+  </data>
+  <data name="Common.Text3" xml:space="preserve">
+    <value>Text 3</value>
+  </data>
   <data name="Common.Title" xml:space="preserve">
     <value>Title</value>
+  </data>
+  <data name="Common.True" xml:space="preserve">
+    <value>True</value>
+  </data>
+  <data name="Common.Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="Common.Updated" xml:space="preserve">
+    <value>Updated</value>
   </data>
   <data name="Common.Yes" xml:space="preserve">
     <value>Yes</value>
@@ -764,6 +836,99 @@
   </data>
   <data name="InvTabs.UnknownTab" xml:space="preserve">
     <value>Unknown tab.</value>
+  </data>
+  <data name="Items.Create.BackToItems" xml:space="preserve">
+    <value>Back to Items</value>
+  </data>
+  <data name="Items.Create.Heading" xml:space="preserve">
+    <value>Create Item</value>
+  </data>
+  <data name="Items.Create.PageTitle" xml:space="preserve">
+    <value>Create Item</value>
+  </data>
+  <data name="Items.Details.CommentHelp" xml:space="preserve">
+    <value>Max 1000 characters.</value>
+  </data>
+  <data name="Items.Details.CommentPlaceholder" xml:space="preserve">
+    <value>Write a comment...</value>
+  </data>
+  <data name="Items.Details.Comments" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Items.Details.CommentsSection" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Items.Details.EditItem" xml:space="preserve">
+    <value>Edit Item</value>
+  </data>
+  <data name="Items.Details.Fields" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="Items.Details.Inventory" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="Items.Details.Like" xml:space="preserve">
+    <value>Like</value>
+  </data>
+  <data name="Items.Details.Likes" xml:space="preserve">
+    <value>Likes</value>
+  </data>
+  <data name="Items.Details.LoginToComment" xml:space="preserve">
+    <value>Login to post comments</value>
+  </data>
+  <data name="Items.Details.LoginToLike" xml:space="preserve">
+    <value>Login to like</value>
+  </data>
+  <data name="Items.Details.NoComments" xml:space="preserve">
+    <value>No comments yet.</value>
+  </data>
+  <data name="Items.Details.PostComment" xml:space="preserve">
+    <value>Post Comment</value>
+  </data>
+  <data name="Items.Details.Unlike" xml:space="preserve">
+    <value>Unlike</value>
+  </data>
+  <data name="Items.Edit.Heading" xml:space="preserve">
+    <value>Edit Item</value>
+  </data>
+  <data name="Items.Edit.PageTitle" xml:space="preserve">
+    <value>Edit Item</value>
+  </data>
+  <data name="Items.Errors.Concurrency" xml:space="preserve">
+    <value>This item was updated by someone else, reload and try again.</value>
+  </data>
+  <data name="Items.Errors.CustomIdExists" xml:space="preserve">
+    <value>Custom ID already exists in this inventory.</value>
+  </data>
+  <data name="Items.Messages.BulkDeleted" xml:space="preserve">
+    <value>Deleted {0}</value>
+  </data>
+  <data name="Items.Messages.CommentAdded" xml:space="preserve">
+    <value>Comment added.</value>
+  </data>
+  <data name="Items.Messages.CommentDeleted" xml:space="preserve">
+    <value>Comment deleted.</value>
+  </data>
+  <data name="Items.Messages.CommentEmpty" xml:space="preserve">
+    <value>Comment cannot be empty.</value>
+  </data>
+  <data name="Items.Messages.Created" xml:space="preserve">
+    <value>Item created.</value>
+  </data>
+  <data name="Items.Messages.Liked" xml:space="preserve">
+    <value>Liked.</value>
+  </data>
+  <data name="Items.Messages.LikeRemoved" xml:space="preserve">
+    <value>Like Removed.</value>
+  </data>
+  <data name="Items.Messages.Updated" xml:space="preserve">
+    <value>Item updated.</value>
+  </data>
+  <data name="Items.Upsert.CustomIdHelp" xml:space="preserve">
+    <value>Unique inside this inventory.</value>
+  </data>
+  <data name="Items.Upsert.FieldsInventoryHelp" xml:space="preserve">
+    <value>Fields here follow the inventory “Fields” settings.</value>
   </data>
   <data name="Nav.AdminPanel" xml:space="preserve">
     <value>Admin Panel</value>

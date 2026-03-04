@@ -1,15 +1,16 @@
 ﻿@model iLearning.Web.Models.ViewModels.Items.ItemUpsertVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
-    ViewData["Title"] = "Edit Item";
+    ViewData["Title"] = T["Items.Edit.PageTitle"].Value;
 }
 
 <div class="container py-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-        <h2 class="mb-0">Edit Item</h2>
+        <h2 class="mb-0">@T["Items.Edit.Heading"]</h2>
 
         <a class="btn btn-outline-secondary" asp-controller="Items" asp-action="Details" asp-route-inventoryId="@Model.InventoryId" asp-route-itemId="@Model.ItemId">
-            Back
+            @T["Common.Back"]
         </a>
     </div>
 
@@ -27,10 +28,10 @@
                 <partial name="_UpsertForm" model="Model" />
 
                 <div class="d-flex gap-2 mt-3">
-                    <button class="btn btn-primary" type="submit">Save</button>
+                    <button class="btn btn-primary" type="submit">@T["Common.Save"]</button>
 
                     <a class="btn btn-outline-primary" asp-controller="Items" asp-action="Details" asp-route-inventoryId="@Model.InventoryId" asp-route-itemId="@Model.ItemId">
-                        Cancel
+                        @T["Common.Cancel"]
                     </a>
                 </div>
             </form>

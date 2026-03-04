@@ -282,6 +282,18 @@
   <data name="Common.BackToInventory" xml:space="preserve">
     <value>Назад к инвентарю</value>
   </data>
+  <data name="Common.Bool1" xml:space="preserve">
+    <value>Да/Нет 1</value>
+  </data>
+  <data name="Common.Bool2" xml:space="preserve">
+    <value>Да/Нет 2</value>
+  </data>
+  <data name="Common.Bool3" xml:space="preserve">
+    <value>Да/Нет 3</value>
+  </data>
+  <data name="Common.By" xml:space="preserve">
+    <value>кем</value>
+  </data>
   <data name="Common.Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
@@ -290,6 +302,9 @@
   </data>
   <data name="Common.Create" xml:space="preserve">
     <value>Создать</value>
+  </data>
+  <data name="Common.Created" xml:space="preserve">
+    <value>Создано</value>
   </data>
   <data name="Common.CustomId" xml:space="preserve">
     <value>Пользовательский ID</value>
@@ -303,6 +318,15 @@
   <data name="Common.Email" xml:space="preserve">
     <value>Email</value>
   </data>
+  <data name="Common.EmptyOption" xml:space="preserve">
+    <value>(Пусто)</value>
+  </data>
+  <data name="Common.Errors.CouldNotSave" xml:space="preserve">
+    <value>Не удалось сохранить изменения. Попробуйте ещё раз</value>
+  </data>
+  <data name="Common.False" xml:space="preserve">
+    <value>Нет</value>
+  </data>
   <data name="Common.Fields" xml:space="preserve">
     <value>Поля</value>
   </data>
@@ -315,6 +339,15 @@
   <data name="Common.Likes" xml:space="preserve">
     <value>Лайки</value>
   </data>
+  <data name="Common.Link1" xml:space="preserve">
+    <value>Ссылка 1</value>
+  </data>
+  <data name="Common.Link2" xml:space="preserve">
+    <value>Ссылка 2</value>
+  </data>
+  <data name="Common.Link3" xml:space="preserve">
+    <value>Ссылка 3</value>
+  </data>
   <data name="Common.Name" xml:space="preserve">
     <value>Имя</value>
   </data>
@@ -324,11 +357,23 @@
   <data name="Common.NoMatches" xml:space="preserve">
     <value>Совпадений нет.</value>
   </data>
+  <data name="Common.Number1" xml:space="preserve">
+    <value>Число 1</value>
+  </data>
+  <data name="Common.Number2" xml:space="preserve">
+    <value>Число 2</value>
+  </data>
+  <data name="Common.Number3" xml:space="preserve">
+    <value>Число 3</value>
+  </data>
   <data name="Common.Private" xml:space="preserve">
     <value>Приватный</value>
   </data>
   <data name="Common.Public" xml:space="preserve">
     <value>Публичный</value>
+  </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Сохранить</value>
   </data>
   <data name="Common.SelectAll" xml:space="preserve">
     <value>Выбрать все</value>
@@ -342,8 +387,35 @@
   <data name="Common.SelectedPrefix" xml:space="preserve">
     <value>Выбрано:</value>
   </data>
+  <data name="Common.String1" xml:space="preserve">
+    <value>Строка 1</value>
+  </data>
+  <data name="Common.String2" xml:space="preserve">
+    <value>Строка 2</value>
+  </data>
+  <data name="Common.String3" xml:space="preserve">
+    <value>Строка 3</value>
+  </data>
+  <data name="Common.Text1" xml:space="preserve">
+    <value>Текст 1</value>
+  </data>
+  <data name="Common.Text2" xml:space="preserve">
+    <value>Текст 2</value>
+  </data>
+  <data name="Common.Text3" xml:space="preserve">
+    <value>Текст 3</value>
+  </data>
   <data name="Common.Title" xml:space="preserve">
     <value>Название</value>
+  </data>
+  <data name="Common.True" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="Common.Unknown" xml:space="preserve">
+    <value>Неизвестно</value>
+  </data>
+  <data name="Common.Updated" xml:space="preserve">
+    <value>Обновлено</value>
   </data>
   <data name="Common.Yes" xml:space="preserve">
     <value>Да</value>
@@ -764,6 +836,99 @@
   </data>
   <data name="InvTabs.UnknownTab" xml:space="preserve">
     <value>Неизвестная вкладка.</value>
+  </data>
+  <data name="Items.Create.BackToItems" xml:space="preserve">
+    <value>Назад к элементам</value>
+  </data>
+  <data name="Items.Create.Heading" xml:space="preserve">
+    <value>Создать элемент</value>
+  </data>
+  <data name="Items.Create.PageTitle" xml:space="preserve">
+    <value>Создать элемент</value>
+  </data>
+  <data name="Items.Details.CommentHelp" xml:space="preserve">
+    <value>Максимум 1000 символов.</value>
+  </data>
+  <data name="Items.Details.CommentPlaceholder" xml:space="preserve">
+    <value>Написать комментарий...</value>
+  </data>
+  <data name="Items.Details.Comments" xml:space="preserve">
+    <value>Комментарии</value>
+  </data>
+  <data name="Items.Details.CommentsSection" xml:space="preserve">
+    <value>Комментарии</value>
+  </data>
+  <data name="Items.Details.EditItem" xml:space="preserve">
+    <value>Редактировать элемент</value>
+  </data>
+  <data name="Items.Details.Fields" xml:space="preserve">
+    <value>Поля</value>
+  </data>
+  <data name="Items.Details.Inventory" xml:space="preserve">
+    <value>Инвентарь</value>
+  </data>
+  <data name="Items.Details.Like" xml:space="preserve">
+    <value>Лайк</value>
+  </data>
+  <data name="Items.Details.Likes" xml:space="preserve">
+    <value>Лайки</value>
+  </data>
+  <data name="Items.Details.LoginToComment" xml:space="preserve">
+    <value>Войдите, чтобы оставлять комментарии</value>
+  </data>
+  <data name="Items.Details.LoginToLike" xml:space="preserve">
+    <value>Войдите, чтобы поставить лайк</value>
+  </data>
+  <data name="Items.Details.NoComments" xml:space="preserve">
+    <value>Комментариев пока нет.</value>
+  </data>
+  <data name="Items.Details.PostComment" xml:space="preserve">
+    <value>Отправить комментарий</value>
+  </data>
+  <data name="Items.Details.Unlike" xml:space="preserve">
+    <value>Убрать лайк</value>
+  </data>
+  <data name="Items.Edit.Heading" xml:space="preserve">
+    <value>Редактировать элемент</value>
+  </data>
+  <data name="Items.Edit.PageTitle" xml:space="preserve">
+    <value>Редактировать элемент</value>
+  </data>
+  <data name="Items.Errors.Concurrency" xml:space="preserve">
+    <value>Эта запись была изменена кем-то ещё. Обновите страницу и попробуйте снова.</value>
+  </data>
+  <data name="Items.Errors.CustomIdExists" xml:space="preserve">
+    <value>Пользовательский ID уже существует в этом инвентаре.</value>
+  </data>
+  <data name="Items.Messages.BulkDeleted" xml:space="preserve">
+    <value>Удалено элементов: {0}</value>
+  </data>
+  <data name="Items.Messages.CommentAdded" xml:space="preserve">
+    <value>Комментарий добавлен.</value>
+  </data>
+  <data name="Items.Messages.CommentDeleted" xml:space="preserve">
+    <value>Комментарий удалён.</value>
+  </data>
+  <data name="Items.Messages.CommentEmpty" xml:space="preserve">
+    <value>Комментарий не может быть пустым.</value>
+  </data>
+  <data name="Items.Messages.Created" xml:space="preserve">
+    <value>Элемент создан</value>
+  </data>
+  <data name="Items.Messages.Liked" xml:space="preserve">
+    <value>Лайк поставлен</value>
+  </data>
+  <data name="Items.Messages.LikeRemoved" xml:space="preserve">
+    <value>Лайк удалён.</value>
+  </data>
+  <data name="Items.Messages.Updated" xml:space="preserve">
+    <value>Элемент обновлён.</value>
+  </data>
+  <data name="Items.Upsert.CustomIdHelp" xml:space="preserve">
+    <value>Уникально в рамках этого инвентаря.</value>
+  </data>
+  <data name="Items.Upsert.FieldsInventoryHelp" xml:space="preserve">
+    <value>Поля ниже зависят от настроек вкладки «Поля» в инвентаре.</value>
   </data>
   <data name="Nav.AdminPanel" xml:space="preserve">
     <value>Админ панель</value>
