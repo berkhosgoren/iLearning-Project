@@ -609,11 +609,17 @@
   <data name="Inv.CustomId.DigitsHelp" xml:space="preserve">
     <value>Длина числовой части с ведущими нулями (от 1 до 8). По умолчанию 4.</value>
   </data>
+  <data name="Inv.CustomId.DigitsRange" xml:space="preserve">
+    <value>Цифры должны быть от 1 до 8.</value>
+  </data>
   <data name="Inv.CustomId.Help" xml:space="preserve">
     <value>Определяет, как предлагаются Custom ID для новых элементов в этом инвентаре.</value>
   </data>
   <data name="Inv.CustomId.Msg.Saved" xml:space="preserve">
     <value>Настройки Custom ID сохранены.</value>
+  </data>
+  <data name="Inv.CustomId.NextError" xml:space="preserve">
+    <value>Должно быть больше 0</value>
   </data>
   <data name="Inv.CustomId.NextHelp" xml:space="preserve">
     <value>Следующее предлагаемое число. Автоматически увеличивается, если используется подходящий ID.</value>

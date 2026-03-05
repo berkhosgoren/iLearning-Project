@@ -609,11 +609,17 @@
   <data name="Inv.CustomId.DigitsHelp" xml:space="preserve">
     <value>Padding length for the numeric part (1 to 8). Default is 4.</value>
   </data>
+  <data name="Inv.CustomId.DigitsRange" xml:space="preserve">
+    <value>Digits must be between 1 and 8.</value>
+  </data>
   <data name="Inv.CustomId.Help" xml:space="preserve">
     <value>Controls how Item Custom IDs are suggested when creating new items in this inventory.</value>
   </data>
   <data name="Inv.CustomId.Msg.Saved" xml:space="preserve">
     <value>Custom ID settings saved.</value>
+  </data>
+  <data name="Inv.CustomId.NextError" xml:space="preserve">
+    <value>Must be greater than 0 </value>
   </data>
   <data name="Inv.CustomId.NextHelp" xml:space="preserve">
     <value>The next suggested numeric value. This increases automatically when matching IDs are used.</value>
