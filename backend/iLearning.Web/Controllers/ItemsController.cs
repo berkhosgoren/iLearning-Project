@@ -572,6 +572,36 @@ namespace iLearning.Web.Controllers
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "items" });
         }
 
+        [HttpGet("suggest-customid")]
+        public async Task<IActionResult> SuggestCustomId(Guid inventoryId)
+        {
+            var canWrite = await CanWriteInventoryAsync(inventoryId);
+            if (!canWrite) return Forbid();
+
+            var cfg = await _db.Inventories
+                .AsNoTracking()
+                .Where(i => i.Id == inventoryId)
+                .Select(i => new
+                {
+                    i.Id,
+                    Prefix = i.ItemCustomIdPrefix,
+                    Digits = i.ItemCustomIdDigits,
+                    NextNumber = i.ItemCustomIdNextNumber
+                })
+                .FirstOrDefaultAsync();
+
+            if (cfg == null) return NotFound();
+
+            var prefix = (cfg.Prefix ?? "").Trim();
+            var digits = cfg.Digits < 1 ? 1 : (cfg.Digits > 8 ? 8 : cfg.Digits);
+            var next = cfg.NextNumber < 1 ? 1 : cfg.NextNumber;
+
+            var numeric = next.ToString().PadLeft(digits, '0');
+            var suggested = string.IsNullOrWhiteSpace(prefix) ? numeric : $"{prefix}-{numeric}";
+
+            return Json(new { suggested });
+        }
+
         private async Task<bool> CanWriteInventoryAsync(Guid inventoryId)
         {
             var userId = _current.GetUserId(User);

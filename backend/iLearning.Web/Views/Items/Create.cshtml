@@ -35,5 +35,9 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        window.itemCustomIdSuggestUrl = '@Url.Action("SuggestCustomId", "Items", new {inventoryId = Model.InventoryId })';
+    </script>
 }
 

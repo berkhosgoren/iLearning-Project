@@ -8,10 +8,23 @@
 <div class="row g-3">
     <div class="col-md-4">
         <label class="form-label">@T["Common.CustomId"]</label>
-        <input asp-for="CustomId" class="form-control" />
+
+        <div class="input-group">
+            <input asp-for="CustomId" class="form-control" id="itemCustomIdInput" />
+            <button class="btn btn-outline-secondary" type="button" id="itemCustomIdUseBtn">
+                @T["Items.Upsert.UseSuggested"]
+            </button>
+        </div>
+
         <span asp-validation-for="CustomId" class="text-danger small"></span>
-        <div class="form-text">@T["Items.Upsert.CustomIdHelp"]</div>
+        <div class="form-text">
+            @T["Items.Upsert.CustomIdHelp"]
+            <span class="ms-2 text-muted" id="itemCustomIdSuggestedText"></span>
+        </div>
     </div>
+
+    <span asp-validation-for="CustomId" class="text-danger small"></span>
+
 
     <div class="col-md-8">
         <label class="form-label">@T["Common.Title"]</label>
@@ -154,4 +167,42 @@
     }
 </div>
 
-          
+<script>
+    (function () {
+        const input = document.getElementById('itemCustomIdInput');
+        const suggestedText = document.getElementById('itemCustomIdSuggestedText');
+        const useBtn = document.getElementById('itemCustomIdUseBtn');
+
+        const url = window.itemCustomIdSuggestUrl;
+
+        if (!input || !suggestedText || !useBtn || !url) return;
+
+        let lastSuggested = '';
+
+        async function loadSuggested() {
+            try{
+                const res = await fetch(url, { headers: {'Accept': 'application/json' } });
+                if (!res.ok) return;
+
+                const data = await res.json();
+                if (!data || !data.suggested) return;
+
+                lastSuggested = String(data.suggested);
+                suggestedText.textContent = '(' + lastSuggested + ')';
+
+                if (!input.value || !input.value.trim()) {
+                    input.value = lastSuggested;
+                }
+            } catch {
+
+            }
+        }
+
+            useBtn.addEventListener('click', function() {
+                if (lastSuggested) input.value = lastSuggested;
+                input.focus();
+            });
+
+            loadSuggested();
+    })();
+</script>    

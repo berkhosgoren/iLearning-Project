@@ -1074,6 +1074,9 @@
   <data name="Items.Upsert.FieldsInventoryHelp" xml:space="preserve">
     <value>Fields here follow the inventory “Fields” settings.</value>
   </data>
+  <data name="Items.Upsert.UseSuggested" xml:space="preserve">
+    <value>Use Suggested</value>
+  </data>
   <data name="Nav.AdminPanel" xml:space="preserve">
     <value>Admin Panel</value>
   </data>

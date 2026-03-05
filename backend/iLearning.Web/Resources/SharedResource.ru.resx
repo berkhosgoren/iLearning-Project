@@ -1074,6 +1074,9 @@
   <data name="Items.Upsert.FieldsInventoryHelp" xml:space="preserve">
     <value>Поля ниже зависят от настроек вкладки «Поля» в инвентаре.</value>
   </data>
+  <data name="Items.Upsert.UseSuggested" xml:space="preserve">
+    <value>Использовать предложенное</value>
+  </data>
   <data name="Nav.AdminPanel" xml:space="preserve">
     <value>Админ панель</value>
   </data>
