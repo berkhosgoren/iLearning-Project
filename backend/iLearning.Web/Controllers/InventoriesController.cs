@@ -139,53 +139,7 @@ namespace iLearning.Web.Controllers
             if (!await CanEditInventoryAsync(inv))
                 return Forbid();
 
-            var vm = new InventoryUpsertVm
-            {
-                Id = inv.Id,
-                Title = inv.Title,
-                Description = inv.Description,
-                ImageUrl = inv.ImageUrl,
-                CategoryId = inv.CategoryId,
-                IsPublic = inv.IsPublic,
-                Version = inv.Version,
-                TagsCsv = string.Join(", ", inv.InventoryTags.Select(t => t.Tag.Name).OrderBy(x => x)),
-
-                CustomString1Enabled = inv.CustomString1Enabled,
-                CustomString1Name = inv.CustomString1Name,
-                CustomString2Enabled = inv.CustomString2Enabled,
-                CustomString2Name = inv.CustomString2Name,
-                CustomString3Enabled = inv.CustomString3Enabled,
-                CustomString3Name = inv.CustomString3Name,
-
-                CustomText1Enabled = inv.CustomText1Enabled,
-                CustomText1Name = inv.CustomText1Name,
-                CustomText2Enabled = inv.CustomText2Enabled,
-                CustomText2Name = inv.CustomText2Name,
-                CustomText3Enabled = inv.CustomText3Enabled,
-                CustomText3Name = inv.CustomText3Name,
-
-                CustomNumber1Enabled = inv.CustomNumber1Enabled,
-                CustomNumber1Name = inv.CustomNumber1Name,
-                CustomNumber2Enabled = inv.CustomNumber2Enabled,
-                CustomNumber2Name = inv.CustomNumber2Name,
-                CustomNumber3Enabled = inv.CustomNumber3Enabled,
-                CustomNumber3Name = inv.CustomNumber3Name,
-
-                CustomBool1Enabled = inv.CustomBool1Enabled,
-                CustomBool1Name = inv.CustomBool1Name,
-                CustomBool2Enabled = inv.CustomBool2Enabled,
-                CustomBool2Name = inv.CustomBool2Name,
-                CustomBool3Enabled = inv.CustomBool3Enabled,
-                CustomBool3Name = inv.CustomBool3Name,
-
-                CustomLink1Enabled = inv.CustomLink1Enabled,
-                CustomLink1Name = inv.CustomLink1Name,
-                CustomLink2Enabled = inv.CustomLink2Enabled,
-                CustomLink2Name = inv.CustomLink2Name,
-                CustomLink3Enabled = inv.CustomLink3Enabled,
-                CustomLink3Name = inv.CustomLink3Name,
-            };
-
+            var vm = BuildInventoryUpsertVm(inv);
             return View(vm);
         }
 
@@ -276,7 +230,7 @@ namespace iLearning.Web.Controllers
                 return View(vm);
             }
 
-            return RedirectToAction(nameof(Details), new { id = inv.Id });
+            return RedirectToAction(nameof(Details), new { id = inv.Id, tab= "settings" });
         }
 
         [Authorize]
@@ -561,7 +515,63 @@ namespace iLearning.Web.Controllers
                     .ToListAsync();
             }
 
+            if (activeTab == "settings" && canEdit)
+            {
+                await LoadCategoriesAsync();
+                vm.SettingsVm = BuildInventoryUpsertVm(inv);
+            }
+
             return View(vm);
+        }
+
+        private InventoryUpsertVm BuildInventoryUpsertVm(Inventory inv)
+        {
+            return new InventoryUpsertVm
+            {
+                Id = inv.Id,
+                Title = inv.Title,
+                Description = inv.Description,
+                ImageUrl = inv.ImageUrl,
+                CategoryId = inv.CategoryId,
+                IsPublic = inv.IsPublic,
+                Version = inv.Version,
+                TagsCsv = string.Join(", ", inv.InventoryTags.Select(t => t.Tag.Name).OrderBy(x => x)),
+
+                CustomString1Enabled = inv.CustomString1Enabled,
+                CustomString1Name = inv.CustomString1Name,
+                CustomString2Enabled = inv.CustomString2Enabled,
+                CustomString2Name = inv.CustomString2Name,
+                CustomString3Enabled = inv.CustomString3Enabled,
+                CustomString3Name = inv.CustomString3Name,
+
+                CustomText1Enabled = inv.CustomText1Enabled,
+                CustomText1Name = inv.CustomText1Name,
+                CustomText2Enabled = inv.CustomText2Enabled,
+                CustomText2Name = inv.CustomText2Name,
+                CustomText3Enabled = inv.CustomText3Enabled,
+                CustomText3Name = inv.CustomText3Name,
+
+                CustomNumber1Enabled = inv.CustomNumber1Enabled,
+                CustomNumber1Name = inv.CustomNumber1Name,
+                CustomNumber2Enabled = inv.CustomNumber2Enabled,
+                CustomNumber2Name = inv.CustomNumber2Name,
+                CustomNumber3Enabled = inv.CustomNumber3Enabled,
+                CustomNumber3Name = inv.CustomNumber3Name,
+
+                CustomBool1Enabled = inv.CustomBool1Enabled,
+                CustomBool1Name = inv.CustomBool1Name,
+                CustomBool2Enabled = inv.CustomBool2Enabled,
+                CustomBool2Name = inv.CustomBool2Name,
+                CustomBool3Enabled = inv.CustomBool3Enabled,
+                CustomBool3Name = inv.CustomBool3Name,
+
+                CustomLink1Enabled = inv.CustomLink1Enabled,
+                CustomLink1Name = inv.CustomLink1Name,
+                CustomLink2Enabled = inv.CustomLink2Enabled,
+                CustomLink2Name = inv.CustomLink2Name,
+                CustomLink3Enabled = inv.CustomLink3Enabled,
+                CustomLink3Name = inv.CustomLink3Name,
+            };
         }
 
         private static string? NormalizeFieldName(bool enabled, string? name)

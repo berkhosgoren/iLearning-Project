@@ -1,3 +1,37 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryDetailsVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
-<div class="text-muted">Settings editor will be implemented. </div>
+@if (Model.SettingsVm == null)
+{
+    <div class="text-muted">@T["InvTabs.UnknownTab"]</div>
+}
+else
+{
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+        <div class="fw-semibold">@T["InvTabs.Settings"]</div>
+        <a class="btn btn-outline-secondary btn-sm" asp-controller="Inventories" asp-action="Details"
+           asp-route-id="@Model.Id" asp-route-tab="items">@T["Common.Back"]</a>
+    </div>
+
+    <form method="post" asp-controller="Inventories" asp-action="Edit" asp-route-id="@Model.Id">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <input type="hidden" asp-for="SettingsVm.Id" />
+        <input type="hidden" asp-for="SettingsVm.Version" />
+
+        <partial name="~/Views/Inventories/_UpsertForm.cshtml" model="Model.SettingsVm" />
+
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary">@T["Inv.Edit.Save"]</button>
+
+            <a class="btn btn-outline-secondary" asp-controller="Inventories" asp-action="Details"
+               asp-route-id="@Model.Id" asp-route-tab="items">@T["Inv.Edit.Cancel"]</a>
+        </div>
+
+        <div class="form-text mt-3">
+            @T["Inv.Edit.Concurrency"]
+        </div>
+    </form>
+}

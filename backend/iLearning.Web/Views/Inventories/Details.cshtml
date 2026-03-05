@@ -40,13 +40,6 @@
 
         <div class="d-flex gap-2">
             <a class="btn btn-outline-secondary" asp-controller="Home" asp-action="Index">@T["Common.Back"]</a>
-
-            @if (Model.CanEdit)
-            {
-                <a class="btn btn-outline-primary" asp-controller="Inventories" asp-action="Edit" asp-route-id="@Model.Id">
-                    @T["InvDetails.EditInventory"]
-                </a>
-            }
         </div>
     </div>
 
