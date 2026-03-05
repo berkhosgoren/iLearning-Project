@@ -603,6 +603,45 @@
   <data name="Inv.Create.Title" xml:space="preserve">
     <value>Создать инвентарь</value>
   </data>
+  <data name="Inv.CustomId.Digits" xml:space="preserve">
+    <value>Количество цифр</value>
+  </data>
+  <data name="Inv.CustomId.DigitsHelp" xml:space="preserve">
+    <value>Длина числовой части с ведущими нулями (от 1 до 8). По умолчанию 4.</value>
+  </data>
+  <data name="Inv.CustomId.Help" xml:space="preserve">
+    <value>Определяет, как предлагаются Custom ID для новых элементов в этом инвентаре.</value>
+  </data>
+  <data name="Inv.CustomId.Msg.Saved" xml:space="preserve">
+    <value>Настройки Custom ID сохранены.</value>
+  </data>
+  <data name="Inv.CustomId.NextHelp" xml:space="preserve">
+    <value>Следующее предлагаемое число. Автоматически увеличивается, если используется подходящий ID.</value>
+  </data>
+  <data name="Inv.CustomId.NextNumber" xml:space="preserve">
+    <value>Следующий номер</value>
+  </data>
+  <data name="Inv.CustomId.NotAvailable" xml:space="preserve">
+    <value>Настройки Custom ID недоступны.</value>
+  </data>
+  <data name="Inv.CustomId.Prefix" xml:space="preserve">
+    <value>Префикс (необязательно)</value>
+  </data>
+  <data name="Inv.CustomId.PrefixHelp" xml:space="preserve">
+    <value>Если задано, ID будет выглядеть как PREFIX-0001. Оставьте пустым для только числовых ID.</value>
+  </data>
+  <data name="Inv.CustomId.PrefixPlaceholder" xml:space="preserve">
+    <value>Пример: INV</value>
+  </data>
+  <data name="Inv.CustomId.Preview" xml:space="preserve">
+    <value>Пример</value>
+  </data>
+  <data name="Inv.CustomId.PreviewHelp" xml:space="preserve">
+    <value>Так будет выглядеть следующий предлагаемый Custom ID элемента.</value>
+  </data>
+  <data name="Inv.CustomId.Title" xml:space="preserve">
+    <value>Конструктор Custom ID</value>
+  </data>
   <data name="Inv.Description" xml:space="preserve">
     <value>Описание</value>
   </data>

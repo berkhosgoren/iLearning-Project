@@ -1,3 +1,109 @@
 ﻿@model iLearning.Web.Models.ViewModels.Inventories.InventoryDetailsVm
+@inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
-<div class="text-muted">Custom ID builder will be implemented. </div>
+@{
+    var vm = Model.CustomIdVm;
+}
+
+@if (vm == null)
+{
+    <div class="text-muted">@T["Inv.CustomId.NotAvailable"]</div>
+}
+else
+{
+    <div class="row g-3" style="max-width: 900px;">
+        <div class="col-12">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                <div>
+                    <div class="fw-semibold">@T["Inv.CustomId.Title"]</div>
+                    <div class="text-muted small">@T["Inv.CustomId.Help"]</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <form method="post" asp-controller="Inventories" asp-action="SaveCustomId" asp-route-id="@Model.Id">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="InventoryId" value="@vm.InventoryId" />
+                <input type="hidden" name="Version" value="@vm.Version" />
+
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="mb-3">
+                            <label class="form-label">@T["Inv.CustomId.Prefix"]</label>
+                            <input class="form-control" id="cidPrefix" name="Prefix" value="@(vm.Prefix ?? "")"
+                                   maxlength="20" placeholder="@T["Inv.CustomId.PrefixPlaceholder"]" />
+                            <div class="form-text">@T["Inv.CustomId.PrefixHelp"]</div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label">@T["Inv.CustomId.Digits"]</label>
+                                <input class="form-control" id="cidDigits" name="Digits" type="number"
+                                       min="1" max="8" value="@vm.Digits" />
+                                <div class="form-text">@T["Inv.CustomId.DigitsHelp"]</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">@T["Inv.CustomId.NextNumber"]</label>
+                                <input class="form-control" id="cidNext" name="NextNumber" min="1" value="@vm.NextNumber" />
+                                <div class="form-text">@T["Inv.CustomId.NextHelp"]</div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">@T["Inv.CustomId.Preview"]</label>
+                                <input class="form-control" id="cidPreview" value="@vm.Preview" readonly />
+                                <div class="form-text">@T["Inv.CustomId.PreviewHelp"]</div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <button class="btn btn-primary" type="submit">@T["Common.Save"]</button>
+                            <a class="btn btn-outline-secondary" asp-controller="Inventories" asp-action="Details"
+                               asp-route-id="@Model.Id" asp-route-tab="customid">@T["Common.Cancel"]</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const prefixEl = document.getElementById('cidPrefix');
+            const digitsEl = document.getElementById('cidDigits');
+            const nextEl = document.getElementById('cidNext');
+            const previewEl = document.getElementById('cidPreview');
+
+            function padLeft(s, len) {
+                s = String(s || '');
+                while (s.length < len) s = '0' + s;
+                return s;
+            }
+
+            function buildPreview() {
+                const prefix = (prefixEl.value || '').trim();
+                let digits = parseInt(digitsEl.value || '4', 10);
+                let next = parseInt(nextEl.value || '1', 10);
+
+                if (isNaN(digits) || digits < 1) digits = 1;
+                if (digits > 8) digits = 8;
+
+                if (isNaN(next) || next < 1) next = 1;
+
+                const numeric = padLeft(next, digits);
+                previewEl.value = prefix ? (prefix + '-' + numeric) : numeric;
+            }
+
+            ['input', 'change'].forEach(evt => {
+                prefixEl.addEventListener(evt, buildPreview);
+                digitsEl.addEventListener(evt, buildPreview);
+                nextEl.addEventListener(evt, buildPreview);
+            });
+            
+            buildPreview();
+        })();
+    </script>
+}

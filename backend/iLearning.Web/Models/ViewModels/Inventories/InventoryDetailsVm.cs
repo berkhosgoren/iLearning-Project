@@ -47,6 +47,8 @@ namespace iLearning.Web.Models.ViewModels.Inventories
         public bool AccessAddCanWrite { get; set; } = true;
 
         public InventoryUpsertVm? SettingsVm { get; set; }
+
+        public InventoryCustomIdVm? CustomIdVm { get; set; }
     }
 
     public class InventoryAccessRowVm

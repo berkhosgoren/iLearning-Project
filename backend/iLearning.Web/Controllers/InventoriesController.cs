@@ -77,6 +77,10 @@ namespace iLearning.Web.Controllers
                 CategoryId = vm.CategoryId,
                 Version = 1,
 
+                ItemCustomIdPrefix = null,
+                ItemCustomIdDigits = 4,
+                ItemCustomIdNextNumber = 1,
+
                 CustomString1Enabled = vm.CustomString1Enabled,
                 CustomString1Name = NormalizeFieldName(vm.CustomString1Enabled, vm.CustomString1Name),
                 CustomString2Enabled = vm.CustomString2Enabled,
@@ -399,6 +403,46 @@ namespace iLearning.Web.Controllers
             return Json(results);
         }
 
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpPost("{id:guid}/customid")]
+        public async Task<IActionResult> SaveCustomId(Guid id, InventoryCustomIdVm vm)
+        {
+            if (id != vm.InventoryId) return BadRequest();
+
+            var inv = await _db.Inventories.FirstOrDefaultAsync(i => i.Id == id);
+            if (inv is null) return NotFound();
+
+            if (!await CanEditInventoryAsync(inv)) return Forbid();
+
+            if (vm.Version != inv.Version)
+            {
+                TempData["InventoryMessage"] = T["Inv.Err.Concurrency"].Value;
+                return RedirectToAction(nameof(Details), new { id, tab = "customid" });
+            }
+
+            var prefix = (vm.Prefix ?? "").Trim();
+            if (prefix.Length > 20) prefix = prefix[..20];
+
+            prefix = string.IsNullOrWhiteSpace(prefix) ? "" : prefix;
+
+            var digits = vm.Digits;
+            if (digits < 1 || digits > 8) digits = 4;
+
+            var next = vm.NextNumber;
+            if (next < 1) next = 1;
+
+            inv.ItemCustomIdPrefix = string.IsNullOrWhiteSpace(prefix) ? null : prefix;
+            inv.ItemCustomIdDigits = digits;
+            inv.ItemCustomIdNextNumber = next;
+
+            inv.Version += 1;
+            await _db.SaveChangesAsync();
+
+            TempData["InventoryMessage"] = T["Inv.CustomId.Msg.Saved"].Value;
+            return RedirectToAction(nameof(Details), new { id, tab = "items" });
+        }
+
         [AllowAnonymous]
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Details(Guid id, [FromQuery] string? tab)
@@ -521,6 +565,26 @@ namespace iLearning.Web.Controllers
                 vm.SettingsVm = BuildInventoryUpsertVm(inv);
             }
 
+            if (activeTab == "customid" && canEdit)
+            {
+                var prefix = (inv.ItemCustomIdPrefix ?? "").Trim();
+                var digits = inv.ItemCustomIdDigits <= 0 ? 4 : inv.ItemCustomIdDigits;
+                if (digits < 1) digits = 1;
+                if (digits > 8) digits = 8;
+
+                var next = inv.ItemCustomIdNextNumber <= 0 ? 1 : inv.ItemCustomIdNextNumber;
+
+                vm.CustomIdVm = new InventoryCustomIdVm
+                {
+                    InventoryId = inv.Id,
+                    Version = inv.Version,
+                    Prefix = string.IsNullOrWhiteSpace(prefix) ? null : prefix,
+                    Digits = digits,
+                    NextNumber = next,
+                    Preview = BuildItemCustomId(prefix, digits, next)
+                };
+            }
+
             return View(vm);
         }
 
@@ -638,6 +702,17 @@ namespace iLearning.Web.Controllers
                     Tag = tag
                 });
             }
-        }       
+        }
+        
+        private static string BuildItemCustomId(string? prefix, int digits, int number)
+        {
+            var p = (prefix ?? "").Trim();
+            if (digits < 1) digits = 1;
+            if (digits > 8) digits = 8;
+            if (number < 0) number = 0;
+
+            var numeric = number.ToString().PadLeft(digits, '0');
+            return string.IsNullOrWhiteSpace(p) ? numeric : $"{p}-{numeric}";
+        }
     }
 }

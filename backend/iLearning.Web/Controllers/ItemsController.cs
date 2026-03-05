@@ -46,6 +46,9 @@ namespace iLearning.Web.Controllers
                 Fields = MapFieldConfig(inv)
             };
 
+            var suggested = await BuildSuggestedCustomIdAsync(inventoryId);
+            vm.CustomId = suggested;
+
             return View(vm);
         }
 
@@ -68,6 +71,12 @@ namespace iLearning.Web.Controllers
             vm.Fields = MapFieldConfig(inv);
 
             vm.CustomId = (vm.CustomId ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(vm.CustomId))
+            {
+                vm.CustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+            }
+
             vm.Title = (vm.Title ?? "").Trim();
             ApplyFieldEnforcement(vm, inv);
 
@@ -124,6 +133,8 @@ namespace iLearning.Web.Controllers
             try
             {
                 await _db.SaveChangesAsync();
+
+                await TryAdvanceInventoryCustomIdAsync(inventoryId, vm.CustomId);
             }
             catch (DbUpdateException)
             {
@@ -673,6 +684,70 @@ namespace iLearning.Web.Controllers
             if (!inv.CustomLink1Enabled) vm.Link1 = null;
             if (!inv.CustomLink2Enabled) vm.Link2 = null;
             if (!inv.CustomLink3Enabled) vm.Link3 = null;
+        }
+
+        private async Task<string> BuildSuggestedCustomIdAsync(Guid inventoryId)
+        {
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .Where(i => i.Id == inventoryId)
+                .Select(i => new { i.ItemCustomIdPrefix, i.ItemCustomIdDigits, i.ItemCustomIdNextNumber })
+                .FirstOrDefaultAsync();
+
+            if (inv == null) return "";
+
+            var prefix = (inv.ItemCustomIdPrefix ?? "").Trim();
+            var digits = inv.ItemCustomIdDigits;
+            if (digits < 1) digits = 1;
+            if (digits > 8) digits = 8;
+
+            var next = inv.ItemCustomIdNextNumber;
+            if (next < 1) next = 1;
+
+            var numeric = next.ToString().PadLeft(digits, '0');
+            return string.IsNullOrWhiteSpace(prefix) ? numeric : $"{prefix}-{numeric}";
+        }
+
+        private async Task TryAdvanceInventoryCustomIdAsync(Guid inventoryId, string usedCustomId)
+        {
+            usedCustomId = (usedCustomId ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(usedCustomId)) return;
+
+            var inv = await _db.Inventories.FirstOrDefaultAsync(i => i.Id == inventoryId);
+            if (inv == null) return;
+
+            var prefix = (inv.ItemCustomIdPrefix ?? "").Trim();
+            var digits = inv.ItemCustomIdDigits;
+            if (digits < 1) digits = 1;
+            if (digits > 8) digits = 8;
+
+            string numericPart;
+
+            if (string.IsNullOrWhiteSpace(prefix))
+            {
+                numericPart = usedCustomId;
+            }
+            else
+            {
+                var expectedStart = prefix + "-";
+                if (!usedCustomId.StartsWith(expectedStart, StringComparison.OrdinalIgnoreCase))
+                    return;
+
+                numericPart = usedCustomId.Substring(expectedStart.Length);
+            }
+
+            if (numericPart.Length == 0 || numericPart.Length > 20) return;
+            if (!numericPart.All(char.IsDigit)) return;
+
+            if (!int.TryParse(numericPart, out var n)) return;
+            if (n < 0) return;
+
+            if (n >= inv.ItemCustomIdNextNumber)
+            {
+                inv.ItemCustomIdNextNumber = n + 1;
+                inv.Version += 1;
+                await _db.SaveChangesAsync();
+            }
         }
     }
 }

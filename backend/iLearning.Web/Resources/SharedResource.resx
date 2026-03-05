@@ -603,6 +603,45 @@
   <data name="Inv.Create.Title" xml:space="preserve">
     <value>Create Inventory</value>
   </data>
+  <data name="Inv.CustomId.Digits" xml:space="preserve">
+    <value>Digits</value>
+  </data>
+  <data name="Inv.CustomId.DigitsHelp" xml:space="preserve">
+    <value>Padding length for the numeric part (1 to 8). Default is 4.</value>
+  </data>
+  <data name="Inv.CustomId.Help" xml:space="preserve">
+    <value>Controls how Item Custom IDs are suggested when creating new items in this inventory.</value>
+  </data>
+  <data name="Inv.CustomId.Msg.Saved" xml:space="preserve">
+    <value>Custom ID settings saved.</value>
+  </data>
+  <data name="Inv.CustomId.NextHelp" xml:space="preserve">
+    <value>The next suggested numeric value. This increases automatically when matching IDs are used.</value>
+  </data>
+  <data name="Inv.CustomId.NextNumber" xml:space="preserve">
+    <value>Next number</value>
+  </data>
+  <data name="Inv.CustomId.NotAvailable" xml:space="preserve">
+    <value>Custom ID settings are not available.</value>
+  </data>
+  <data name="Inv.CustomId.Prefix" xml:space="preserve">
+    <value>Prefix (optional)</value>
+  </data>
+  <data name="Inv.CustomId.PrefixHelp" xml:space="preserve">
+    <value>If set, IDs will look like PREFIX-0001. Leave empty for numeric-only IDs.</value>
+  </data>
+  <data name="Inv.CustomId.PrefixPlaceholder" xml:space="preserve">
+    <value>Example: INV</value>
+  </data>
+  <data name="Inv.CustomId.Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="Inv.CustomId.PreviewHelp" xml:space="preserve">
+    <value>This is what the next suggested Item Custom ID will look like.</value>
+  </data>
+  <data name="Inv.CustomId.Title" xml:space="preserve">
+    <value>Custom ID Builder</value>
+  </data>
   <data name="Inv.Description" xml:space="preserve">
     <value>Description</value>
   </data>
