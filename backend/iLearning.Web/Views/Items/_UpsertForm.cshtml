@@ -9,11 +9,12 @@
     <div class="col-md-4">
         <label class="form-label">@T["Common.CustomId"]</label>
 
-        <div class="input-group">
+        <div class="d-flex gap-2">
             <input asp-for="CustomId" class="form-control" id="itemCustomIdInput" />
-            <button class="btn btn-outline-secondary" type="button" id="itemCustomIdUseBtn">
+            <button type="button" class="btn btn-outline-primary flex-shrink-0" id="itemCustomIdUseBtn"
+                    @(string.IsNullOrWhiteSpace(Model.SuggestedCustomId) ? "disabled" : "")>
                 @T["Items.Upsert.UseSuggested"]
-            </button>
+             </button>
         </div>
 
         <span asp-validation-for="CustomId" class="text-danger small"></span>
@@ -22,9 +23,6 @@
             <span class="ms-2 text-muted" id="itemCustomIdSuggestedText"></span>
         </div>
     </div>
-
-    <span asp-validation-for="CustomId" class="text-danger small"></span>
-
 
     <div class="col-md-8">
         <label class="form-label">@T["Common.Title"]</label>
@@ -175,34 +173,42 @@
 
         const url = window.itemCustomIdSuggestUrl;
 
-        if (!input || !suggestedText || !useBtn || !url) return;
+        if (!input || !suggestedText || !useBtn) return;
 
-        let lastSuggested = '';
+        let lastSuggested = '@(Model.SuggestedCustomId ?? "")';
 
-        async function loadSuggested() {
-            try{
-                const res = await fetch(url, { headers: {'Accept': 'application/json' } });
-                if (!res.ok) return;
-
-                const data = await res.json();
-                if (!data || !data.suggested) return;
-
-                lastSuggested = String(data.suggested);
-                suggestedText.textContent = '(' + lastSuggested + ')';
-
-                if (!input.value || !input.value.trim()) {
-                    input.value = lastSuggested;
-                }
-            } catch {
-
-            }
+        function renderSuggested() {
+            suggestedText.textContent = lastSuggested ? ('(' + lastSuggested + ')') : '';
+            useBtn.disabled = !lastSuggested;
         }
 
-            useBtn.addEventListener('click', function() {
-                if (lastSuggested) input.value = lastSuggested;
-                input.focus();
-            });
+        async function loadSuggested() {
+            const url = window.itemCustomIdSuggestUrl;
+            if (!url) { renderSuggested(); return; }
 
-            loadSuggested();
+            try {
+                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                if (!res.ok) { renderSuggested(); return; }
+
+                const data = await res.json();
+                if (data && data.suggested) {
+                    lastSuggested = String(data.suggested);
+                }
+        } catch {
+
+        }
+
+        renderSuggested();
+        }
+
+        useBtn.addEventListener('click', function () {
+            if (lastSuggested) {
+                input.value = lastSuggested;
+                input.focus();
+            }
+        });
+
+        renderSuggested();
+        loadSuggested();
     })();
 </script>    

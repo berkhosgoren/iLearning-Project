@@ -47,7 +47,8 @@ namespace iLearning.Web.Controllers
             };
 
             var suggested = await BuildSuggestedCustomIdAsync(inventoryId);
-            vm.CustomId = suggested;
+            vm.SuggestedCustomId = suggested;
+            //vm.CustomId = suggested; //if i want ID to prefill suggestion
 
             return View(vm);
         }
@@ -79,6 +80,8 @@ namespace iLearning.Web.Controllers
 
             vm.Title = (vm.Title ?? "").Trim();
             ApplyFieldEnforcement(vm, inv);
+
+            vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
 
             if (!ModelState.IsValid)
                 return View(vm);
@@ -139,6 +142,7 @@ namespace iLearning.Web.Controllers
             catch (DbUpdateException)
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
+                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
                 return View(vm);
             }
 
@@ -430,6 +434,8 @@ namespace iLearning.Web.Controllers
             };
 
             vm.Fields = MapFieldConfig(inv);
+
+            vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
 
             return View(vm);
         }

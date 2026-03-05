@@ -18,6 +18,8 @@ namespace iLearning.Web.Models.ViewModels.Items
 
         public InventoryFieldConfigVm Fields { get; set; } = new();
 
+        public string? SuggestedCustomId { get; set; }
+
         [MaxLength(500)]
         public string? String1 { get; set; }
         [MaxLength(500)]
