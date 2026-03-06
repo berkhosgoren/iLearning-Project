@@ -27,7 +27,7 @@ namespace iLearning.Web.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost("inventory-settings/{id:guid}")]
-        public async Task<IActionResult> InventorySettings(Guid id, InventoryUpsertVm vm)
+        public async Task<IActionResult> InventorySettings(Guid id, [FromForm] InventoryUpsertVm vm)
         {
            if (id != vm.Id) 
                 return BadRequest();
@@ -117,7 +117,7 @@ namespace iLearning.Web.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost("inventory-fields/{id:guid}")]
-        public async Task<IActionResult> InventoryFields(Guid id, InventoryFieldsPageVm vm)
+        public async Task<IActionResult> InventoryFields(Guid id, [FromForm] InventoryFieldsPageVm vm)
         {
             if (id != vm.InventoryId)
                 return BadRequest();

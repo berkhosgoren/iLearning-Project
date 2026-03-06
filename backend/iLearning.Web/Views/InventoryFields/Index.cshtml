@@ -13,11 +13,20 @@
             <div class="text-muted small">@Model.InventoryTitle</div>
         </div>
 
-        <a class="btn btn-outline-secondary"
-           asp-controller="Inventories" asp-action="Details"
-           asp-route-id="@Model.InventoryId" asp-route-tab="items">
-            @T["Common.BackToInventory"]
-        </a>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-muted small" id="autosaveStatus" data-prefix="@T["Inv.AutoSave.Label"]" data-off="@T["Inv.AutoSave.Off"]"
+                  data-ready="@T["Inv.AutoSave.Ready"]" data-pending="@T["Inv.AutoSave.Pending"]" data-saving="@T["Inv.AutoSave.Saving"]"
+                  data-saved="@T["Inv.AutoSave.Saved"]" data-error="@T["Inv.AutoSave.Error"]" data-conflict="@T["Inv.AutoSave.Conflict"]"
+                  data-at="@T["Inv.AutoSave.At"]">
+                @T["Inv.AutoSave.Label"] @T["Inv.AutoSave.Off"]
+            </span>
+
+            <a class="btn btn-outline-secondary"
+               asp-controller="Inventories" asp-action="Details"
+               asp-route-id="@Model.InventoryId" asp-route-tab="items">
+                @T["Common.BackToInventory"]
+            </a>
+        </div>
     </div>
 
     @if (!string.IsNullOrWhiteSpace(msg))
@@ -27,7 +36,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form method="post" asp-action="Save" asp-route-inventoryId="@Model.InventoryId">
+            <form method="post" asp-action="Save" asp-route-inventoryId="@Model.InventoryId" id="inventoryFieldsForm">
                 @Html.AntiForgeryToken()
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
@@ -210,4 +219,16 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/js/autosave-form.js" asp-append-version="true"></script>
+    <script>
+        InventoryAutoSave.init({
+            formId: 'inventoryFieldsForm',
+            statusElementId: 'autosaveStatus',
+            url: '@Url.Action("InventoryFields", "AutoSave", new { id = Model.InventoryId })',
+            idFieldName: 'InventoryId',
+            versionFieldName: 'Version',
+            delayMs: 800
+        });
+    </script>
 }
