@@ -43,22 +43,34 @@ else
 
             const statusEl = document.getElementById('autosaveStatus');
 
-            const autosaveUrl = '/inventories/@Model.Id/autosave';
+            const autosaveUrl = '@Url.Action("AutoSave", "Inventories", new { id = Model.Id })';
 
             function setStatus(stateKey) {
                 if (!statusEl) return;
 
                 const prefix = statusEl.dataset.prefix || 'Auto-save:';
-                const value = statusEl.dataset(stateKey) || stateKey;
+                const value = statusEl.dataset[stateKey] || stateKey;
 
                 statusEl.textContent = prefix + ' ' + value;
+            }
+
+            function buildPayloadKey(fd) {
+                return Array.from(fd.entries())
+                    .filter(([k]) => k !== '__RequestVerificationToken')
+                    .map(([k, v]) => k + '=' + String(v))
+                    .join('&');
             }
 
             const tokenEl = form.querySelector('input[name="__RequestVerificationToken"]');
             const token = tokenEl ? tokenEl.value : null;
 
             const idEl = form.querySelector('input[name="SettingsVm.Id"]');
-            const versionEl = form.querySeletor('input[name="SettingsVm.Version"]');
+            const versionEl = form.querySelector('input[name="SettingsVm.Version"]');
+
+            console.log('tokenEl:', tokenEl);
+            console.log('idEl:', idEl);
+            console.log('versionEl:', versionEl);
+
 
             if (!token || !idEl || !versionEl) {
                 setStatus('off');
@@ -87,29 +99,26 @@ else
                 if (stoppedByConflict) return;
 
                 const fd = serializeForm();
+                const payloadKey = buildPayloadKey(fd);
+                
+                if (payloadKey === lastPayload) {
+                    setStatus('saved');
+                    return;
+                }
 
-                const payloadKey = Array.from(fd.entries())
-                    .map(([k, v]) => k + '=' + string(v))
-                    .join('&');
+                if (isSaving) {
+                    hasPending = true;
+                    return;
+                }
 
-                    if (payloadKey === lastPayload) {
-                        setStatus('saved');
-                        return;
-                    }
+                isSaving = true;
+                setStatus('saving');
 
-                    if (isSaving) {
-                        hasPending = true;
-                        return;
-                    }
-
-                    isSaving = true;
-                    setStatus('saving');
-
-                    try {
-                        const res = await fetch(autosaveUrl, {
-                            method: 'POST',
-                            body: fd,
-                            headers: token ? { 'RequestVerificationToken' : token } : {}
+                try {
+                    const res = await fetch(autosaveUrl, {
+                        method: 'POST',
+                        body: fd,
+                        headers: token ? { 'RequestVerificationToken': token } : {}
                     });
 
                     if (res.status === 409) {
@@ -131,21 +140,19 @@ else
                         if (settingsVersionEl) settingsVersionEl.value = newVer;
                     }
 
-                    lastPayload = payloadKey;
-
+                    lastPayload = buildPayloadKey(serializeForm());
                     setStatus('saved');
-            } catch {
-                setStatus('error');
-            } finally {
+                } catch {
+                    setStatus('error');
+                } finally {
+                    isSaving = false;
 
-                isSaving = false;
-
-                if (hasPending) {
-                    hasPending = false;
-                    setTimeout(doSave, 50);
+                    if (hasPending) {
+                        hasPending = false;
+                        setTimeout(doSave, 50);
+                    }
                 }
             }
-        }
         
         function scheduleSave() {
             if (stoppedByConflict) return;
@@ -161,16 +168,18 @@ else
             const el = e.target;
             if (!el) return;
 
-            if (el.matches('input, textarea, select'))
+            if (el.matches('input, textarea, select')) {
                 scheduleSave();
+            }
         });
 
         form.addEventListener('change', function(e) {
             const el = e.target;
             if (!el) return;
 
-            if (el.matches('input[type="checkbox"], input[type="radio"], select'))
-               scheduleSave();      
+            if (el.matches('input[type="checkbox"], input[type="radio"], select')){
+                scheduleSave();
+            }                   
         });
 
         setStatus('ready');
