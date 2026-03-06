@@ -594,6 +594,30 @@
   <data name="Inv.Access.Table.Write" xml:space="preserve">
     <value>Write</value>
   </data>
+  <data name="Inv.AutoSave.Conflict" xml:space="preserve">
+    <value>Conflict (refresh page)</value>
+  </data>
+  <data name="Inv.AutoSave.Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Inv.AutoSave.Label" xml:space="preserve">
+    <value>Auto-save:</value>
+  </data>
+  <data name="Inv.AutoSave.Off" xml:space="preserve">
+    <value>Off.</value>
+  </data>
+  <data name="Inv.AutoSave.Pending" xml:space="preserve">
+    <value>Pending...</value>
+  </data>
+  <data name="Inv.AutoSave.Ready" xml:space="preserve">
+    <value>Ready.</value>
+  </data>
+  <data name="Inv.AutoSave.Saved" xml:space="preserve">
+    <value>Saved.</value>
+  </data>
+  <data name="Inv.AutoSave.Saving" xml:space="preserve">
+    <value>Saving...</value>
+  </data>
   <data name="Inv.Category" xml:space="preserve">
     <value>Category</value>
   </data>

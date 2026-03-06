@@ -13,7 +13,8 @@ else
            asp-route-id="@Model.Id" asp-route-tab="items">@T["Common.Back"]</a>
     </div>
 
-    <form method="post" asp-controller="Inventories" asp-action="Edit" asp-route-id="@Model.Id">
+    <form method="post" asp-controller="Inventories" asp-action="Edit" asp-route-id="@Model.Id"
+          id="inventorySettingsForm" data-autosave="true">
         @Html.AntiForgeryToken()
 
         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
@@ -34,4 +35,145 @@ else
             @T["Inv.Edit.Concurrency"]
         </div>
     </form>
+
+    <script>
+        (function () {
+            const form = document.getElementById('inventorySettingsForm');
+            if (!form) return;
+
+            const statusEl = document.getElementById('autosaveStatus');
+
+            const autosaveUrl = '/inventories/@Model.Id/autosave';
+
+            function setStatus(stateKey) {
+                if (!statusEl) return;
+
+                const prefix = statusEl.dataset.prefix || 'Auto-save:';
+                const value = statusEl.dataset(stateKey) || stateKey;
+
+                statusEl.textContent = prefix + ' ' + value;
+            }
+
+            const tokenEl = form.querySelector('input[name="__RequestVerificationToken"]');
+            const token = tokenEl ? tokenEl.value : null;
+
+            const idEl = form.querySelector('input[name="SettingsVm.Id"]');
+            const versionEl = form.querySeletor('input[name="SettingsVm.Version"]');
+
+            if (!token || !idEl || !versionEl) {
+                setStatus('off');
+                return;
+            }
+
+            let timer = null;
+            let isSaving = false;
+            let hasPending = false;
+            let lastPayload = '';
+            let stoppedByConflict = false;
+
+            function serializeForm() {
+                const fd = new FormData(form);
+
+                fd.set('Id', fd.get('SettingsVm.Id'));
+                fd.set('Version', fd.get('SettingsVm.Version'));
+
+                fd.delete('SettingsVm.Id');
+                fd.delete('SettingsVm.Version');
+
+                return fd;
+            }
+
+            async function doSave() {
+                if (stoppedByConflict) return;
+
+                const fd = serializeForm();
+
+                const payloadKey = Array.from(fd.entries())
+                    .map(([k, v]) => k + '=' + string(v))
+                    .join('&');
+
+                    if (payloadKey === lastPayload) {
+                        setStatus('saved');
+                        return;
+                    }
+
+                    if (isSaving) {
+                        hasPending = true;
+                        return;
+                    }
+
+                    isSaving = true;
+                    setStatus('saving');
+
+                    try {
+                        const res = await fetch(autosaveUrl, {
+                            method: 'POST',
+                            body: fd,
+                            headers: token ? { 'RequestVerificationToken' : token } : {}
+                    });
+
+                    if (res.status === 409) {
+                        stoppedByConflict = true;
+                        setStatus('conflict');
+                        return;
+                    }
+
+                    if (!res.ok) {
+                        setStatus('error');
+                        return;
+                    }
+
+                    const data = await res.json();
+
+                    if (data && data.newVersion) {
+                        const newVer = String(data.newVersion);
+                        const settingsVersionEl = form.querySelector('input[name="SettingsVm.Version"]');
+                        if (settingsVersionEl) settingsVersionEl.value = newVer;
+                    }
+
+                    lastPayload = payloadKey;
+
+                    setStatus('saved');
+            } catch {
+                setStatus('error');
+            } finally {
+
+                isSaving = false;
+
+                if (hasPending) {
+                    hasPending = false;
+                    setTimeout(doSave, 50);
+                }
+            }
+        }
+        
+        function scheduleSave() {
+            if (stoppedByConflict) return;
+
+            setStatus('pending');
+
+            if (timer) clearTimeout(timer);
+
+            timer = setTimeout(doSave, 800);
+        }
+
+        form.addEventListener('input', function (e) {
+            const el = e.target;
+            if (!el) return;
+
+            if (el.matches('input, textarea, select'))
+                scheduleSave();
+        });
+
+        form.addEventListener('change', function(e) {
+            const el = e.target;
+            if (!el) return;
+
+            if (el.matches('input[type="checkbox"], input[type="radio"], select'))
+               scheduleSave();      
+        });
+
+        setStatus('ready');
+    })();
+    </script>
 }
