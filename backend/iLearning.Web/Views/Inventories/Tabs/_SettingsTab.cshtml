@@ -67,11 +67,6 @@ else
             const idEl = form.querySelector('input[name="SettingsVm.Id"]');
             const versionEl = form.querySelector('input[name="SettingsVm.Version"]');
 
-            console.log('tokenEl:', tokenEl);
-            console.log('idEl:', idEl);
-            console.log('versionEl:', versionEl);
-
-
             if (!token || !idEl || !versionEl) {
                 setStatus('off');
                 return;
