@@ -594,6 +594,9 @@
   <data name="Inv.Access.Table.Write" xml:space="preserve">
     <value>Write</value>
   </data>
+  <data name="Inv.AutoSave.At" xml:space="preserve">
+    <value>at</value>
+  </data>
   <data name="Inv.AutoSave.Conflict" xml:space="preserve">
     <value>Conflict (refresh page)</value>
   </data>
@@ -613,7 +616,7 @@
     <value>Ready.</value>
   </data>
   <data name="Inv.AutoSave.Saved" xml:space="preserve">
-    <value>Saved.</value>
+    <value>Saved</value>
   </data>
   <data name="Inv.AutoSave.Saving" xml:space="preserve">
     <value>Saving...</value>

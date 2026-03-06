@@ -594,6 +594,9 @@
   <data name="Inv.Access.Table.Write" xml:space="preserve">
     <value>Запись</value>
   </data>
+  <data name="Inv.AutoSave.At" xml:space="preserve">
+    <value>в</value>
+  </data>
   <data name="Inv.AutoSave.Conflict" xml:space="preserve">
     <value>конфликт (обновите страницу)</value>
   </data>
@@ -613,7 +616,7 @@
     <value>готово.</value>
   </data>
   <data name="Inv.AutoSave.Saved" xml:space="preserve">
-    <value>сохранено.</value>
+    <value>сохранено</value>
   </data>
   <data name="Inv.AutoSave.Saving" xml:space="preserve">
     <value>сохранение...</value>

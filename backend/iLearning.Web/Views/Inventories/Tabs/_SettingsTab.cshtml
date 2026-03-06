@@ -45,13 +45,22 @@ else
 
             const autosaveUrl = '@Url.Action("AutoSave", "Inventories", new { id = Model.Id })';
 
-            function setStatus(stateKey) {
+            function setStatus(stateKey, suffix = '') {
                 if (!statusEl) return;
 
                 const prefix = statusEl.dataset.prefix || 'Auto-save:';
                 const value = statusEl.dataset[stateKey] || stateKey;
 
-                statusEl.textContent = prefix + ' ' + value;
+                statusEl.textContent = suffix
+                    ? (prefix + ' ' + value + ' ' + suffix)
+                    : (prefix + ' ' + value);
+            }
+
+            function formatNow() {
+                const now = new Date();
+                const atText = statusEl?.dataset.at || 'at';
+                const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                return atText + ' ' + time;
             }
 
             function buildPayloadKey(fd) {
@@ -97,7 +106,7 @@ else
                 const payloadKey = buildPayloadKey(fd);
                 
                 if (payloadKey === lastPayload) {
-                    setStatus('saved');
+                    setStatus('saved', formatNow());
                     return;
                 }
 
@@ -136,7 +145,7 @@ else
                     }
 
                     lastPayload = buildPayloadKey(serializeForm());
-                    setStatus('saved');
+                    setStatus('saved', formatNow());
                 } catch {
                     setStatus('error');
                 } finally {
