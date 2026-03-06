@@ -337,13 +337,13 @@ namespace iLearning.Web.Controllers
 
             if (!userId.HasValue || userId.Value == Guid.Empty)
             {
-                TempData["InventoryMessage"] = T["Inv.Err.SelectUser"];
+                TempData["InventoryMessage"] = T["Inv.Err.SelectUser"].Value;
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
             if (userId.Value == inv.CreatorId)
             {
-                TempData["InventoryMessage"] = T["Inv.Err.OwnerAlreadyHasAccess"];
+                TempData["InventoryMessage"] = T["Inv.Err.OwnerAlreadyHasAccess"].Value;
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
@@ -355,13 +355,13 @@ namespace iLearning.Web.Controllers
 
             if (user == null)
             {
-                TempData["InventoryMessage"] = T["Inv.Err.UserNotFound"];
+                TempData["InventoryMessage"] = T["Inv.Err.UserNotFound"].Value;
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
             if (user.IsBlocked)
             {
-                TempData["InventoryMessage"] = T["Inv.Err.UserBlocked"];
+                TempData["InventoryMessage"] = T["Inv.Err.UserBlocked"].Value;
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
@@ -379,14 +379,14 @@ namespace iLearning.Web.Controllers
                 });
 
                 await _db.SaveChangesAsync();
-                TempData["InventoryMessage"] = T["Inv.Access.Msg.Granted"];
+                TempData["InventoryMessage"] = T["Inv.Access.Msg.Granted"].Value;
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
             existing.CanWrite = canWrite;
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = T["Inv.Access.Msg.Updated"];
+            TempData["InventoryMessage"] = T["Inv.Access.Msg.Updated"].Value;
             return RedirectToAction(nameof(Details), new { id, tab = "access" });
         }
 
@@ -412,7 +412,7 @@ namespace iLearning.Web.Controllers
             _db.InventoryAccesses.RemoveRange(rows);
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = T["Inv.Access.Msg.RemovedCount", rows.Count];
+            TempData["InventoryMessage"] = T["Inv.Access.Msg.RemovedCount", rows.Count].Value;
             return RedirectToAction(nameof(Details), new { id, tab = "access" });
         }
 
@@ -440,7 +440,7 @@ namespace iLearning.Web.Controllers
 
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = canWrite ? T["Inv.Access.Msg.GrantedWriteCount", rows.Count] : T["Inv.Access.Msg.SetReadOnlyCount", rows.Count];
+            TempData["InventoryMessage"] = canWrite ? T["Inv.Access.Msg.GrantedWriteCount", rows.Count].Value : T["Inv.Access.Msg.SetReadOnlyCount", rows.Count].Value;
 
             return RedirectToAction(nameof(Details), new { id, tab = "access" });
         }
