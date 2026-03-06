@@ -1069,7 +1069,7 @@
     <value>Custom ID already exists in this inventory.</value>
   </data>
   <data name="Items.Messages.BulkDeleted" xml:space="preserve">
-    <value>Deleted {0}</value>
+    <value>Deleted {0} item(s).</value>
   </data>
   <data name="Items.Messages.CommentAdded" xml:space="preserve">
     <value>Comment added.</value>

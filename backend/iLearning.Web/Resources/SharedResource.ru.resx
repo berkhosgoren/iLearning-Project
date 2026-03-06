@@ -1069,7 +1069,7 @@
     <value>Пользовательский ID уже существует в этом инвентаре.</value>
   </data>
   <data name="Items.Messages.BulkDeleted" xml:space="preserve">
-    <value>Удалено элементов: {0}</value>
+    <value>Удалено: {0} элементов</value>
   </data>
   <data name="Items.Messages.CommentAdded" xml:space="preserve">
     <value>Комментарий добавлен.</value>

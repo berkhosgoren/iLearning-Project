@@ -574,7 +574,7 @@ namespace iLearning.Web.Controllers
             _db.Items.RemoveRange(itemsToDelete);
             await _db.SaveChangesAsync();
 
-            TempData["InventoryMessage"] = T["Items.Messages.BulkDeleted", itemsToDelete.Count];
+            TempData["InventoryMessage"] = T["Items.Messages.BulkDeleted", itemsToDelete.Count].Value;
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "items" });
         }
 
