@@ -43,7 +43,7 @@ else
 
             const statusEl = document.getElementById('autosaveStatus');
 
-            const autosaveUrl = '@Url.Action("AutoSave", "Inventories", new { id = Model.Id })';
+            const autosaveUrl = '@Url.Action("InventorySettings", "AutoSave", new { id = Model.Id })';
 
             function setStatus(stateKey, suffix = '') {
                 if (!statusEl) return;
