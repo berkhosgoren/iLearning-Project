@@ -507,6 +507,33 @@
   <data name="Common.Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="Home.Latest.Empty" xml:space="preserve">
+    <value>No inventories found.</value>
+  </data>
+  <data name="Home.Latest.Subtitle" xml:space="preserve">
+    <value>Recently created public inventories.</value>
+  </data>
+  <data name="Home.Latest.Title" xml:space="preserve">
+    <value>Latest Inventories</value>
+  </data>
+  <data name="Home.Popular.ActivityCount" xml:space="preserve">
+    <value>Activity: {0}</value>
+  </data>
+  <data name="Home.Popular.Empty" xml:space="preserve">
+    <value>No active inventories found yet.</value>
+  </data>
+  <data name="Home.Popular.LastActivityLabel" xml:space="preserve">
+    <value>Last activity:</value>
+  </data>
+  <data name="Home.Popular.NoRecentActivity" xml:space="preserve">
+    <value>No recent activity</value>
+  </data>
+  <data name="Home.Popular.Subtitle" xml:space="preserve">
+    <value>Public inventories ranked by recent activity.</value>
+  </data>
+  <data name="Home.Popular.Title" xml:space="preserve">
+    <value>Popular Inventories</value>
+  </data>
   <data name="Home.PublicInventories.Empty" xml:space="preserve">
     <value>No inventories found.</value>
   </data>
@@ -517,6 +544,15 @@
     <value>Inventories</value>
   </data>
   <data name="Home.PublicInventories.ViewInventory" xml:space="preserve">
+    <value>View Inventory</value>
+  </data>
+  <data name="Home.Subtitle" xml:space="preserve">
+    <value>Browse the latest public inventories and the ones with the most recent activity.</value>
+  </data>
+  <data name="Home.Title" xml:space="preserve">
+    <value>Inventories</value>
+  </data>
+  <data name="Home.ViewInventory" xml:space="preserve">
     <value>View Inventory</value>
   </data>
   <data name="Inv.Access.ActionLabel" xml:space="preserve">

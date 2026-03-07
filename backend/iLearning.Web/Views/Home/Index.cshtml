@@ -1,67 +1,128 @@
-﻿@model List<iLearning.Web.Models.ViewModels.Home.HomeInventoryCardVm>
+﻿@model iLearning.Web.Models.ViewModels.Home.HomeIndexVm
 @inject Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> T
 
 @{
-    ViewData["Title"] = T["Home.PublicInventories.Title"];
+    ViewData["Title"] = T["Home.Title"];
 }
 
 <div class="container mt-4">
-    <h3 class="mb-4">@T["Home.PublicInventories.Heading"]</h3>
+    <div class="mb-4">
+        <h2 class="mb-1">@T["Home.Title"]</h2>
+        <div class="text-muted">@T["Home.Subtitle"]</div>
+    </div>
 
-    @if (!Model.Any())
-    {
-        <div class="alert alert-secondary">
-            @T["Home.PublicInventories.Empty"]
+    <section class="mb-5">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+            <h3 class="mb-0">@T["Home.Latest.Title"]</h3>
+            <div class="text-muted small">@T["Home.Latest.Subtitle"]</div>
         </div>
-    }
-    else
-    {
-        <div class="row g-3">
 
-            @foreach ( var inv in Model)
-            {
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 shadow-sm">
+        @if (!Model.LatestInventories.Any())
+        {
+            <div class="alert alert-secondary">
+                @T["Home.Latest.Empty"]
+            </div>
+        }
+        else
+        {
+            <div class="row g-3">
+                @foreach (var inv in Model.LatestInventories)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm">
+                            @if (!string.IsNullOrWhiteSpace(inv.ImageUrl))
+                            {
+                                <img src="@inv.ImageUrl" class="card-img-top" alt="@inv.Title" />
+                            }
 
-                        @if (!string.IsNullOrWhiteSpace(inv.ImageUrl))
-                        {
-                            <img src="@inv.ImageUrl" class="card-img-top" />
-                        }
+                            <div class="card-body">
+                                <h5 class="card-title">@inv.Title</h5>
 
-                        <div class="card-body">
+                                <p class="text-muted small mb-2">
+                                    @inv.CategoryName • @T["Common.By"] @inv.CategoryName
+                                </p>
 
-                            <h5 class="card-title">
-                                @inv.Title
-                            </h5>
+                                <p class="text-muted small mb-2">
+                                    @T["Common.CreatedLabel"] @inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                </p>
 
-                            <p class="text-muted small mb-2">
-                                @inv.CategoryName • @T["Common.By"] @inv.CreatorName
-                            </p>
-
-                            <p class="text-muted small mb-2">
-                                @T["Common.CreatedLabel"] @inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
-                            </p>
-
-                            <div class="markdown-preview text-muted small">
-                                @Html.Raw(inv.DescriptionHtml)
+                                <div class="markdown-preview text-muted small">
+                                    @Html.Raw(inv.DescriptionHtml)
+                                </div>
                             </div>
 
+                            <div class="card-footer bg-body border-0">
+                                <a class="btn btn-outline-primary btn-sm w-100" asp-controller="Inventories" asp-action="Details" asp-route-id="@inv.Id">
+                                    @T["Home.ViewInventory"]
+                                </a>
+                            </div>
                         </div>
-
-                        <div class="card-footer bg-body border-0">
-                            <a class="btn btn-outline-primary btn-sm w-100"
-                            asp-controller="Inventories"
-                            asp-action="Details"
-                            asp-route-id="@inv.Id">
-                                @T["Home.PublicInventories.ViewInventory"]
-                            </a>
-                        </div>
-
                     </div>
-                </div>
-            }
-
-        </div>
+                }
+            </div>
         }
+    </section>
 
+    <section class="mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
+            <h3 class="mb-0">@T["Home.Popular.Title"]</h3>
+            <div class="text-muted small">@T["Home.Popular.Subtitle"]</div>
+        </div>
+
+        @if (!Model.PopularInventories.Any())
+        {
+            <div class="alert alert-secondary">
+                @T["Home.Popular.Empty"]
+            </div>
+        }
+        else
+        {
+            <div class="row g-3">
+                @foreach (var inv in Model.PopularInventories)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm">
+                            @if (!string.IsNullOrWhiteSpace(inv.ImageUrl))
+                            {
+                                <img src="@inv.ImageUrl" class="card-img-top" alt="@inv.Title" />
+                            }
+
+                            <div class="card-body">
+                                <h5 class="card-title">@inv.Title</h5>
+
+                                <p class="text-muted small mb-2">
+                                    @inv.CategoryName • @T["Common.By"] @inv.CategoryName
+                                </p>
+
+                                <p class="text-muted small mb-2">
+                                    @T["Home.Popular.ActivityCount", inv.ActivityCount]
+                                </p>
+
+                                <p class="text-muted small mb-2">
+                                    @if (inv.LastActivityAtUtc.HasValue)
+                                    {
+                                        @T["Home.Popular.LastActivityLabel"] @inv.LastActivityAtUtc.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                    }
+                                    else
+                                    {
+                                        @T["Home.Popular.NoRecentActivity"]
+                                    }
+                                </p>
+
+                                <div class="markdown-preview text-muted small">
+                                    @Html.Raw(inv.DescriptionHtml)
+                                </div>
+                            </div>
+
+                            <div class="card-footer bg-body border-0">
+                                <a class="btn btn-outline-primary btn-sm w-100" asp-controller="Inventories" asp-action="Details" asp-route-id="@inv.Id">
+                                    @T["Home.ViewInventory"]
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </section>
 </div>

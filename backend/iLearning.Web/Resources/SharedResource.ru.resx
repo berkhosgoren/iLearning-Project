@@ -507,6 +507,33 @@
   <data name="Common.Yes" xml:space="preserve">
     <value>Да</value>
   </data>
+  <data name="Home.Latest.Empty" xml:space="preserve">
+    <value>Инвентари не найдены.</value>
+  </data>
+  <data name="Home.Latest.Subtitle" xml:space="preserve">
+    <value>Недавно созданные публичные инвентари.</value>
+  </data>
+  <data name="Home.Latest.Title" xml:space="preserve">
+    <value>Последние инвентари</value>
+  </data>
+  <data name="Home.Popular.ActivityCount" xml:space="preserve">
+    <value>Активность: {0}</value>
+  </data>
+  <data name="Home.Popular.Empty" xml:space="preserve">
+    <value>Активных инвентарей пока не найдено.</value>
+  </data>
+  <data name="Home.Popular.LastActivityLabel" xml:space="preserve">
+    <value>Последняя активность:</value>
+  </data>
+  <data name="Home.Popular.NoRecentActivity" xml:space="preserve">
+    <value>Недавней активности нет</value>
+  </data>
+  <data name="Home.Popular.Subtitle" xml:space="preserve">
+    <value>Публичные инвентари, отсортированные по недавней активности.</value>
+  </data>
+  <data name="Home.Popular.Title" xml:space="preserve">
+    <value>опулярные инвентари</value>
+  </data>
   <data name="Home.PublicInventories.Empty" xml:space="preserve">
     <value>Инвентари не найдены.</value>
   </data>
@@ -517,6 +544,15 @@
     <value>Инвентари</value>
   </data>
   <data name="Home.PublicInventories.ViewInventory" xml:space="preserve">
+    <value>Открыть инвентарь</value>
+  </data>
+  <data name="Home.Subtitle" xml:space="preserve">
+    <value>Просматривайте последние публичные инвентари и инвентари с самой недавней активностью.</value>
+  </data>
+  <data name="Home.Title" xml:space="preserve">
+    <value>Инвентари</value>
+  </data>
+  <data name="Home.ViewInventory" xml:space="preserve">
     <value>Открыть инвентарь</value>
   </data>
   <data name="Inv.Access.ActionLabel" xml:space="preserve">

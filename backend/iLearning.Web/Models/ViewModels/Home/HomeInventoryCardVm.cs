@@ -9,5 +9,8 @@
         public DateTime CreatedAtUtc { get; set; }
         public string? ImageUrl { get; set; }
         public string DescriptionHtml { get; set; } = "";
+
+        public int ActivityCount { get; set; }
+        public DateTime? LastActivityAtUtc { get; set; }
     }
 }
