@@ -519,11 +519,14 @@
   <data name="Home.Popular.ActivityCount" xml:space="preserve">
     <value>Activity: {0}</value>
   </data>
+  <data name="Home.Popular.ActivityScore" xml:space="preserve">
+    <value>Score: {0}</value>
+  </data>
   <data name="Home.Popular.Empty" xml:space="preserve">
     <value>No active inventories found yet.</value>
   </data>
   <data name="Home.Popular.LastActivityLabel" xml:space="preserve">
-    <value>Last activity:</value>
+    <value>Last Activity:</value>
   </data>
   <data name="Home.Popular.NoRecentActivity" xml:space="preserve">
     <value>No recent activity</value>

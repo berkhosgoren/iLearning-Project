@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using iLearning.Web.Services;
 using iLearning.Web.Models.ViewModels.Home;
+using System.Text.RegularExpressions;
+
 
 
 namespace iLearning.Web.Controllers
@@ -41,17 +43,25 @@ namespace iLearning.Web.Controllers
                 .ToListAsync();
 
             var latest = latestRows
-                .Select(i => new HomeInventoryCardVm
+                .Select(i =>
                 {
-                    Id = i.Id,
-                    Title = i.Title,
-                    CategoryName = i.CategoryName,
-                    CreatorName = i.CreatorName,
-                    CreatedAtUtc = i.CreatedAtUtc,
-                    ImageUrl = i.ImageUrl,
-                    DescriptionHtml = _markdown.ToSafeHtml(i.Description),
-                    ActivityCount = 0,
-                    LastActivityAtUtc = null
+                    var safeHtml = _markdown.ToSafeHtml(i.Description);
+                    var previewText = _markdown.ToPreviewText(i.Description, 160);
+
+                    return new HomeInventoryCardVm
+                    {
+                        Id = i.Id,
+                        Title = i.Title,
+                        CategoryName = i.CategoryName,
+                        CreatorName = i.CreatorName,
+                        CreatedAtUtc = i.CreatedAtUtc,
+                        ImageUrl = i.ImageUrl,
+                        DescriptionHtml = safeHtml,
+                        DescriptionPreview = previewText,
+                        ActivityCount = 0,
+                        ActivityScore = 0,
+                        LastActivityAtUtc = null
+                    };
                 })
                 .ToList();
 
@@ -95,7 +105,15 @@ namespace iLearning.Web.Controllers
             var popular = popularRows
                 .Select(i =>
                 {
+                    var safeHtml = _markdown.ToSafeHtml(i.Description);
+                    var previewText = _markdown.ToPreviewText(i.Description, 160);
+
                     var activityCount = i.InventoryDiscussionCount + i.ItemCommentsCount + i.ItemLikesCount;
+
+                    var activityScore =
+                        (i.InventoryDiscussionCount * 3) +
+                        (i.ItemCommentsCount * 2) +
+                        (i.ItemLikesCount * 1);
 
                     DateTime? lastActivityAtUtc = new[]
                     {
@@ -116,8 +134,10 @@ namespace iLearning.Web.Controllers
                         CreatorName = i.CreatorName,
                         CreatedAtUtc = i.CreatedAtUtc,
                         ImageUrl = i.ImageUrl,
-                        DescriptionHtml = _markdown.ToSafeHtml(i.Description),
+                        DescriptionHtml = safeHtml,
+                        DescriptionPreview = previewText,
                         ActivityCount = activityCount,
+                        ActivityScore = activityScore,
                         LastActivityAtUtc = lastActivityAtUtc == default ? null : lastActivityAtUtc
                     };
                 })

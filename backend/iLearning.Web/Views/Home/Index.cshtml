@@ -39,16 +39,19 @@
                                 <h5 class="card-title">@inv.Title</h5>
 
                                 <p class="text-muted small mb-2">
-                                    @inv.CategoryName • @T["Common.By"] @inv.CategoryName
+                                    @inv.CategoryName • @T["Common.By"] @inv.CreatorName
                                 </p>
 
                                 <p class="text-muted small mb-2">
                                     @T["Common.CreatedLabel"] @inv.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
                                 </p>
 
-                                <div class="markdown-preview text-muted small">
-                                    @Html.Raw(inv.DescriptionHtml)
-                                </div>
+                                @if (!string.IsNullOrWhiteSpace(inv.DescriptionPreview))
+                                {
+                                    <div class="text-muted small">
+                                        @inv.DescriptionPreview
+                                    </div>
+                                }
                             </div>
 
                             <div class="card-footer bg-body border-0">
@@ -91,27 +94,32 @@
                                 <h5 class="card-title">@inv.Title</h5>
 
                                 <p class="text-muted small mb-2">
-                                    @inv.CategoryName • @T["Common.By"] @inv.CategoryName
+                                    @inv.CategoryName • @T["Common.By"] @inv.CreatorName
                                 </p>
 
                                 <p class="text-muted small mb-2">
                                     @T["Home.Popular.ActivityCount", inv.ActivityCount]
+                                    <span class="ms-2">@T["Home.Popular.ActivityScore", inv.ActivityScore]</span>
                                 </p>
 
                                 <p class="text-muted small mb-2">
                                     @if (inv.LastActivityAtUtc.HasValue)
                                     {
-                                        @T["Home.Popular.LastActivityLabel"] @inv.LastActivityAtUtc.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")
+                                        <span>@T["Home.Popular.LastActivityLabel"]</span>
+                                        <span>@inv.LastActivityAtUtc.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</span>
                                     }
                                     else
                                     {
-                                        @T["Home.Popular.NoRecentActivity"]
+                                        <span>@T["Home.Popular.NoRecentActivity"]</span>
                                     }
                                 </p>
 
-                                <div class="markdown-preview text-muted small">
-                                    @Html.Raw(inv.DescriptionHtml)
-                                </div>
+                                @if (!string.IsNullOrWhiteSpace(inv.DescriptionPreview))
+                                {
+                                    <div class="text-muted small">
+                                        @inv.DescriptionPreview
+                                    </div>
+                                }
                             </div>
 
                             <div class="card-footer bg-body border-0">

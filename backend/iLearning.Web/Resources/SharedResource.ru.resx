@@ -519,11 +519,14 @@
   <data name="Home.Popular.ActivityCount" xml:space="preserve">
     <value>Активность: {0}</value>
   </data>
+  <data name="Home.Popular.ActivityScore" xml:space="preserve">
+    <value>Балл: {0}</value>
+  </data>
   <data name="Home.Popular.Empty" xml:space="preserve">
     <value>Активных инвентарей пока не найдено.</value>
   </data>
   <data name="Home.Popular.LastActivityLabel" xml:space="preserve">
-    <value>Последняя активность:</value>
+    <value>Последняя Aктивность: </value>
   </data>
   <data name="Home.Popular.NoRecentActivity" xml:space="preserve">
     <value>Недавней активности нет</value>
