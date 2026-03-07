@@ -40,6 +40,24 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.Name = "ilearning_auth";
         options.SlidingExpiration = true;
         options.ExpireTimeSpan = TimeSpan.FromDays(7);
+    })
+    .AddCookie("External", options =>
+    {
+        options.Cookie.Name = "ilearning_external";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+    })
+    .AddGoogle("Google", options =>
+    {
+        options.SignInScheme = "External";
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? "";
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? "";
+    })
+    .AddGitHub("GitHub", options =>
+    {
+        options.SignInScheme = "External";
+        options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"] ?? "";
+        options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"] ?? "";
+        options.Scope.Add("user:email");
     });
 
 builder.Services.AddAuthorization(options =>

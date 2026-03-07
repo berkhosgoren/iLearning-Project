@@ -282,6 +282,24 @@
   <data name="Auth.Errors.UserBlocked" xml:space="preserve">
     <value>Пользователь заблокирован.</value>
   </data>
+  <data name="Auth.External.Failed" xml:space="preserve">
+    <value>Не удалось завершить внешний вход.</value>
+  </data>
+  <data name="Auth.External.GitHub" xml:space="preserve">
+    <value>Продолжить через GitHub</value>
+  </data>
+  <data name="Auth.External.Google" xml:space="preserve">
+    <value>Продолжить через Google</value>
+  </data>
+  <data name="Auth.External.MissingEmail" xml:space="preserve">
+    <value>Внешний сервис не передал email аккаунта.</value>
+  </data>
+  <data name="Auth.External.MissingId" xml:space="preserve">
+    <value>Внешний сервис не передал идентификатор аккаунта.</value>
+  </data>
+  <data name="Auth.External.OrContinueWith" xml:space="preserve">
+    <value>Или продолжить через</value>
+  </data>
   <data name="Auth.Login.BackHome" xml:space="preserve">
     <value>На главную</value>
   </data>
@@ -311,6 +329,9 @@
   </data>
   <data name="Auth.Register.Footer" xml:space="preserve">
     <value> Вход через Google и Facebook добавим позже.</value>
+  </data>
+  <data name="Auth.Register.SuccessMessage" xml:space="preserve">
+    <value>Регистрация прошла успешно. Теперь вы можете войти.</value>
   </data>
   <data name="Auth.Register.Title" xml:space="preserve">
     <value>Регистрация</value>
@@ -1196,6 +1217,9 @@
   </data>
   <data name="Search.Title" xml:space="preserve">
     <value>Поиск</value>
+  </data>
+  <data name="String1Auth.External.RemoteError" xml:space="preserve">
+    <value>Внешний вход не выполнен. Попробуйте снова.</value>
   </data>
   <data name="Theme.Dark" xml:space="preserve">
     <value>Тёмную</value>

@@ -57,32 +57,7 @@ namespace iLearning.Web.Controllers
                 return View(vm); 
             }
 
-            var roleNames = await _db.UserRoles
-                .Where(ur => ur.UserId == user.Id)
-                .Join(_db.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => r.Name)
-                .ToListAsync();
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Name),
-                new Claim(ClaimTypes.Email, user.Email)
-            };
-
-            foreach (var role in roleNames)
-                claims.Add(new Claim(ClaimTypes.Role, role));
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                principal,
-                new AuthenticationProperties
-                {
-                    IsPersistent = vm.RememberMe
-                }
-            );
+            await SignInUserAsync(user, vm.RememberMe);
 
             return RedirectToAction("Index", "Home");
         }
@@ -122,7 +97,123 @@ namespace iLearning.Web.Controllers
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
 
-            return RedirectToAction("Login");
+            TempData["Message"] = T["Auth.Register.Success"].Value;
+            return RedirectToAction(nameof(Login));
+        }
+
+        [HttpPost("external/{provider}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult ExternalLogin(string provider, string? returnUrl = null)
+        {
+            if (provider != "Google" && provider != "GitHub")
+                return RedirectToAction(nameof(Login));
+
+            var redirectUrl = Url.Action(nameof(ExternalCallback), "Auth", new { provider, returnUrl });
+
+            var props = new AuthenticationProperties
+            {
+                RedirectUri = redirectUrl ?? "/"
+            };
+
+            return Challenge(props, provider);
+        }
+
+        [HttpGet("external/callback")]
+        public async Task<IActionResult> ExternalCallback(string provider, string? returnUrl = null, string? remoteError = null)
+        {
+            if (!string.IsNullOrWhiteSpace(remoteError))
+            {
+                TempData["Message"] = T["Auth.External.RemoteError"].Value;
+                return RedirectToAction(nameof(Login));
+            }
+
+            var result = await HttpContext.AuthenticateAsync("External");
+            if (!result.Succeeded || result.Principal is null)
+            {
+                TempData["Message"] = T["Auth.External.Failed"];
+                return RedirectToAction(nameof(Login));
+            }
+
+            var principal = result.Principal;
+
+            var externalUserId =
+                principal.FindFirstValue(ClaimTypes.NameIdentifier) ??
+                principal.FindFirstValue("sub") ??
+                principal.FindFirstValue("id");
+
+            var email =
+                principal.FindFirstValue(ClaimTypes.Email) ??
+                principal.FindFirstValue("email");
+
+            var name =
+                principal.FindFirstValue(ClaimTypes.Name) ??
+                principal.FindFirstValue("name");
+
+            if (string.IsNullOrWhiteSpace(externalUserId))
+            {
+                await HttpContext.SignOutAsync("External");
+                TempData["Message"] = T["Auth.External.MissingId"].Value;
+                return RedirectToAction(nameof(Login));
+            }
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                await HttpContext.SignOutAsync("External");
+                TempData["Message"] = T["Auth.External.MissingEmail"].Value;
+                return RedirectToAction(nameof(Login));
+            }
+
+            email = email.Trim().ToLowerInvariant();
+            name = string.IsNullOrWhiteSpace(name) ? email.Split('@')[0] : name.Trim();
+
+            var user = await _db.Users.FirstOrDefaultAsync(u =>
+                u.ExternalProvider == provider &&
+                u.ExternalProviderUserId == externalUserId);
+
+            if (user is null)
+            {
+                user = await _db.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+                if (user is null)
+                {
+                    user = new AppUser
+                    {
+                        Name = name,
+                        Email = email,
+                        IsBlocked = false,
+                        PasswordHash = null,
+                        ExternalProvider = provider,
+                        ExternalProviderUserId = externalUserId,
+                    };
+
+                    _db.Users.Add(user);
+                }
+                else
+                {
+                    user.ExternalProvider ??= provider;
+                    user.ExternalProviderUserId ??= externalUserId;
+
+                    if (string.IsNullOrWhiteSpace(user.Name))
+                        user.Name = name;
+                }
+
+                await _db.SaveChangesAsync();
+            }
+
+            if (user.IsBlocked)
+            {
+                await HttpContext.SignOutAsync("External");
+                TempData["Message"] = T["Auth.Errors.UserBlocked"].Value;
+                return RedirectToAction(nameof(Login));
+            }
+
+            await HttpContext.SignOutAsync("External");
+            await SignInUserAsync(user, true);
+
+            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost("logout")]
@@ -137,6 +228,35 @@ namespace iLearning.Web.Controllers
         public IActionResult Denied()
         {
             return View();
+        }
+
+        private async Task SignInUserAsync(AppUser user, bool isPersistent)
+        {
+            var roleNames = await _db.UserRoles
+                .Where(ur => ur.UserId == user.Id)
+                .Join(_db.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => r.Name)
+                .ToListAsync();
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Name),
+                new Claim(ClaimTypes.Email, user.Email)
+            };
+
+            foreach (var role in roleNames)
+                claims.Add(new Claim(ClaimTypes.Role, role));
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                principal,
+                new AuthenticationProperties
+                {
+                    IsPersistent = isPersistent
+                });
         }
     }
 }
