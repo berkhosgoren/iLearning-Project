@@ -15,8 +15,13 @@ namespace iLearning.Web.Models.Domain
         public bool IsBlocked {  get; set; } = false;
 
         [MaxLength(500)]
-
         public string? PasswordHash { get; set; }
+
+        [MaxLength(50)]
+        public string? ExternalProvider { get; set; }
+
+        [MaxLength(250)]
+        public string? ExternalProviderUserId { get; set; }
 
         public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 
