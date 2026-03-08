@@ -540,6 +540,24 @@ namespace iLearning.Web.Controllers
             {
                 await _db.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                ModelState.AddModelError("", T["Items.Error.Concurrency"]);
+
+                var currentItem = await _db.Items
+                    .AsNoTracking()
+                    .Where(x => x.InventoryId == inventoryId && x.Id == itemId)
+                    .Select(x => new { x.Version })
+                    .FirstOrDefaultAsync();
+
+                if (currentItem != null)
+                {
+                    vm.Version = currentItem.Version;
+                }
+
+                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+                return View(vm);
+            }
             catch (DbUpdateException)
             {
                 ModelState.AddModelError("", T["Common.Errors.CouldNotSave"]);
