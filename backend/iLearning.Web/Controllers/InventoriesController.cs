@@ -451,14 +451,24 @@ namespace iLearning.Web.Controllers
 
             var canEdit = isAdmin || isOwner;
 
+            bool hasAnyAccess = false;
             bool hasExplicitWriteAccess = false;
 
             if (!canEdit && isAuthenticated && userId.HasValue)
             {
-                hasExplicitWriteAccess = await _db.InventoryAccesses
+                var access = await _db.InventoryAccesses
                     .AsNoTracking()
-                    .AnyAsync(a => a.InventoryId == inv.Id && a.UserId == userId.Value && a.CanWrite);
+                    .Where(a => a.InventoryId == inv.Id && a.UserId == userId.Value)
+                    .Select(a => new { a.CanWrite })
+                    .FirstOrDefaultAsync();
+
+                hasAnyAccess = access != null;
+                hasExplicitWriteAccess = access?.CanWrite == true;
             }
+
+            var canRead = inv.IsPublic || canEdit || hasAnyAccess;
+            if (!canRead)
+                return Forbid();
 
             var canWrite = canEdit || hasExplicitWriteAccess;
 
