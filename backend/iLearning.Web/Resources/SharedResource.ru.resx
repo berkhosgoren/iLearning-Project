@@ -1131,6 +1131,9 @@
   <data name="Items.Errors.CustomIdExists" xml:space="preserve">
     <value>Пользовательский ID уже существует в этом инвентаре.</value>
   </data>
+  <data name="Items.Errors.CustomIdFormat" xml:space="preserve">
+    <value>Пользовательский ID должен соответствовать формату пользовательского ID инвентаря.</value>
+  </data>
   <data name="Items.Messages.BulkDeleted" xml:space="preserve">
     <value>Удалено: {0} элементов</value>
   </data>

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using System.Globalization;
 using System.Runtime.Intrinsics.Arm;
 using System.Threading.Channels;
 
@@ -81,7 +82,10 @@ namespace iLearning.Web.Controllers
             vm.Title = (vm.Title ?? "").Trim();
             ApplyFieldEnforcement(vm, inv);
 
-            vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+            if (!MatchesInventoryCustomIdFormat(inv, vm.CustomId))
+            {
+                ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdFormat"]);
+            }
 
             if (!ModelState.IsValid)
                 return View(vm);
@@ -460,6 +464,12 @@ namespace iLearning.Web.Controllers
 
             vm.CustomId = (vm.CustomId ?? "").Trim();
             vm.Title = (vm.Title ?? "").Trim();
+            ApplyFieldEnforcement(vm, inv);
+
+            if (!MatchesInventoryCustomIdFormat(inv, vm.CustomId))
+            {
+                ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdFormat"]);
+            }
 
             if (!ModelState.IsValid)
                 return View(vm);
@@ -784,6 +794,32 @@ namespace iLearning.Web.Controllers
                 inv.Version += 1;
                 await _db.SaveChangesAsync();
             }
+        }
+
+        private bool MatchesInventoryCustomIdFormat(Inventory inv, string? customId)
+        {
+            var value = (customId ?? "").Trim();
+            if (string.IsNullOrWhiteSpace (value)) 
+                return false;
+
+            var prefix = (inv.ItemCustomIdPrefix ?? "").Trim();
+
+            var digits = inv.ItemCustomIdDigits;
+            if (digits < 1) digits = 1;
+            if (digits > 8) digits = 8;
+
+            string expected;
+
+            if (string.IsNullOrWhiteSpace(prefix))
+            {
+                expected = @"^\d{" + digits + "}$";
+            }
+            else
+            {
+                expected = "^" + System.Text.RegularExpressions.Regex.Escape(prefix) + @"-\d{" + digits + "}$";
+            }
+
+            return System.Text.RegularExpressions.Regex.IsMatch(value, expected);                         
         }
     }
 }
