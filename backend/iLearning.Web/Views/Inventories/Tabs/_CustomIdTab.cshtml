@@ -31,13 +31,15 @@ else
                 <div class="card">
                     <div class="card-body">
 
-                    <div class="form-check mb-4">
-                        <input class="form-check-input" type="checkbox" id="cidEnabled" name="Enabled" value="true" @(vm.Enabled ? "checked" : "") />
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="cidEnabled" name="Enabled" value="true" @(vm.Enabled ? "checked" : null) />
                         <input type="hidden" name="Enabled" value="false" />
                         <label class="form-check-label" for="cidEnabled">
-                             @T["Inv.CustomId.Enabled"]
+                            @T["Inv.CustomId.Enabled"]
                         </label>
-                        <div class="form-text">@T["Inv.CustomId.EnabledHelp"]</div>
+                        <div class="form-text">
+                            @T["Inv.CustomId.EnabledHelp"]
+                        </div>
                     </div>
 
                     <div id="cidSettingsWrap">

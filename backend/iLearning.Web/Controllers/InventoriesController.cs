@@ -432,7 +432,7 @@ namespace iLearning.Web.Controllers
             await _db.SaveChangesAsync();
 
             TempData["InventoryMessage"] = T["Inv.CustomId.Msg.Saved"].Value;
-            return RedirectToAction(nameof(Details), new { id, tab = "items" });
+            return RedirectToAction(nameof(Details), new { id, tab = "customid" });
         }
 
         [AllowAnonymous]
@@ -580,6 +580,7 @@ namespace iLearning.Web.Controllers
                 {
                     InventoryId = inv.Id,
                     Version = inv.Version,
+                    Enabled = inv.ItemCustomIdEnabled,
                     Prefix = string.IsNullOrWhiteSpace(prefix) ? null : prefix,
                     Digits = digits,
                     NextNumber = next,
