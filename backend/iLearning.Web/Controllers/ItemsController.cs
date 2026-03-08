@@ -88,7 +88,10 @@ namespace iLearning.Web.Controllers
             }
 
             if (!ModelState.IsValid)
+            {
+                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
                 return View(vm);
+            }
 
             var customIdExists = await _db.Items
                 .AsNoTracking()
@@ -97,6 +100,7 @@ namespace iLearning.Web.Controllers
             if (customIdExists)
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
+                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
                 return View(vm); 
             }
 
@@ -140,7 +144,6 @@ namespace iLearning.Web.Controllers
             try
             {
                 await _db.SaveChangesAsync();
-
                 await TryAdvanceInventoryCustomIdAsync(inventoryId, vm.CustomId);
             }
             catch (DbUpdateException)
@@ -472,7 +475,11 @@ namespace iLearning.Web.Controllers
             }
 
             if (!ModelState.IsValid)
+            {
+                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
                 return View(vm);
+            }
+                
 
             var item = await _db.Items
                 .FirstOrDefaultAsync(x => x.InventoryId == inventoryId && x.Id == itemId);
@@ -483,6 +490,7 @@ namespace iLearning.Web.Controllers
             {
                 ModelState.AddModelError("", T["Items.Errors.Concurrency"]);
                 vm.Version = item.Version;
+                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
                 return View(vm);
             }
 
@@ -493,6 +501,7 @@ namespace iLearning.Web.Controllers
             if (customIdTaken)
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
+                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
                 return View(vm);
             }
 
@@ -534,6 +543,7 @@ namespace iLearning.Web.Controllers
             catch (DbUpdateException)
             {
                 ModelState.AddModelError("", T["Common.Errors.CouldNotSave"]);
+                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
                 return View(vm);
             }
 
