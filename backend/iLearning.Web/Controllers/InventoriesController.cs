@@ -156,12 +156,12 @@ namespace iLearning.Web.Controllers
             if (!await CanEditInventoryAsync(inv))
                 return Forbid();
 
-            inv.Version = vm.Version;
-
-            inv.Title = vm.Title.Trim();
-            inv.Description = string.IsNullOrWhiteSpace(vm.Description) ? null : vm.Description.Trim();
-            inv.ImageUrl = string.IsNullOrWhiteSpace(vm.ImageUrl) ? null : vm.ImageUrl.Trim();
-            inv.IsPublic = vm.IsPublic;
+            if (vm.Version != inv.Version)
+            {
+                ModelState.AddModelError("", T["Inv.Err.Concurrency"]);
+                vm.Version = inv.Version;
+                return View(vm);
+            }
 
             var categoryExists = await _db.Categories.AnyAsync(c => c.Id == vm.CategoryId);
             if (!categoryExists)
@@ -170,6 +170,10 @@ namespace iLearning.Web.Controllers
                 return View(vm);
             }
 
+            inv.Title = vm.Title.Trim();
+            inv.Description = string.IsNullOrWhiteSpace(vm.Description) ? null : vm.Description.Trim();
+            inv.ImageUrl = string.IsNullOrWhiteSpace(vm.ImageUrl) ? null : vm.ImageUrl.Trim();
+            inv.IsPublic = vm.IsPublic;
             inv.CategoryId = vm.CategoryId;
 
             inv.CustomString1Enabled = vm.CustomString1Enabled;
