@@ -609,7 +609,7 @@ namespace iLearning.Web.Controllers
                 .Where(i => i.Id == inventoryId)
                 .Select(i => new
                 {
-                    i.Id,
+                    i.ItemCustomIdEnabled,
                     Prefix = i.ItemCustomIdPrefix,
                     Digits = i.ItemCustomIdDigits,
                     NextNumber = i.ItemCustomIdNextNumber
@@ -617,6 +617,9 @@ namespace iLearning.Web.Controllers
                 .FirstOrDefaultAsync();
 
             if (cfg == null) return NotFound();
+
+            if (!cfg.ItemCustomIdEnabled)
+                return Json(new { suggested = "" });
 
             var prefix = (cfg.Prefix ?? "").Trim();
             var digits = cfg.Digits < 1 ? 1 : (cfg.Digits > 8 ? 8 : cfg.Digits);
@@ -747,10 +750,10 @@ namespace iLearning.Web.Controllers
             var inv = await _db.Inventories
                 .AsNoTracking()
                 .Where(i => i.Id == inventoryId)
-                .Select(i => new { i.ItemCustomIdPrefix, i.ItemCustomIdDigits, i.ItemCustomIdNextNumber })
+                .Select(i => new { i.ItemCustomIdEnabled, i.ItemCustomIdPrefix, i.ItemCustomIdDigits, i.ItemCustomIdNextNumber })
                 .FirstOrDefaultAsync();
 
-            if (inv == null) return "";
+            if (inv == null || !inv.ItemCustomIdEnabled) return "";
 
             var prefix = (inv.ItemCustomIdPrefix ?? "").Trim();
             var digits = inv.ItemCustomIdDigits;
@@ -767,10 +770,15 @@ namespace iLearning.Web.Controllers
         private async Task TryAdvanceInventoryCustomIdAsync(Guid inventoryId, string usedCustomId)
         {
             usedCustomId = (usedCustomId ?? "").Trim();
-            if (string.IsNullOrWhiteSpace(usedCustomId)) return;
+            if (string.IsNullOrWhiteSpace(usedCustomId)) 
+                return;
 
             var inv = await _db.Inventories.FirstOrDefaultAsync(i => i.Id == inventoryId);
-            if (inv == null) return;
+            if (inv == null) 
+                return;
+
+            if (!inv.ItemCustomIdEnabled) 
+                return;
 
             var prefix = (inv.ItemCustomIdPrefix ?? "").Trim();
             var digits = inv.ItemCustomIdDigits;
@@ -792,11 +800,17 @@ namespace iLearning.Web.Controllers
                 numericPart = usedCustomId.Substring(expectedStart.Length);
             }
 
-            if (numericPart.Length == 0 || numericPart.Length > 20) return;
-            if (!numericPart.All(char.IsDigit)) return;
+            if (numericPart.Length == 0 || numericPart.Length > 20) 
+                return;
+           
+            if (!numericPart.All(char.IsDigit)) 
+                return;
 
-            if (!int.TryParse(numericPart, out var n)) return;
-            if (n < 0) return;
+            if (!int.TryParse(numericPart, out var n)) 
+                return;
+            
+            if (n < 0) 
+                return;
 
             if (n >= inv.ItemCustomIdNextNumber)
             {
@@ -808,6 +822,9 @@ namespace iLearning.Web.Controllers
 
         private bool MatchesInventoryCustomIdFormat(Inventory inv, string? customId)
         {
+            if (!inv.ItemCustomIdEnabled)
+                return true;
+            
             var value = (customId ?? "").Trim();
             if (string.IsNullOrWhiteSpace (value)) 
                 return false;

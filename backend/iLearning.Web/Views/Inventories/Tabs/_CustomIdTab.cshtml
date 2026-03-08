@@ -31,6 +31,16 @@ else
                 <div class="card">
                     <div class="card-body">
 
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="cidEnabled" name="Enabled" value="true" @(vm.Enabled ? "checked" : "") />
+                        <input type="hidden" name="Enabled" value="false" />
+                        <label class="form-check-label" for="cidEnabled">
+                             @T["Inv.CustomId.Enabled"]
+                        </label>
+                        <div class="form-text">@T["Inv.CustomId.EnabledHelp"]</div>
+                    </div>
+
+                    <div id="cidSettingsWrap">
                         <div class="mb-3">
                             <label class="form-label">@T["Inv.CustomId.Prefix"]</label>
                             <input class="form-control" id="cidPrefix" name="Prefix" value="@(vm.Prefix ?? "")"
@@ -64,12 +74,13 @@ else
                                 <div class="form-text">@T["Inv.CustomId.PreviewHelp"]</div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="d-flex gap-2 mt-4">
-                            <button class="btn btn-primary" type="submit">@T["Common.Save"]</button>
-                            <a class="btn btn-outline-secondary" asp-controller="Inventories" asp-action="Details"
-                               asp-route-id="@Model.Id" asp-route-tab="customid">@T["Common.Cancel"]</a>
-                        </div>
+                    <div class="d-flex gap-2 mt-4">
+                        <button class="btn btn-primary" type="submit">@T["Common.Save"]</button>
+                        <a class="btn btn-outline-secondary" asp-controller="Inventories" asp-action="Details"
+                           asp-route-id="@Model.Id" asp-route-tab="customid">@T["Common.Cancel"]</a>
+                       </div>
                     </div>
                 </div>
             </form>
@@ -82,6 +93,8 @@ else
             const form = document.querySelector('form.needs-validation');
             if (!form) return;
 
+            const enabledEl = document.getElementById('cidEnabled');
+            const wrapEl = document.getElementById('cidSettingsWrap');
             const prefixEl = document.getElementById('cidPrefix');
             const digitsEl = document.getElementById('cidDigits');
             const nextEl = document.getElementById('cidNext');
@@ -93,11 +106,31 @@ else
                 return value;
             }
 
+            function isEnabled() {
+                return enabledEl && enabledEl.checked;
+            }
+
+            function setInnerDisabled(disabled) {
+                [prefixEl, digitsEl, nextEl, previewEl].forEach(el => {
+                    if (el) el.disabled = disabled;
+                });
+
+                if (wrapEl) {
+                    wrapEl.style.opacity = disabled ? `0.6` : `1`;
+                    wrapEl.style.pointerEvents = disabled ? `none` : `auto`;
+                }
+            }
+
             function validateDigits() {
-
+                if (!isEnabled()) {
+                    digitsEl.classList.remove('is-invalid');
+                    digitsEl.setCustomValidity('');
+                    return 4;
+                }
+                    
                 const digits = parseInt(digitsEl.value || '4', 10);
-
                 const invalid = Number.isNaN(digits) || digits < 1 || digits > 8;
+                
                 if (invalid) {
                     digitsEl.classList.add('is-invalid');
                     digitsEl.setCustomValidity('invalid');
@@ -111,9 +144,13 @@ else
             }
 
             function validateNext() {
-
+                if(!isEnabled()) {
+                    nextEl.classList.remove('is-invalid');
+                    nextEl.setCustomValidity('');
+                    return 1;
+                }
+                
                 const next = parseInt(nextEl.value || '1', 10);
-
                 const invalid = Number.isNaN(next) || next < 1;
 
                 if (invalid) {
@@ -129,37 +166,51 @@ else
             }
 
             function buildPreview() {
-                
                 const prefix = (prefixEl.value || '').trim();
 
-                let digits = validateDigits();
-                if (digits === null) {
-                    previewEl.value = '';
-                    return;
-                }
+                let digits;
+                let next;
+                
+                if (!isEnabled()) {
+                    digits = parseInt(digitsEl.value || '4', 10);
+                    if (Number.isNaN(digits) || digits < 1) digits = 4;
 
-                let next = validateNext();
-                if (next === null) {
-                    previewEl.value = '';
-                    return;
+                    next = parseInt(nextEl.value || '1', 10);
+                    if (Number.isNaN(next) || next < 1) next =1;
+          
+                    setInnerDisabled(true);      
+                } else {
+                    setInnerDisabled(false);
+
+                    digits = validateDigits();
+                    if (digits === null) {
+                        previewEl.value = '';
+                        return;
+                    }
+
+                    next = validateNext();
+                    if (next === null) {
+                        previewEl.value = '';
+                        return;
+                    }
+
                 }
 
                 const numeric = padLeft(next, digits);
-
                 previewEl.value = prefix ? (prefix + '-' + numeric) : numeric;
             }
 
-            ['input', 'change'].forEach(evt => {
-                prefixEl.addEventListener(evt, buildPreview);
-                digitsEl.addEventListener(evt, buildPreview);
-                nextEl.addEventListener(evt, buildPreview);
+            enabledEl.addEventListener('change', buildPreview);
+
+            [prefixEl, digitsEl, nextEl].forEach(el => {
+                ['input','change'].forEach(evt => el.addEventListener(evt, buildPreview));
             });
 
             form.addEventListener('submit', function(e) {
 
                 buildPreview();
 
-                if (!form.checkValidity()) {
+                if (isEnabled() && !form.checkValidity()) {
 
                     e.preventDefault();
                     e.stopPropagation();

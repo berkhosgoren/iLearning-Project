@@ -76,6 +76,7 @@ namespace iLearning.Web.Controllers
                 CategoryId = vm.CategoryId,
                 Version = 1,
 
+                ItemCustomIdEnabled = false,
                 ItemCustomIdPrefix = null,
                 ItemCustomIdDigits = 4,
                 ItemCustomIdNextNumber = 1,
@@ -422,6 +423,7 @@ namespace iLearning.Web.Controllers
             var next = vm.NextNumber;
             if (next < 1) next = 1;
 
+            inv.ItemCustomIdEnabled = vm.Enabled;
             inv.ItemCustomIdPrefix = string.IsNullOrWhiteSpace(prefix) ? null : prefix;
             inv.ItemCustomIdDigits = digits;
             inv.ItemCustomIdNextNumber = next;

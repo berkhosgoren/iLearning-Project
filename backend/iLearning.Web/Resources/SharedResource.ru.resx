@@ -699,6 +699,12 @@
   <data name="Inv.CustomId.DigitsRange" xml:space="preserve">
     <value>Цифры должны быть от 1 до 8.</value>
   </data>
+  <data name="Inv.CustomId.Enabled" xml:space="preserve">
+    <value>Включить формат пользовательского ID для элементов.</value>
+  </data>
+  <data name="Inv.CustomId.EnabledHelp" xml:space="preserve">
+    <value>Если включено, новые и редактируемые пользовательские ID элементов должны соответствовать этому формату. Если выключено, формат пользовательских ID элементов не применяется.</value>
+  </data>
   <data name="Inv.CustomId.Help" xml:space="preserve">
     <value>Определяет, как предлагаются Custom ID для новых элементов в этом инвентаре.</value>
   </data>

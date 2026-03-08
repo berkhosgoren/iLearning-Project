@@ -699,6 +699,12 @@
   <data name="Inv.CustomId.DigitsRange" xml:space="preserve">
     <value>Digits must be between 1 and 8.</value>
   </data>
+  <data name="Inv.CustomId.Enabled" xml:space="preserve">
+    <value>Enable custom ID format for items.</value>
+  </data>
+  <data name="Inv.CustomId.EnabledHelp" xml:space="preserve">
+    <value>When enabled, new and edited item custom IDs must match this format. When disabled, item custom IDs are not enforced.</value>
+  </data>
   <data name="Inv.CustomId.Help" xml:space="preserve">
     <value>Controls how Item Custom IDs are suggested when creating new items in this inventory.</value>
   </data>
