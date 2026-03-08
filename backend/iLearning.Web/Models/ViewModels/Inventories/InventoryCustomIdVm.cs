@@ -8,6 +8,8 @@ namespace iLearning.Web.Models.ViewModels.Inventories
         
         public int Version { get; set; }
 
+        public bool Enabled { get; set; }
+
         [MaxLength(20)]
         public string? Prefix { get; set; }
 

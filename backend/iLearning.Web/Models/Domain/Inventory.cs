@@ -29,6 +29,8 @@ namespace iLearning.Web.Models.Domain
 
         public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 
+        public bool ItemCustomIdEnabled { get; set; } = false;
+
         [MaxLength(20)]
         public string? ItemCustomIdPrefix { get; set; }
         public int ItemCustomIdDigits { get; set; } = 4;
