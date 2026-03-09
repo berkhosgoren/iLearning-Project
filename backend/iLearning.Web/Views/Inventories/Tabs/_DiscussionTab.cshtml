@@ -3,6 +3,8 @@
 
 @{
     var msg = TempData["InventoryMessage"] as string;
+    var token = Context.RequestServices.GetRequiredService<Microsoft.AspNetCore.Antiforgery.IAntiforgery>()
+                                       .GetAndStoreTokens(Context).RequestToken;
 }
 
 @if (!string.IsNullOrWhiteSpace(msg))
@@ -32,34 +34,44 @@ else
     <div class="text-muted small mb-3">@T["Inv.Discussion.LoginToPost"]</div>
 }
 
-@if (Model.DiscussionComments.Count == 0)
-{
-    <div class="text-muted">@T["Inv.Discussion.None"]</div>
-}
-else
-{
-    <div class="d-flex flex-column gap-3">
-        @foreach (var c in Model.DiscussionComments)
-        {
-            <div class="border rounded p-3">
-                <div class="d-flex align-items-start justify-content-between gap-2">
-                    <div>
-                        <div class="fw-semibold">@c.UserName</div>
-                        <div class="text-muted small">@c.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
-                    </div>
+<div id="inventoryDiscussionEmpty" class="text-muted @(Model.DiscussionComments.Count == 0 ? "" : "d-none")">
+    @T["Inv.Discussion.None"]
+</div>
 
-                    @if (c.CanDelete)
-                    {
-                        <form method="post" asp-controller="InventoryDiscussion" asp-action="DeleteComment" asp-route-inventoryId="@Model.Id"
-                              asp-route-commentId="@c.Id" class="m-0">
-                             @Html.AntiForgeryToken()
-                            <button class="btn btn-outline-danger btn-sm" type="submit">@T["Common.Delete"]</button>
-                        </form>
-                    }
+ <div id="inventoryDiscussionList" class="d-flex flex-column gap-3 @(Model.DiscussionComments.Count == 0 ? "d-none" : "")">
+    @foreach (var c in Model.DiscussionComments)
+    {
+        <div class="border rounded p-3">
+            <div class="d-flex align-items-start justify-content-between gap-2">
+                <div>
+                    <div class="fw-semibold">@c.UserName</div>
+                    <div class="text-muted small">@c.CreatedAtUtc.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</div>
                 </div>
 
-                <div class="mt-2">@c.Body</div>
+                @if (c.CanDelete)
+                {
+                    <form method="post" asp-controller="InventoryDiscussion" asp-action="DeleteComment" asp-route-inventoryId="@Model.Id"
+                          asp-route-commentId="@c.Id" class="m-0">
+                          @Html.AntiForgeryToken()
+                          <button class="btn btn-outline-danger btn-sm" type="submit">@T["Common.Delete"]</button>
+                    </form>
+                }
             </div>
-        }
-    </div>
-}
+
+            <div class="mt-2">@c.Body</div>
+        </div>
+    }
+</div>
+
+<script src="~/js/inventory-discussion-poll.js" asp-append-version="true"></script>
+<script>
+    InventoryDiscussionPoll.init({
+        listElementId: "inventoryDiscussionList",
+        emptyElementId: "inventoryDiscussionEmpty",
+        feedUrl: `@Url.Action("CommentsFeed", "InventoryDiscussion", new { inventoryId = Model.Id })`,
+        inventoryId: `@Model.Id`,
+        requestVerificationToken: `@token`,
+        deleteText: `@T["Common.Delete"]`,
+        pollMs: 10000
+    });
+</script>

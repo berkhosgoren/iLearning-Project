@@ -94,6 +94,45 @@ namespace iLearning.Web.Controllers
             TempData["InventoryMessage"] = T["Items.Messages.CommentDeleted"].Value;
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "discussion" });
         }
+
+        [HttpGet("comments-feed")]
+        public async Task<IActionResult> CommentsFeed(Guid inventoryId)
+        {
+            var canRead = await CanReadInventoryAsync(inventoryId);
+            if (!canRead) return Forbid();
+
+            var isAuthenticated = _current.IsAuthenticated(User);
+            var userId = _current.GetUserId(User);
+            var isAdmin = _current.IsAdmin(User);
+
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .Select(i => new { i.Id, i.CreatorId })
+                .FirstOrDefaultAsync(i => i.Id == inventoryId);
+
+            if (inv is null) return NotFound();
+
+            var comments = await _db.InventoryComments
+                .AsNoTracking()
+                .Where(c => c.InventoryId == inventoryId)
+                .OrderByDescending(c => c.CreatedAtUtc)
+                .Take(200)
+                .Select(c => new
+                {
+                    id = c.Id,
+                    userName = c.User != null ? c.User.Name : T["Common.Unknown"].Value,
+                    body = c.Body,
+                    createdAtUtc = c.CreatedAtUtc,
+                    canDelete = isAdmin || (isAuthenticated && userId.HasValue
+                               && (c.UserId == userId.Value || inv.CreatorId == userId.Value))
+                })
+                .ToListAsync();
+
+            return Json(new
+            {
+                comments
+            });
+        }
         
         private async Task<bool> CanReadInventoryAsync(Guid inventoryId)
         {
