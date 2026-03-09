@@ -342,6 +342,9 @@
   <data name="Common.Asc" xml:space="preserve">
     <value>Asc</value>
   </data>
+  <data name="Common.Ascending" xml:space="preserve">
+    <value>Ascending</value>
+  </data>
   <data name="Common.Back" xml:space="preserve">
     <value>Back</value>
   </data>
@@ -392,6 +395,12 @@
   </data>
   <data name="Common.Desc" xml:space="preserve">
     <value>Desc</value>
+  </data>
+  <data name="Common.Descending" xml:space="preserve">
+    <value>Descending </value>
+  </data>
+  <data name="Common.Direction" xml:space="preserve">
+    <value>Direction</value>
   </data>
   <data name="Common.Email" xml:space="preserve">
     <value>Email</value>
@@ -479,6 +488,12 @@
   </data>
   <data name="Common.SelectedPrefix" xml:space="preserve">
     <value>Selected: </value>
+  </data>
+  <data name="Common.Sort" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="Common.SortBy" xml:space="preserve">
+    <value>Sort by</value>
   </data>
   <data name="Common.SortCategory" xml:space="preserve">
     <value>Sort: Category</value>

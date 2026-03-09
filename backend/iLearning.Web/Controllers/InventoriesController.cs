@@ -437,7 +437,10 @@ namespace iLearning.Web.Controllers
 
         [AllowAnonymous]
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> Details(Guid id, [FromQuery] string? tab)
+        public async Task<IActionResult> Details(
+            Guid id, [FromQuery] string? tab,
+            [FromQuery] string ? accessSort,
+            [FromQuery] string ? accessDir)
         {
             var inv = await _db.Inventories
                 .AsNoTracking()
@@ -525,21 +528,46 @@ namespace iLearning.Web.Controllers
 
             if (activeTab == "access" && canEdit)
             {
-                vm.AccessUsers = await _db.InventoryAccesses
+                var sort = (accessSort ?? "name").Trim().ToLowerInvariant();
+                var dir = (accessDir ?? "asc").Trim().ToLowerInvariant();
+
+                if (sort is not ("name" or "email" or "write" or "granted"))
+                    sort = "name";
+
+                if (dir is not ("asc" or "desc"))
+                    dir = "asc";
+
+                IQueryable<InventoryAccess> query = _db.InventoryAccesses
                     .AsNoTracking()
                     .Include(a => a.User)
-                    .Where(a => a.InventoryId == inv.Id)
-                    .OrderBy(a => a.User.Name)
+                    .Where(a => a.InventoryId == inv.Id);
+
+                query = (sort, dir) switch
+                {
+                    ("name", "desc") => query.OrderByDescending(a => a.User != null ? a.User.Name : ""),
+                    ("email", "asc") => query.OrderBy(a => a.User != null ? a.User.Email : ""),
+                    ("email", "desc") => query.OrderByDescending(a => a.User != null ? a.User.Email : ""),
+                    ("write", "asc") => query.OrderBy(a => a.CanWrite).ThenBy(a => a.User != null ? a.User.Name : ""),
+                    ("write", "desc") => query.OrderByDescending(a => a.CanWrite).ThenBy(a => a.User != null ? a.User.Name : ""),
+                    ("granted", "asc") => query.OrderBy(a => a.CreatedAtUtc),
+                    ("granted", "desc") => query.OrderByDescending(a => a.CreatedAtUtc),
+                    _ => query.OrderBy(a => a.User != null ? a.User.Name : "")
+                };
+
+                vm.AccessUsers = await query
                     .Take(500)
                     .Select(a => new InventoryAccessRowVm
                     {
-                        UserId = a.User.Id,
+                        UserId = a.User != null ? a.User.Id : Guid.Empty,
                         Name = a.User != null ? a.User.Name : "Unknown",
                         Email = a.User != null ? a.User.Email : "",
                         CanWrite = a.CanWrite,
                         CreatedAtUtc = a.CreatedAtUtc
                     })
                     .ToListAsync();
+
+                ViewBag.AccessSort = sort;
+                ViewBag.AccessDir = dir;
             }
 
             if (activeTab == "discussion")

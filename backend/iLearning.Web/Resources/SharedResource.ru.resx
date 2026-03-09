@@ -342,6 +342,9 @@
   <data name="Common.Asc" xml:space="preserve">
     <value>Возр.</value>
   </data>
+  <data name="Common.Ascending" xml:space="preserve">
+    <value>По возрастанию</value>
+  </data>
   <data name="Common.Back" xml:space="preserve">
     <value>Назад</value>
   </data>
@@ -392,6 +395,12 @@
   </data>
   <data name="Common.Desc" xml:space="preserve">
     <value>Убыв.</value>
+  </data>
+  <data name="Common.Descending" xml:space="preserve">
+    <value>По убыванию</value>
+  </data>
+  <data name="Common.Direction" xml:space="preserve">
+    <value> Направление</value>
   </data>
   <data name="Common.Email" xml:space="preserve">
     <value>Email</value>
@@ -479,6 +488,12 @@
   </data>
   <data name="Common.SelectedPrefix" xml:space="preserve">
     <value>Выбрано:</value>
+  </data>
+  <data name="Common.Sort" xml:space="preserve">
+    <value>Сортировка</value>
+  </data>
+  <data name="Common.SortBy" xml:space="preserve">
+    <value>Сортировать по</value>
   </data>
   <data name="Common.SortCategory" xml:space="preserve">
     <value>Сортировка: Категория</value>

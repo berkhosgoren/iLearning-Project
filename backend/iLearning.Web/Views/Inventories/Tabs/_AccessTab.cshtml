@@ -3,6 +3,8 @@
 
 @{
     var msg = TempData["InventoryMessage"] as string;
+    var currentSort = (ViewBag.AccessSort as string ?? "name").ToLowerInvariant();
+    var currentDir = (ViewBag.AccessDir as string ?? "asc").ToLowerInvariant();
 }
 
 @if (!string.IsNullOrWhiteSpace(msg))
@@ -15,12 +17,6 @@
     <div class="text-muted">@T["Inv.Access.NoPermission"]</div>
     return;
 }
-
-<div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-    <div class="text-muted small">
-        @T["Inv.Access.RowsLabel"]: @Model.AccessUsers.Count
-    </div>
-</div>
 
 <div class="card mb-3">
     <div class="card-body">
@@ -41,7 +37,7 @@
             </div> 
 
             <div class="col-md-3">
-                <label class="form-label">Permission</label>
+                <label class="form-label">@T["Inv.Access.PermissionLabel"]</label>
                 <select class="form-select" name="canWrite">
                     <option value="true" selected>@T["Inv.Access.Permission.CanWrite"]</option>
                     <option value="false">@T["Inv.Access.Permission.ReadOnly"]</option>
@@ -57,7 +53,32 @@
 </div>
 
 <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
-    <div class="text-muted small" id="accessSelectedLabel">@T["Common.SelectedCount", 0]</div>
+    <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
+        <span>@T["Inv.Access.RowsLabel"]: @Model.AccessUsers.Count</span>
+        <span id="accessSelectedLabel">@T["Common.SelectedCount", 0]</span>
+    </div>
+
+    <form method="get" asp-controller="Inventories" asp-action="Details" asp-route-id="@Model.Id" class="d-flex flex-wrap gap-2 align-items-end">
+        <input type="hidden" name="tab" value="access" />
+
+        <span class="text-muted small fw-semibold">@T["Common.Sort"]</span>
+
+        <select class="form-select form-select-sm" name="accessSort" onchange="this.form.submit()">
+            <option value="name" selected="@(currentSort == "name")">@T["Common.Name"]</option>
+            <option value="email" selected="@(currentSort == "email")">@T["Common.Email"]</option>
+            <option value="write" selected="@(currentSort == "write")">@T["Inv.Access.Table.Write"]</option>
+            <option value="granted" selected="@(currentSort == "granted")">@T["Inv.Access.Table.Granted"]</option>
+        </select>
+        
+        <select class="form-select form-select-sm" name="accessDir" onchange="this.form.submit()">
+            <option value="asc" selected="@(currentDir == "asc")">@T["Common.Ascending"]</option>
+            <option value="desc" selected="@(currentDir == "desc")">@T["Common.Descending"]</option>
+        </select>
+        <noscript>
+            <button type="submit" class="btn btn-outline-secondary btn-sm">@T["Common.Apply"]</button>
+        </noscript>
+    </form>
+</div>
 
     <div class="d-flex flex-wrap gap-2">
         <form method="post" asp-controller="Inventories" asp-action="AccessSetWrite" asp-route-id="@Model.Id" id="accessWriteForm">
@@ -84,6 +105,7 @@
         </form>
     </div>
 </div>
+
 
 <div class="table-responsive">
     <table class="table table-sm align-middle mb-0">
