@@ -19,8 +19,8 @@ else
 
         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-        <input type="hidden" asp-for="SettingsVm.Id" />
-        <input type="hidden" asp-for="SettingsVm.Version" />
+        <input type="hidden" name="Id" value="@Model.SettingsVm.Id" />
+        <input type="hidden" name="Version" value="@Model.SettingsVm.Version" />
 
         <partial name="~/Views/Inventories/_UpsertForm.cshtml" model="Model.SettingsVm" />
 
@@ -42,13 +42,9 @@ else
             formId: 'inventorySettingsForm',
             statusElementId: 'autosaveStatus',
             url: '@Url.Action("InventorySettings", "AutoSave", new { id = Model.Id })',
-            idFieldName: 'SettingsVm.Id',
-            versionFieldName: 'SettingsVm.Version',
+            idFieldName: 'Id',
+            versionFieldName: 'Version',
             delayMs: 800,
-            mapFields: [
-                { from: 'SettingsVm.Id', to: 'Id', removeOriginal: true },
-                { from: 'SettingsVm.Version', to: 'Version', removeOriginal: true }
-            ]
         });
     </script>   
 }

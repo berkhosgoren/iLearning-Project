@@ -144,10 +144,9 @@ namespace iLearning.Web.Controllers
             if (id != vm.Id)
                 return BadRequest();
 
-            if (!ModelState.IsValid)
-                return View(vm);
-
             var inv = await _db.Inventories
+                .Include(i => i.Category)
+                .Include(i => i.Creator)
                 .Include(i => i.InventoryTags).ThenInclude(it => it.Tag)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
@@ -157,18 +156,51 @@ namespace iLearning.Web.Controllers
             if (!await CanEditInventoryAsync(inv))
                 return Forbid();
 
+            InventoryDetailsVm BuildDetailsVmForSettings(Inventory inventory, InventoryUpsertVm settingsVm)
+            {
+                return new InventoryDetailsVm
+                {
+                    Id = inventory.Id,
+                    Title = inventory.Title,
+                    Description = inventory.Description,
+                    DescriptionHtml = _markdown.ToSafeHtml(inventory.Description),
+                    ImageUrl = inventory.ImageUrl,
+                    CategoryName = inventory.Category?.Name ?? "Other",
+                    IsPublic = inventory.IsPublic,
+                    CreatorName = inventory.Creator?.Name ?? "Unknown",
+                    CreatedAtUtc = inventory.CreatedAtUtc,
+                    Tags = inventory.InventoryTags.Select(x => x.Tag.Name).OrderBy(x => x).ToList(),
+                    ActiveTab = "settings",
+                    CanEdit = true,
+                    CanWrite = true,
+                    IsAuthenticated = _currentUser.IsAuthenticated(User),
+                    SettingsVm = settingsVm
+                };
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var invalidVm = BuildDetailsVmForSettings(inv, vm);
+                return View("Details", invalidVm);
+            }
+
             if (vm.Version != inv.Version)
             {
                 ModelState.AddModelError("", T["Inv.Err.Concurrency"]);
                 vm.Version = inv.Version;
-                return View(vm);
+
+                var conflictVm = BuildDetailsVmForSettings(inv, vm);
+                return View("Details", conflictVm);
             }
 
             var categoryExists = await _db.Categories.AnyAsync(c => c.Id == vm.CategoryId);
             if (!categoryExists)
             {
                 ModelState.AddModelError(nameof(vm.CategoryId), T["Inv.Err.InvalidCategory"]);
-                return View(vm);
+                vm.Version = inv.Version;
+
+                var invalidCategoryVm = BuildDetailsVmForSettings(inv, vm);
+                return View("Details", invalidCategoryVm);
             }
 
             inv.Title = vm.Title.Trim();
@@ -222,9 +254,13 @@ namespace iLearning.Web.Controllers
             catch (DbUpdateConcurrencyException) 
             {
                 ModelState.AddModelError("", T["Inv.Err.Concurrency"]);
-                return View(vm);
+                vm.Version = inv.Version;
+
+                var saveConflictVm = BuildDetailsVmForSettings(inv, vm);
+                return View("Details", saveConflictVm);
             }
 
+            TempData["InventoryMessage"] = T["Inv.Edit.Saved"].Value;
             return RedirectToAction(nameof(Details), new { id = inv.Id, tab= "settings" });
         }       
 

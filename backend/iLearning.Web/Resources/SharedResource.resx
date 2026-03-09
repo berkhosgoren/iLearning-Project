@@ -789,6 +789,9 @@
   <data name="Inv.Edit.Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="Inv.Edit.Saved" xml:space="preserve">
+    <value>Inventory settings saved.</value>
+  </data>
   <data name="Inv.Edit.Title" xml:space="preserve">
     <value>Edit Inventory</value>
   </data>
