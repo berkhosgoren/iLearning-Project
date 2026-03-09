@@ -76,15 +76,7 @@ namespace iLearning.Web.Controllers
                 ownedQuery = ownedQuery.Where(i => i.CreatorId == userId.Value);
             }
 
-            if (!string.IsNullOrWhiteSpace(vm.OwnedQuery))
-            {
-                var s = vm.OwnedQuery.Trim().ToLowerInvariant();
-                ownedQuery = ownedQuery.Where(i => 
-                    i.Title.ToLower().Contains(s) || (i.Description ?? "").ToLower().Contains(s) ||
-                    (isAdmin && i.Creator != null ? i.Creator.Name.ToLower().Contains(s) : false)
-                    );
-            }
-
+            ownedQuery = ApplyInventorySearch(ownedQuery, vm.OwnedQuery, isAdmin);
             ownedQuery = ApplySort(ownedQuery, vm.OwnedSort, vm.OwnedDir);
 
             vm.Owned = await ownedQuery
@@ -100,7 +92,7 @@ namespace iLearning.Web.Controllers
                     : ""
                 })
                 .ToListAsync();
-
+            
             if (!isAdmin)
             {
                 var accessBase = _db.InventoryAccesses
@@ -114,16 +106,7 @@ namespace iLearning.Web.Controllers
                     .Include(i => i.Creator)
                     .Where(i => accessBase.Contains(i.Id) && i.CreatorId != userId.Value);
 
-                if (!string.IsNullOrWhiteSpace(vm.AccessQuery))
-                {
-                    var s = vm.AccessQuery.Trim().ToLowerInvariant();
-                    accessQuery = accessQuery.Where(i =>
-                        i.Title.ToLower().Contains(s) ||
-                        (i.Description ?? "").ToLower().Contains(s) ||
-                        (i.Creator != null ? i.Creator.Name.ToLower().Contains(s) : false)
-                        );
-                }
-                
+                accessQuery = ApplyInventorySearch(accessQuery, vm.AccessQuery, includeCreatorName: true);
                 accessQuery = ApplySort(accessQuery, vm.AccessSort, vm.AccessDir);
 
                 vm.Access = await accessQuery
@@ -150,16 +133,7 @@ namespace iLearning.Web.Controllers
                     .Include(i => i.Creator)
                     .Where(i => readOnlyIds.Contains(i.Id) && i.CreatorId != userId.Value);
 
-                if (!string.IsNullOrWhiteSpace(vm.ReadQuery))
-                {
-                    var s = vm.ReadQuery.Trim().ToLowerInvariant();
-                    readQuery = readQuery.Where(i =>
-                       i.Title.ToLower().Contains(s) || 
-                       (i.Description ?? "").ToLower().Contains(s) ||
-                       (i.Creator != null ? i.Creator.Name.ToLower().Contains(s) : false)
-                       );
-                }
-
+                readQuery = ApplyInventorySearch(readQuery, vm.ReadQuery, includeCreatorName: true);
                 readQuery = ApplySort(readQuery, vm.ReadSort, vm.ReadDir);
 
                 vm.ReadOnly = await readQuery
@@ -201,6 +175,34 @@ namespace iLearning.Web.Controllers
 
             TempData["AccountMessage"] = T["Account.Message.OwnedDeleted", ownedToDelete.Count].Value;
             return RedirectToAction(nameof(Index));
+        }
+
+        private static IQueryable<Models.Domain.Inventory> ApplyInventorySearch(
+            IQueryable<Models.Domain.Inventory> query,
+            string? rawQuery,
+            bool includeCreatorName)
+        {
+            if (string.IsNullOrWhiteSpace(rawQuery))
+                return query;
+
+            var term = rawQuery.Trim();
+            if (term.Length > 200)
+                term = term[..200];
+
+            var creatorPrefix = term + "%";
+
+            if (includeCreatorName)
+            {
+                query = query.Where(i =>
+                    i.SearchVector.Matches(term) ||
+                    (i.Creator != null && EF.Functions.ILike(i.Creator.Name, creatorPrefix)));
+            }
+            else
+            {
+                query = query.Where(i => i.SearchVector.Matches(term));
+            }
+
+            return query;
         }
 
         private static string NormalizeSort(string? s)

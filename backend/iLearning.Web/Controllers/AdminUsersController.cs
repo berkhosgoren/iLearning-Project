@@ -4,7 +4,6 @@ using iLearning.Web.Data;
 using iLearning.Web.Models.ViewModels.Admin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Localization;
 
 
@@ -41,9 +40,16 @@ namespace iLearning.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(vm.Q))
             {
-                var search = vm.Q.Trim().ToLowerInvariant();
+                var term = vm.Q.Trim();
+
+                if (term.Length > 200)
+                    term = term[..200];
+
+                var pattern = $"%{term}%";
+
                 baseQuery = baseQuery.Where(u =>
-                    u.Name.ToLower().Contains(search) || u.Email.ToLower().Contains(search));
+                    EF.Functions.ILike(u.Name, pattern) ||
+                    EF.Functions.ILike(u.Email, pattern));
             }
 
             baseQuery = ApplySort(baseQuery, vm.Sort, vm.Dir);

@@ -368,7 +368,7 @@ namespace iLearning.Web.Controllers
             if (term.Length > 80)
                 term = term[..80];
 
-            var pattern = $"%{term}%";
+            var prefixPattern = term + "%";
 
             var existing = _db.InventoryAccesses
                 .AsNoTracking()
@@ -380,7 +380,7 @@ namespace iLearning.Web.Controllers
                 .Where(u => !u.IsBlocked)
                 .Where(u => u.Id != inv.CreatorId)
                 .Where(u => !existing.Contains(u.Id))
-                .Where(u => EF.Functions.ILike(u.Name, pattern) || EF.Functions.ILike(u.Email, pattern))
+                .Where(u => EF.Functions.ILike(u.Name, prefixPattern) || EF.Functions.ILike(u.Email, prefixPattern))
                 .OrderBy(u => u.Name)
                 .Take(10)
                 .Select(u => new
