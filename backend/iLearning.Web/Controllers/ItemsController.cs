@@ -85,6 +85,8 @@ namespace iLearning.Web.Controllers
 
                 if (!string.IsNullOrWhiteSpace(suggested))
                 {
+                    vm.CustomId = suggested;
+
                     ModelState.Remove(nameof(vm.CustomId));
                     ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
                 }             
