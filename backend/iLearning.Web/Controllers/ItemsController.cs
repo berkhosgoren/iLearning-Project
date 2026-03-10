@@ -103,12 +103,12 @@ namespace iLearning.Web.Controllers
 
             if (string.IsNullOrWhiteSpace(vm.Title))
             {
-                ModelState.AddModelError(nameof(vm.Title), T["The {0} field is required.", T["Common.Title"]].Value);
+                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Common.Title"]]);
             }
 
             if (string.IsNullOrWhiteSpace(vm.CustomId))
             {
-                ModelState.AddModelError(nameof(vm.CustomId), T["The {0} field is required.", T["Common.CustomId"]].Value);
+                ModelState.AddModelError(nameof(vm.CustomId), T["Common.Required", T["Common.CustomId"]]);
             }
 
             ApplyFieldEnforcement(vm, inv);
@@ -525,12 +525,12 @@ namespace iLearning.Web.Controllers
 
             if (string.IsNullOrWhiteSpace(vm.CustomId))
             {
-                ModelState.AddModelError(nameof(vm.CustomId), T["The {0} field is required.", T["Common.CustomId"]].Value);
+                ModelState.AddModelError(nameof(vm.CustomId), T["Common.Required", T["Common.CustomId"]]);
             }
 
             if (string.IsNullOrWhiteSpace(vm.Title))
             {
-                ModelState.AddModelError(nameof(vm.Title), T["The {0} field is required.", T["Common.Title"]].Value);
+                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Common.Title"]]);
             }
 
             ApplyFieldEnforcement(vm, inv);

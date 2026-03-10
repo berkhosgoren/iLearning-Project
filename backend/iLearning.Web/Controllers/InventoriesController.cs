@@ -59,7 +59,7 @@ namespace iLearning.Web.Controllers
 
             if (string.IsNullOrWhiteSpace(vm.Title))
             {
-                ModelState.AddModelError(nameof(vm.Title), T["The {0} field is required.", T["Inv.Title"]].Value);
+                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Inv.Title"]]);
             }
 
             if (!ModelState.IsValid)
@@ -194,7 +194,7 @@ namespace iLearning.Web.Controllers
 
             if (string.IsNullOrWhiteSpace(vm.Title))
             {
-                ModelState.AddModelError(nameof(vm.Title), T["The {0} field is required.", T["Inv.Title"]].Value);
+                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Inv.Title"]]);
             }
 
             if (!ModelState.IsValid)

@@ -474,6 +474,9 @@
   <data name="Common.Public" xml:space="preserve">
     <value>Public</value>
   </data>
+  <data name="Common.Required" xml:space="preserve">
+    <value>The {0} field is required.</value>
+  </data>
   <data name="Common.Save" xml:space="preserve">
     <value>Save</value>
   </data>

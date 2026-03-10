@@ -474,6 +474,9 @@
   <data name="Common.Public" xml:space="preserve">
     <value>Публичный</value>
   </data>
+  <data name="Common.Required" xml:space="preserve">
+    <value>Поле «{0}» обязательно для заполнения.</value>
+  </data>
   <data name="Common.Save" xml:space="preserve">
     <value>Сохранить</value>
   </data>
