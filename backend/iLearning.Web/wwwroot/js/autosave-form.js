@@ -47,6 +47,7 @@
         let hasPending = false;
         let lastPayload = '';
         let stoppedByConflict = false;
+        let manualSubmitInProgress = false;
 
         function serializeForm() {
             const fd = new FormData(form);
@@ -67,7 +68,7 @@
         }
 
         async function doSave() {
-            if (stoppedByConflict) return;
+            if (stoppedByConflict || manualSubmitInProgress) return;
 
             const fd = serializeForm();
             const payloadKey = buildPayloadKey(fd);
@@ -116,7 +117,7 @@
             } finally {
                 isSaving = false;
 
-                if (hasPending) {
+                if (hasPending && !manualSubmitInProgress && !stoppedByConflict) {
                     hasPending = false;
                     setTimeout(doSave, 50);
                 }
@@ -124,7 +125,7 @@
         }
 
         function scheduleSave() {
-            if (stoppedByConflict) return;
+            if (stoppedByConflict || manualSubmitInProgress) return;
 
             setStatus('pending');
 
@@ -135,7 +136,7 @@
 
         form.addEventListener('input', function (e) {
             const el = e.target;
-            if (!el) return;
+            if (!el || manualSubmitInProgress) return;
 
             if (el.matches('input, textarea, select')) {
                 scheduleSave();
@@ -144,13 +145,30 @@
 
         form.addEventListener('change', function (e) {
             const el = e.target;
-            if (!el) return;
+            if (!el || manualSubmitInProgress) return;
 
             if (el.matches('input[type="checkbox"], input[type="radio"], select')) {
                 scheduleSave();
             }
         });
 
+        form.addEventListener('submit', function (e) {
+            const submitter = e.submitter;
+
+            if (submitter && submitter.hasAttribute('data-autosave-ignore')) {
+                manualSubmitInProgress = true;
+
+                if (timer) {
+                    clearTimeout(timer);
+                    timer = null;
+                }
+
+                hasPending = false;
+                return;
+            }
+        });
+
+        lastPayload = buildPayloadKey(serializeForm());
         setStatus('ready');
     }
 
