@@ -73,16 +73,25 @@ namespace iLearning.Web.Controllers
 
             if (inv == null) return NotFound();
 
+            vm.IsCreateMode = true;
             vm.Fields = MapFieldConfig(inv);
 
             vm.CustomId = (vm.CustomId ?? "").Trim();
 
             if (string.IsNullOrWhiteSpace(vm.CustomId))
             {
-                vm.CustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+                var suggested = await BuildSuggestedCustomIdAsync(inventoryId);
+                vm.SuggestedCustomId = suggested;
 
-                ModelState.Remove(nameof(vm.CustomId));
-                ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
+                if (!string.IsNullOrWhiteSpace(suggested))
+                {
+                    ModelState.Remove(nameof(vm.CustomId));
+                    ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
+                }             
+            }
+            else
+            {
+                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
             }
 
             vm.Title = (vm.Title ?? "").Trim();
@@ -95,7 +104,12 @@ namespace iLearning.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+                if (string.IsNullOrWhiteSpace(vm.SuggestedCustomId))
+                {
+                    vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+                }
+                
+                vm.IsCreateMode = true;
                 return View(vm);
             }
 
@@ -106,7 +120,13 @@ namespace iLearning.Web.Controllers
             if (customIdExists)
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
-                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+
+                if (string.IsNullOrWhiteSpace(vm.SuggestedCustomId))
+                {
+                    vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+                }
+
+                vm.IsCreateMode = true;
                 return View(vm); 
             }
 
@@ -155,7 +175,13 @@ namespace iLearning.Web.Controllers
             catch (DbUpdateException)
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
-                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+
+                if (string.IsNullOrWhiteSpace(vm.SuggestedCustomId))
+                {
+                    vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+                }
+
+                vm.IsCreateMode = true;
                 return View(vm);
             }
 
