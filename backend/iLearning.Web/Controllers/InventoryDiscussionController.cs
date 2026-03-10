@@ -95,6 +95,7 @@ namespace iLearning.Web.Controllers
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "discussion" });
         }
 
+        [AllowAnonymous]
         [HttpGet("comments-feed")]
         public async Task<IActionResult> CommentsFeed(Guid inventoryId)
         {
