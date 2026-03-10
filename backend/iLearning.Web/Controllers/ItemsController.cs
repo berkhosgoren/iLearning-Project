@@ -542,7 +542,7 @@ namespace iLearning.Web.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                ModelState.AddModelError("", T["Items.Error.Concurrency"]);
+                ModelState.AddModelError("", T["Items.Errors.Concurrency"]);
 
                 var currentItem = await _db.Items
                     .AsNoTracking()
