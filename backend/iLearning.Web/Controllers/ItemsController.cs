@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using System.Globalization;
-using System.Runtime.Intrinsics.Arm;
-using System.Threading.Channels;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 
 namespace iLearning.Web.Controllers
@@ -77,6 +75,9 @@ namespace iLearning.Web.Controllers
             if (string.IsNullOrWhiteSpace(vm.CustomId))
             {
                 vm.CustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+
+                ModelState.Remove(nameof(vm.CustomId));
+                ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
             }
 
             vm.Title = (vm.Title ?? "").Trim();
