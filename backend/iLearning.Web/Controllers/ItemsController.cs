@@ -47,7 +47,11 @@ namespace iLearning.Web.Controllers
 
             var suggested = await BuildSuggestedCustomIdAsync(inventoryId);
             vm.SuggestedCustomId = suggested;
-            //vm.CustomId = suggested; //if i want ID to prefill suggestion
+            
+            if (inv.ItemCustomIdEnabled)
+            {
+                vm.CustomId = suggested;
+            }
 
             return View(vm);
         }
