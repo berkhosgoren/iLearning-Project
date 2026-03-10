@@ -77,6 +77,7 @@ namespace iLearning.Web.Controllers
             vm.Fields = MapFieldConfig(inv);
 
             vm.CustomId = (vm.CustomId ?? "").Trim();
+            vm.Title = (vm.Title ?? "").Trim();
 
             if (string.IsNullOrWhiteSpace(vm.CustomId))
             {
@@ -94,12 +95,25 @@ namespace iLearning.Web.Controllers
             else
             {
                 vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+                ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
             }
 
-            vm.Title = (vm.Title ?? "").Trim();
+            ModelState.Remove(nameof(vm.Title));
+            ModelState.SetModelValue(nameof(vm.Title), new ValueProviderResult(vm.Title));
+
+            if (string.IsNullOrWhiteSpace(vm.Title))
+            {
+                ModelState.AddModelError(nameof(vm.Title), T["The {0} field is required.", T["Common.Title"]].Value);
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.CustomId))
+            {
+                ModelState.AddModelError(nameof(vm.CustomId), T["The {0} field is required.", T["Common.CustomId"]].Value);
+            }
+
             ApplyFieldEnforcement(vm, inv);
 
-            if (!MatchesInventoryCustomIdFormat(inv, vm.CustomId))
+            if (!string.IsNullOrWhiteSpace(vm.CustomId) && !MatchesInventoryCustomIdFormat(inv, vm.CustomId))
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdFormat"]);
             }
@@ -503,7 +517,27 @@ namespace iLearning.Web.Controllers
             vm.Title = (vm.Title ?? "").Trim();
             ApplyFieldEnforcement(vm, inv);
 
-            if (!MatchesInventoryCustomIdFormat(inv, vm.CustomId))
+            ModelState.Remove(nameof(vm.CustomId));
+            ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
+
+            ModelState.Remove(nameof(vm.Title));
+            ModelState.SetModelValue(nameof(vm.Title), new ValueProviderResult(vm.Title));
+
+            if (string.IsNullOrWhiteSpace(vm.CustomId))
+            {
+                ModelState.AddModelError(nameof(vm.CustomId), T["The {0} field is required.", T["Common.CustomId"]].Value);
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.Title))
+            {
+                ModelState.AddModelError(nameof(vm.Title), T["The {0} field is required.", T["Common.Title"]].Value);
+            }
+
+            ApplyFieldEnforcement(vm, inv);
+
+
+        
+            if (!string.IsNullOrWhiteSpace(vm.CustomId) && !MatchesInventoryCustomIdFormat(inv, vm.CustomId))
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdFormat"]);
             }
@@ -514,7 +548,6 @@ namespace iLearning.Web.Controllers
                 return View(vm);
             }
                 
-
             var item = await _db.Items
                 .FirstOrDefaultAsync(x => x.InventoryId == inventoryId && x.Id == itemId);
 
