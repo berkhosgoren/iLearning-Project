@@ -20,6 +20,8 @@ namespace iLearning.Web.Models.ViewModels.Items
 
         public string? SuggestedCustomId { get; set; }
 
+        public bool IsCreateMode { get; set; }
+
         [MaxLength(500)]
         public string? String1 { get; set; }
         [MaxLength(500)]

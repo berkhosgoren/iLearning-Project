@@ -3,6 +3,10 @@
 
 @{
     string Label(string? custom, string fallbackKey) => !string.IsNullOrWhiteSpace(custom) ? custom! : T[fallbackKey].Value;
+
+    var hasSuggestedCustomId = !string.IsNullOrWhiteSpace(Model.SuggestedCustomId);
+    var isCreateLocked = Model.IsCreateMode && hasSuggestedCustomId;
+    var showUseSuggestedButton = !Model.IsCreateMode && hasSuggestedCustomId;
 }
 
 <div class="row g-3">
@@ -10,17 +14,28 @@
         <label class="form-label">@T["Common.CustomId"]</label>
 
         <div class="d-flex gap-2">
-            <input asp-for="CustomId" class="form-control" id="itemCustomIdInput" />
-            <button type="button" class="btn btn-outline-primary flex-shrink-0" id="itemCustomIdUseBtn"
-                    @(string.IsNullOrWhiteSpace(Model.SuggestedCustomId) ? "disabled" : "")>
-                @T["Items.Upsert.UseSuggested"]
-             </button>
+            <input asp-for="CustomId" class="form-control" id="itemCustomIdInput" readonly="@isCreateLocked" />
+
+            @if (showUseSuggestedButton)
+            {
+                <button type="button" class="btn btn-outline-primary flex-shrink-0" id="itemCustomIdUseBtn"
+                        @(string.IsNullOrWhiteSpace(Model.SuggestedCustomId) ? "disabled" : "")>
+                    @T["Items.Upsert.UseSuggested"]
+                </button>
+            }           
         </div>
 
         <span asp-validation-for="CustomId" class="text-danger small"></span>
+
         <div class="form-text">
             @T["Items.Upsert.CustomIdHelp"]
-            <span class="ms-2 text-muted" id="itemCustomIdSuggestedText"></span>
+
+            @if (hasSuggestedCustomId)
+            {
+                <span class="ms-2 text-muted" id="itemCustomIdSuggestedText">
+                    (@Model.SuggestedCustomId)
+                </span>
+            }           
         </div>
     </div>
 
@@ -165,50 +180,53 @@
     }
 </div>
 
-<script>
-    (function () {
-        const input = document.getElementById('itemCustomIdInput');
-        const suggestedText = document.getElementById('itemCustomIdSuggestedText');
-        const useBtn = document.getElementById('itemCustomIdUseBtn');
+@if (showUseSuggestedButton)
+{
+    <script>
+        (function () {
+            const input = document.getElementById('itemCustomIdInput');
+            const suggestedText = document.getElementById('itemCustomIdSuggestedText');
+            const useBtn = document.getElementById('itemCustomIdUseBtn');
 
-        const url = window.itemCustomIdSuggestUrl;
-
-        if (!input || !suggestedText || !useBtn) return;
-
-        let lastSuggested = '@(Model.SuggestedCustomId ?? "")';
-
-        function renderSuggested() {
-            suggestedText.textContent = lastSuggested ? ('(' + lastSuggested + ')') : '';
-            useBtn.disabled = !lastSuggested;
-        }
-
-        async function loadSuggested() {
             const url = window.itemCustomIdSuggestUrl;
-            if (!url) { renderSuggested(); return; }
 
-            try {
-                const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-                if (!res.ok) { renderSuggested(); return; }
+            if (!input || !suggestedText || !useBtn) return;
 
-                const data = await res.json();
-                if (data && data.suggested) {
-                    lastSuggested = String(data.suggested);
-                }
-        } catch {
+            let lastSuggested = '@(Model.SuggestedCustomId ?? "")';
 
-        }
-
-        renderSuggested();
-        }
-
-        useBtn.addEventListener('click', function () {
-            if (lastSuggested) {
-                input.value = lastSuggested;
-                input.focus();
+            function renderSuggested() {
+                suggestedText.textContent = lastSuggested ? ('(' + lastSuggested + ')') : '';
+                useBtn.disabled = !lastSuggested;
             }
-        });
 
-        renderSuggested();
-        loadSuggested();
-    })();
-</script>    
+            async function loadSuggested() {
+                const url = window.itemCustomIdSuggestUrl;
+                if (!url) { renderSuggested(); return; }
+
+                try {
+                    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+                    if (!res.ok) { renderSuggested(); return; }
+
+                    const data = await res.json();
+                    if (data && data.suggested) {
+                        lastSuggested = String(data.suggested);
+                    }
+            } catch {
+
+            }
+
+            renderSuggested();
+            }
+
+            useBtn.addEventListener('click', function () {
+                if (lastSuggested) {
+                    input.value = lastSuggested;
+                    input.focus();
+                }
+            });
+
+            renderSuggested();
+            loadSuggested();
+        })();
+    </script>
+}

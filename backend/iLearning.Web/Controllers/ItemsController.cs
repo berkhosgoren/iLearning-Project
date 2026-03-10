@@ -42,7 +42,8 @@ namespace iLearning.Web.Controllers
             var vm = new ItemUpsertVm
             {
                 InventoryId = inventoryId,
-                Fields = MapFieldConfig(inv)
+                Fields = MapFieldConfig(inv),
+                IsCreateMode = true,
             };
 
             var suggested = await BuildSuggestedCustomIdAsync(inventoryId);
