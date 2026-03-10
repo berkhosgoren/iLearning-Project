@@ -3,8 +3,13 @@
 
 @{
     var vm = Model.CustomIdVm;
+    var msg = TempData["InventoryMessage"] as string;
 }
 
+@if (!string.IsNullOrWhiteSpace(msg))
+{
+    <div class="alert alert-success mb-3">@msg</div>
+}
 @if (vm == null)
 {
     <div class="text-muted">@T["Inv.CustomId.NotAvailable"]</div>
