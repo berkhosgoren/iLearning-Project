@@ -5,6 +5,9 @@
     var msg = TempData["InventoryMessage"] as string;
     var currentSort = (ViewBag.AccessSort as string ?? "name").ToLowerInvariant();
     var currentDir = (ViewBag.AccessDir as string ?? "asc").ToLowerInvariant();
+
+    var selectedPrefixJson = System.Text.Json.JsonSerializer.Serialize(T["Common.SelectedPrefix"].Value);
+    var noMatchesJson = System.Text.Json.JsonSerializer.Serialize(T["Common.NoMatches"].Value);
 }
 
 @if (!string.IsNullOrWhiteSpace(msg))
@@ -174,8 +177,8 @@
 
         const rows = () => Array.from(document.querySelectorAll('input.accessRow'));
 
-        const selectedTextPrefix = '@T["Common.SelectedPrefix"]';
-          const noMatchesText = '@T["Common.NoMatches"]';
+        const selectedTextPrefix = @Html.Raw(selectedPrefixJson);
+        const noMatchesText = @Html.Raw(noMatchesJson);
 
         function clearHidden(form) {
             Array.from(form.querySelectorAll('input[type="hidden"][name="ids"]')).forEach(x => x.remove());
@@ -196,7 +199,7 @@
             const checkedIds = rowCbs.filter(x => x.checked).map(x => x.value);
             const checkedCount = checkedIds.length;
 
-            if (label) label.textContent = 'Selected: ' + checkedCount;
+            if (label) label.textContent = selectedTextPrefix + checkedCount;
 
             const enable = checkedCount > 0;
             if (writeBtn) writeBtn.disabled = !enable;
@@ -289,7 +292,7 @@
             if (!list || list.length === 0) {
                 const empty = document.createElement('div');
                 empty.className = 'list-group-item text-muted';
-                empty.textContent = 'No Matches.';
+                empty.textContent = noMatchesText;
                 suggestBox.appendChild(empty);
                 showSuggest();
                 return;

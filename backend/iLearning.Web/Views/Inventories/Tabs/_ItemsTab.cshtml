@@ -110,6 +110,7 @@
         const delBtn = document.getElementById('itemsDeleteBtn');
 
         const rows = () => Array.from(document.querySelectorAll('input.itemRow'));
+        const selectedPrefix = @Html.Raw(selectedPrefixJson);
 
         function setDeleteEnabled(enabled) {
             if (delBtn) delBtn.disabled = !enabled;
@@ -119,7 +120,7 @@
             const rowCbs = rows();
             const checkedCount = rowCbs.filter(x => x.checked).length;
 
-            if (label) label.textContent = 'Selected: ' + checkedCount;
+            if (label) label.textContent = selectedPrefix + checkedCount;
             setDeleteEnabled(checkedCount > 0);
 
             if (!all) return;
