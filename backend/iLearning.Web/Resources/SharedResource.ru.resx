@@ -399,6 +399,9 @@
   <data name="Common.Descending" xml:space="preserve">
     <value>По убыванию</value>
   </data>
+  <data name="Common.Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
   <data name="Common.Direction" xml:space="preserve">
     <value> Направление</value>
   </data>
@@ -1200,6 +1203,9 @@
   <data name="Nav.Home" xml:space="preserve">
     <value>Главная</value>
   </data>
+  <data name="Nav.Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
   <data name="Nav.Login" xml:space="preserve">
     <value>Войти</value>
   </data>
@@ -1212,6 +1218,9 @@
   <data name="Nav.Register" xml:space="preserve">
     <value>Регистрация</value>
   </data>
+  <data name="Nav.SearchAria" xml:space="preserve">
+    <value>Поиск</value>
+  </data>
   <data name="Nav.SearchButton" xml:space="preserve">
     <value>Поиск</value>
   </data>
@@ -1220,6 +1229,12 @@
   </data>
   <data name="Nav.ThemeToggle" xml:space="preserve">
     <value>Переключить на {0}</value>
+  </data>
+  <data name="Nav.ToggleNavigationAria" xml:space="preserve">
+    <value>Переключить навигацию</value>
+  </data>
+  <data name="Nav.ToggleThemeTitle" xml:space="preserve">
+    <value>Переключить тему</value>
   </data>
   <data name="Search.EmptyHint" xml:space="preserve">
     <value>Введите запрос в поле поиска выше.</value>

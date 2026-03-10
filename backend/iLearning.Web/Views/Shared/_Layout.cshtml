@@ -27,7 +27,7 @@
                     <a class="navbar-brand fw-semibold" asp-controller="Home" asp-action="Index">@T["App.Title"]</a>
 
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topNav"
-                            aria-controls="topNav" aria-expanded="false" aria-label="Toggle navigation">
+                            aria-controls="topNav" aria-expanded="false" aria-label="@T["Nav.ToggleNavigationAria"]">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
@@ -40,7 +40,7 @@
 
                         <form class="d-flex flex-grow-1" method="get" action="/search" role="search">
                         <input class="form-control me-2" name="q" type="search" placeholder="@T["Nav.SearchPlaceholder"]"
-                                    value="@Context.Request.Query["q"]" aria-label="Search">
+                                    value="@Context.Request.Query["q"]" aria-label="@T["Nav.SearchAria"]">
                         <button class="btn btn-outline-primary" type="submit">@T["Nav.SearchButton"]</button>
                         </form>
 
@@ -81,7 +81,7 @@
                                         </li>
 
                                         <li><hr class="dropdown-divider"></li>
-                                        <li><h6 class="dropdown-header">Language</h6></li>
+                                        <li><h6 class="dropdown-header">@T["Nav.Language"]</h6></li>
                                         <li>
                                             <form method="post" action="/prefs/language" class="m-0">
                                                 @Html.AntiForgeryToken()
@@ -132,7 +132,7 @@
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="returnUrl" value="@returnUrl" />
                                     <input type="hidden" name="theme" value="@(theme == "dark" ? "light" : "dark")" />
-                                    <button class="btn btn-outline-secondary px-2" type="submit" title="Toggle Theme">
+                                    <button class="btn btn-outline-secondary px-2" type="submit" title="@T["Nav.ToggleThemeTitle"]">
                                         @(theme == "dark" ? "☀️" : "🌙")
                                     </button>
                                 </form>
