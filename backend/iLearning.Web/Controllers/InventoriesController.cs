@@ -7,6 +7,7 @@ using iLearning.Web.Services;
 using iLearning.Web.Models.Domain;
 using iLearning.Web.Models.ViewModels.Items;
 using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace iLearning.Web.Controllers
 {
@@ -51,6 +52,15 @@ namespace iLearning.Web.Controllers
         public async Task<IActionResult> Create(InventoryUpsertVm vm)
         {
             await LoadCategoriesAsync();
+
+            vm.Title = (vm.Title ?? "").Trim();
+            ModelState.Remove(nameof(vm.Title));
+            ModelState.SetModelValue(nameof(vm.Title), new ValueProviderResult(vm.Title));
+
+            if (string.IsNullOrWhiteSpace(vm.Title))
+            {
+                ModelState.AddModelError(nameof(vm.Title), T["The {0} field is required.", T["Inv.Title"]].Value);
+            }
 
             if (!ModelState.IsValid)
                 return View(vm);
@@ -176,6 +186,15 @@ namespace iLearning.Web.Controllers
                     IsAuthenticated = _currentUser.IsAuthenticated(User),
                     SettingsVm = settingsVm
                 };
+            }
+
+            vm.Title = (vm.Title ?? "").Trim();
+            ModelState.Remove(nameof(vm.Title));
+            ModelState.SetModelValue(nameof(vm.Title), new ValueProviderResult(vm.Title));
+
+            if (string.IsNullOrWhiteSpace(vm.Title))
+            {
+                ModelState.AddModelError(nameof(vm.Title), T["The {0} field is required.", T["Inv.Title"]].Value);
             }
 
             if (!ModelState.IsValid)
