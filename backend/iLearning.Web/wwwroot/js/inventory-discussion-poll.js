@@ -87,7 +87,7 @@
 
                 lastSnapshot = snapshot;
                 renderComments(comments);
-            } catch {
+            } catch (err) {
                 console.error("InventoryDiscussionPoll refresh failed:", err);
             }
         }
