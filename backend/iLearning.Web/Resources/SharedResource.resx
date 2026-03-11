@@ -169,7 +169,7 @@
     <value>Removed admin role from {0} user(s). </value>
   </data>
   <data name="Admin.Users.AdminRoleUpdated" xml:space="preserve">
-    <value>Admin role updated. Added: [0}, removed {1}.</value>
+    <value>Admin role updated. Added: {0}, removed {1}.</value>
   </data>
   <data name="Admin.Users.Apply" xml:space="preserve">
     <value>Apply</value>
@@ -299,6 +299,9 @@
   </data>
   <data name="Auth.External.OrContinueWith" xml:space="preserve">
     <value>Or continue with</value>
+  </data>
+  <data name="Auth.External.RemoteError" xml:space="preserve">
+    <value>External sign-in failed. Please try again.</value>
   </data>
   <data name="Auth.Login.BackHome" xml:space="preserve">
     <value>Back to Home</value>
@@ -1271,8 +1274,5 @@
   </data>
   <data name="Theme.Light" xml:space="preserve">
     <value>Light</value>
-  </data>
-  <data name="Auth.External.RemoteError" xml:space="preserve">
-    <value>External sign-in failed. Please try again.</value>
   </data>
 </root>
