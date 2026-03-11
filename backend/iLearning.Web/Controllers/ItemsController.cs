@@ -91,9 +91,9 @@ namespace iLearning.Web.Controllers
                 ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
             }
 
+            NormalizeDecimalInputs(vm);
             ApplyFieldEnforcement(vm, inv);
 
-            NormalizeDecimalInputs(vm);
 
             if (string.IsNullOrWhiteSpace(vm.CustomId))
             {
@@ -492,9 +492,8 @@ namespace iLearning.Web.Controllers
             vm.Title = (vm.Title ?? "").Trim();
             vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
 
-            ApplyFieldEnforcement(vm, inv);
-
             NormalizeDecimalInputs(vm);
+            ApplyFieldEnforcement(vm, inv);           
 
             if (string.IsNullOrWhiteSpace(vm.CustomId))
             {
