@@ -105,6 +105,7 @@
         <div class="col-md-4">
             <label class="form-label">@Label(Model.Fields.Number1Name, "Common.Number1")</label>
             <input asp-for="Number1" class="form-control" />
+            <span asp-validation-for="Number1" class="text-danger small"></span>
         </div>
     }
     @if (Model.Fields.Number2Enabled)
@@ -112,6 +113,7 @@
         <div class="col-md-4">
             <label class="form-label">@Label(Model.Fields.Number2Name, "Common.Number2")</label>
             <input asp-for="Number2" class="form-control" />
+            <span asp-validation-for="Number2" class="text-danger small"></span>
         </div>
     }
     @if (Model.Fields.Number3Enabled)
@@ -119,6 +121,7 @@
         <div class="col-md-4">
             <label class="form-label">@Label(Model.Fields.Number3Name, "Common.Number3")</label>
             <input asp-for="Number3" class="form-control" />
+            <span asp-validation-for="Number3" class="text-danger small"></span>
         </div>
     }
     @if (Model.Fields.Bool1Enabled)

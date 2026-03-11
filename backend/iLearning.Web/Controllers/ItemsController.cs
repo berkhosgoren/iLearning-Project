@@ -85,12 +85,22 @@ namespace iLearning.Web.Controllers
             if (string.IsNullOrWhiteSpace(vm.CustomId) && !string.IsNullOrWhiteSpace(suggested))
             {
                 vm.CustomId = suggested;
+
+                ModelState.Remove(nameof(vm.CustomId));
+                ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
             }
 
             ApplyFieldEnforcement(vm, inv);
 
-            ModelState.Clear();
-            TryValidateModel(vm);
+            if (string.IsNullOrWhiteSpace(vm.CustomId))
+            {
+                ModelState.AddModelError(nameof(vm.CustomId), T["Common.Required", T["Common.CustomId"]].Value);
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.Title))
+            {
+                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Common.Title"]].Value);
+            }
 
             if (!string.IsNullOrWhiteSpace(vm.CustomId) && !MatchesInventoryCustomIdFormat(inv, vm.CustomId))
             {
@@ -481,9 +491,16 @@ namespace iLearning.Web.Controllers
 
             ApplyFieldEnforcement(vm, inv);
 
-            ModelState.Clear();
-            TryValidateModel(vm);
-           
+            if (string.IsNullOrWhiteSpace(vm.CustomId))
+            {
+                ModelState.AddModelError(nameof(vm.CustomId), T["Common.Required", T["Common.CustomId"]].Value);
+            }
+
+            if (string.IsNullOrWhiteSpace(vm.Title))
+            {
+                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Common.Title"]].Value);
+            }
+
             if (!string.IsNullOrWhiteSpace(vm.CustomId) && !MatchesInventoryCustomIdFormat(inv, vm.CustomId))
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdFormat"]);

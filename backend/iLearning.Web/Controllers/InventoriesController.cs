@@ -55,8 +55,10 @@ namespace iLearning.Web.Controllers
 
             vm.Title = (vm.Title ?? "").Trim();
 
-            ModelState.Clear();
-            TryValidateModel(vm);
+            if (string.IsNullOrWhiteSpace(vm.Title))
+            {
+                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Common.Title"]].Value);
+            }
 
             if (!ModelState.IsValid)
                 return View(vm);
@@ -185,8 +187,10 @@ namespace iLearning.Web.Controllers
                 };
             }
 
-            ModelState.Clear();
-            TryValidateModel(vm);
+            if (string.IsNullOrWhiteSpace(vm.Title))
+            {
+                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Common.Title"]].Value);
+            }
 
             if (!ModelState.IsValid)
             {
