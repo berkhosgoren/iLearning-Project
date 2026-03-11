@@ -18,9 +18,16 @@ namespace iLearning.Web.Data
 
         public async Task SeedAsync()
         {
-            var adminEmail = _cfg["SeedAdmin:Email"] ?? "admin@ilearning.local";
-            var adminName = _cfg["SeedAdmin:Name"] ?? "Admin";
-            var adminPassword = _cfg["SeedAdmin:Password"] ?? "Admin123!";
+            var adminEmail = (_cfg["SeedAdmin:Email"] ?? "").Trim().ToLowerInvariant();
+            var adminName = (_cfg["SeedAdmin:Name"] ?? "").Trim();
+            var adminPassword = _cfg["SeedAdmin:Password"] ?? "";
+
+            if (string.IsNullOrWhiteSpace(adminEmail) ||
+                string.IsNullOrWhiteSpace(adminName) ||
+                string.IsNullOrWhiteSpace(adminPassword))
+            {
+                return;
+            }
 
             var adminRole = await _db.Roles.FirstOrDefaultAsync(r => r.Name == "Admin");
             if (adminRole is null) return;

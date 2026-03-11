@@ -32,6 +32,10 @@ namespace iLearning.Web.Data
                 .HasIndex(x => x.Email)
                 .IsUnique();
 
+            modelBuilder.Entity<AppUser>()
+                .HasIndex(x => new { x.ExternalProvider, x.ExternalProviderUserId })
+                .IsUnique();
+
             //Roles
             modelBuilder.Entity<Role>()
                 .HasIndex(x => x.Name)
