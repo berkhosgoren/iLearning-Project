@@ -6,7 +6,8 @@ namespace iLearning.Web.Models.ViewModels.Inventories
     {
         public Guid? Id { get; set; }
 
-        [Required, MaxLength(120)]
+        [Required(ErrorMessage = "Common.Required")] 
+        [MaxLength(120)]
         [Display(Name = "Inv.Title")]
         public string Title { get; set; } = string.Empty;
 

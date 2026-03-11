@@ -57,7 +57,7 @@ namespace iLearning.Web.Controllers
 
             if (string.IsNullOrWhiteSpace(vm.Title))
             {
-                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Common.Title"]].Value);
+                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Inv.Title"]].Value);
             }
 
             if (!ModelState.IsValid)
@@ -189,7 +189,7 @@ namespace iLearning.Web.Controllers
 
             if (string.IsNullOrWhiteSpace(vm.Title))
             {
-                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Common.Title"]].Value);
+                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Inv.Title"]].Value);
             }
 
             if (!ModelState.IsValid)
