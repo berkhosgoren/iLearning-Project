@@ -307,13 +307,13 @@ namespace iLearning.Web.Controllers
 
             if (user == null)
             {
-                TempData["InventoryMessage"] = T["Inv.Err.UserNotFound"].Value;
+                TempData["InventoryMessage"] = T["Inv.Access.Err.UserNotFound"].Value;
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
             if (user.IsBlocked)
             {
-                TempData["InventoryMessage"] = T["Inv.Err.UserBlocked"].Value;
+                TempData["InventoryMessage"] = T["Inv.Access.Err.UserBlocked"].Value;
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
