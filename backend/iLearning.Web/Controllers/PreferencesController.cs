@@ -20,7 +20,7 @@ namespace iLearning.Web.Controllers
                 new CookieOptions
                 {
                     HttpOnly = false,
-                    Secure = true,
+                    Secure = Request.IsHttps,
                     SameSite = SameSiteMode.Lax,
                     Expires = DateTimeOffset.UtcNow.AddYears(1),
                     IsEssential = true,

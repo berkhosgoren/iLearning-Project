@@ -34,11 +34,11 @@ namespace iLearning.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginVm vm)
         {
-            if (!ModelState.IsValid)
-                return View(vm);
-
             var email = (vm.Email ?? "").Trim().ToLowerInvariant();
             var password = vm.Password ?? "";
+            
+            if (!ModelState.IsValid)
+                return View(vm);
 
             var user = await _db.Users
                 .AsNoTracking()
@@ -72,12 +72,12 @@ namespace iLearning.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterVm vm)
         {
-            if (!ModelState.IsValid)
-                return View(vm);
-
             var name = (vm.Name ?? "").Trim();
             var email = (vm.Email ?? "").Trim().ToLowerInvariant();
             var password = vm.Password ?? "";
+
+            if (!ModelState.IsValid)
+                return View(vm);
 
             var exists = await _db.Users.AnyAsync(u => u.Email == email);
             if (exists)
