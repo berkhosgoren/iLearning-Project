@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Globalization;
 
 
 namespace iLearning.Web.Controllers
@@ -91,6 +92,8 @@ namespace iLearning.Web.Controllers
             }
 
             ApplyFieldEnforcement(vm, inv);
+
+            NormalizeDecimalInputs(vm);
 
             if (string.IsNullOrWhiteSpace(vm.CustomId))
             {
@@ -490,6 +493,8 @@ namespace iLearning.Web.Controllers
             vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
 
             ApplyFieldEnforcement(vm, inv);
+
+            NormalizeDecimalInputs(vm);
 
             if (string.IsNullOrWhiteSpace(vm.CustomId))
             {
@@ -895,6 +900,48 @@ namespace iLearning.Web.Controllers
             }
 
             return System.Text.RegularExpressions.Regex.IsMatch(value, expected);                         
+        }
+
+        private void NormalizeDecimalInputs(ItemUpsertVm vm)
+        {
+            vm.Number1 = NormalizeDecimalInput(nameof(ItemUpsertVm.Number1), vm.Number1);
+            vm.Number2 = NormalizeDecimalInput(nameof(ItemUpsertVm.Number2), vm.Number2);
+            vm.Number3 = NormalizeDecimalInput(nameof(ItemUpsertVm.Number3), vm.Number3);
+        }
+
+        private decimal? NormalizeDecimalInput(string key, decimal? currentValue)
+        {
+            if (!Request.HasFormContentType) return currentValue;
+
+            var raw = Request.Form[key].ToString();
+            if (string.IsNullOrWhiteSpace(raw)) return null;
+
+            raw = raw.Trim().Replace(',', '.');
+
+            if (!decimal.TryParse(raw, NumberStyles.Number, CultureInfo.InvariantCulture, out var parsed))
+            {
+                return currentValue;
+            }
+
+            vmRemoveModelStateError(key);
+
+            var cultureText = parsed.ToString(CultureInfo.CurrentCulture);
+            ModelState.SetModelValue(key, new ValueProviderResult(cultureText));
+
+            return parsed;
+        }
+
+        private void vmRemoveModelStateError(string key)
+        {
+            if (ModelState.TryGetValue(key, out var entry)) 
+            {
+                entry.Errors.Clear();
+                entry.ValidationState = ModelValidationState.Valid;
+            }
+            else
+            {
+                ModelState.Remove(key);
+            }
         }
     }
 }

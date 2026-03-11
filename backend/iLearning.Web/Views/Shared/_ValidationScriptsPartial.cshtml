@@ -1,2 +1,16 @@
 ﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+    (function () {
+        if (!window.jQuery || !jQuery.validator) return;
+
+        jQuery.validator.methods.number = function (value, element) {
+            if (this.optional(element)) {
+                return true;
+            }
+
+            return /^-?\d+(?:[.,]\d+)?$/.test((value || '').trim());
+        };
+    })();
+</script>

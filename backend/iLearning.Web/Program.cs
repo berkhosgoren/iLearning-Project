@@ -20,6 +20,24 @@ builder.Services
     {
         options.DataAnnotationLocalizerProvider = (type, factory) =>
             factory.Create(typeof(SharedResource));
+    })
+    .AddMvcOptions(options =>
+    {
+        options.ModelBindingMessageProvider.SetValueMustBeANumberAccessor(fieldName =>
+        {
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            return culture == "ru"
+                ? $"Поле \"{fieldName}\" должно быть числом."
+                : $"The field {fieldName} must be a number.";
+        });
+
+        options.ModelBindingMessageProvider.SetAttemptedValueIsInvalidAccessor((value, fieldName) =>
+        {
+            var culture = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            return culture == "ru"
+                ? $"Значение \"{value}\" недопустимо для поля \"{fieldName}\"."
+                : $"The value '{value}' is not valid for {fieldName}.";
+        });
     });
 
 builder.Services.AddDbContext<AppDbContext>(options => 
