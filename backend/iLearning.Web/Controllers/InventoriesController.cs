@@ -54,13 +54,9 @@ namespace iLearning.Web.Controllers
             await LoadCategoriesAsync();
 
             vm.Title = (vm.Title ?? "").Trim();
-            ModelState.Remove(nameof(vm.Title));
-            ModelState.SetModelValue(nameof(vm.Title), new ValueProviderResult(vm.Title));
 
-            if (string.IsNullOrWhiteSpace(vm.Title))
-            {
-                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Inv.Title"]]);
-            }
+            ModelState.Clear();
+            TryValidateModel(vm);
 
             if (!ModelState.IsValid)
                 return View(vm);
@@ -130,7 +126,6 @@ namespace iLearning.Web.Controllers
             _db.Inventories.Add(inv);
 
             await UpsertInventoryTagsAsync(inv, vm.TagsCsv);
-
             await _db.SaveChangesAsync();
 
             return RedirectToAction(nameof(Details), new { id = inv.Id });
@@ -153,6 +148,8 @@ namespace iLearning.Web.Controllers
 
             if (id != vm.Id)
                 return BadRequest();
+
+            vm.Title = (vm.Title ?? "").Trim();
 
             var inv = await _db.Inventories
                 .Include(i => i.Category)
@@ -188,14 +185,8 @@ namespace iLearning.Web.Controllers
                 };
             }
 
-            vm.Title = (vm.Title ?? "").Trim();
-            ModelState.Remove(nameof(vm.Title));
-            ModelState.SetModelValue(nameof(vm.Title), new ValueProviderResult(vm.Title));
-
-            if (string.IsNullOrWhiteSpace(vm.Title))
-            {
-                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Inv.Title"]]);
-            }
+            ModelState.Clear();
+            TryValidateModel(vm);
 
             if (!ModelState.IsValid)
             {
@@ -222,7 +213,7 @@ namespace iLearning.Web.Controllers
                 return View("Details", invalidCategoryVm);
             }
 
-            inv.Title = vm.Title.Trim();
+            inv.Title = vm.Title;
             inv.Description = string.IsNullOrWhiteSpace(vm.Description) ? null : vm.Description.Trim();
             inv.ImageUrl = string.IsNullOrWhiteSpace(vm.ImageUrl) ? null : vm.ImageUrl.Trim();
             inv.IsPublic = vm.IsPublic;

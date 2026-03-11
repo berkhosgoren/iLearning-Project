@@ -79,39 +79,18 @@ namespace iLearning.Web.Controllers
             vm.CustomId = (vm.CustomId ?? "").Trim();
             vm.Title = (vm.Title ?? "").Trim();
 
-            if (string.IsNullOrWhiteSpace(vm.CustomId))
+            var suggested = await BuildSuggestedCustomIdAsync(inventoryId);
+            vm.SuggestedCustomId = suggested;
+
+            if (string.IsNullOrWhiteSpace(vm.CustomId) && !string.IsNullOrWhiteSpace(suggested))
             {
-                var suggested = await BuildSuggestedCustomIdAsync(inventoryId);
-                vm.SuggestedCustomId = suggested;
-
-                if (!string.IsNullOrWhiteSpace(suggested))
-                {
-                    vm.CustomId = suggested;
-
-                    ModelState.Remove(nameof(vm.CustomId));
-                    ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
-                }             
-            }
-            else
-            {
-                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
-                ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
-            }
-
-            ModelState.Remove(nameof(vm.Title));
-            ModelState.SetModelValue(nameof(vm.Title), new ValueProviderResult(vm.Title));
-
-            if (string.IsNullOrWhiteSpace(vm.Title))
-            {
-                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Common.Title"]]);
-            }
-
-            if (string.IsNullOrWhiteSpace(vm.CustomId))
-            {
-                ModelState.AddModelError(nameof(vm.CustomId), T["Common.Required", T["Common.CustomId"]]);
+                vm.CustomId = suggested;
             }
 
             ApplyFieldEnforcement(vm, inv);
+
+            ModelState.Clear();
+            TryValidateModel(vm);
 
             if (!string.IsNullOrWhiteSpace(vm.CustomId) && !MatchesInventoryCustomIdFormat(inv, vm.CustomId))
             {
@@ -119,12 +98,7 @@ namespace iLearning.Web.Controllers
             }
 
             if (!ModelState.IsValid)
-            {
-                if (string.IsNullOrWhiteSpace(vm.SuggestedCustomId))
-                {
-                    vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
-                }
-                
+            {                         
                 vm.IsCreateMode = true;
                 return View(vm);
             }
@@ -136,12 +110,6 @@ namespace iLearning.Web.Controllers
             if (customIdExists)
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
-
-                if (string.IsNullOrWhiteSpace(vm.SuggestedCustomId))
-                {
-                    vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
-                }
-
                 vm.IsCreateMode = true;
                 return View(vm); 
             }
@@ -191,12 +159,6 @@ namespace iLearning.Web.Controllers
             catch (DbUpdateException)
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
-
-                if (string.IsNullOrWhiteSpace(vm.SuggestedCustomId))
-                {
-                    vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
-                }
-
                 vm.IsCreateMode = true;
                 return View(vm);
             }
@@ -515,28 +477,13 @@ namespace iLearning.Web.Controllers
 
             vm.CustomId = (vm.CustomId ?? "").Trim();
             vm.Title = (vm.Title ?? "").Trim();
-            ApplyFieldEnforcement(vm, inv);
-
-            ModelState.Remove(nameof(vm.CustomId));
-            ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
-
-            ModelState.Remove(nameof(vm.Title));
-            ModelState.SetModelValue(nameof(vm.Title), new ValueProviderResult(vm.Title));
-
-            if (string.IsNullOrWhiteSpace(vm.CustomId))
-            {
-                ModelState.AddModelError(nameof(vm.CustomId), T["Common.Required", T["Common.CustomId"]]);
-            }
-
-            if (string.IsNullOrWhiteSpace(vm.Title))
-            {
-                ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Common.Title"]]);
-            }
+            vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
 
             ApplyFieldEnforcement(vm, inv);
 
-
-        
+            ModelState.Clear();
+            TryValidateModel(vm);
+           
             if (!string.IsNullOrWhiteSpace(vm.CustomId) && !MatchesInventoryCustomIdFormat(inv, vm.CustomId))
             {
                 ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdFormat"]);
@@ -544,7 +491,6 @@ namespace iLearning.Web.Controllers
 
             if (!ModelState.IsValid)
             {
-                vm.SuggestedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
                 return View(vm);
             }
                 
