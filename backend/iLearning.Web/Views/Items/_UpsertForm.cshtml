@@ -11,7 +11,7 @@
 
 <div class="row g-3">
     <div class="col-md-4">
-        <label class="form-label">@T["Common.CustomId"]</label>
+        <label asp-for="CustomId">@T["Common.CustomId"]</label>
 
         <div class="d-flex gap-2">
             <input asp-for="CustomId" class="form-control" id="itemCustomIdInput" readonly="@isCreateLocked" />
@@ -40,7 +40,7 @@
     </div>
 
     <div class="col-md-8">
-        <label class="form-label">@T["Common.Title"]</label>
+        <label asp-for="Title">@T["Common.Title"]</label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger small"></span>
     </div>
@@ -55,7 +55,7 @@
     @if (Model.Fields.String1Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.String1Name, "Common.String1")</label>
+            <label asp-for="String1"">@Label(Model.Fields.String1Name, "Common.String1")</label>
             <input asp-for="String1" class="form-control" />
             <span asp-validation-for="String1" class="text-danger small"></span>
         </div>
@@ -63,7 +63,7 @@
     @if (Model.Fields.String2Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.String2Name, "Common.String2")</label>
+            <label asp-for="String2">@Label(Model.Fields.String2Name, "Common.String2")</label>
             <input asp-for="String2" class="form-control" />
             <span asp-validation-for="String2" class="text-danger small"></span>
         </div>
@@ -71,7 +71,7 @@
     @if (Model.Fields.String3Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.String3Name, "Common.String3")</label>
+            <label asp-for="String3">@Label(Model.Fields.String3Name, "Common.String3")</label>
             <input asp-for="String3" class="form-control" />
             <span asp-validation-for="String3" class="text-danger small"></span>
         </div>
@@ -79,7 +79,7 @@
     @if (Model.Fields.Text1Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Text1Name, "Common.Text1")</label>
+            <label asp-for="Text1">@Label(Model.Fields.Text1Name, "Common.Text1")</label>
             <input asp-for="Text1" class="form-control" />
             <span asp-validation-for="Text1" class="text-danger small"></span>
         </div>
@@ -87,7 +87,7 @@
     @if (Model.Fields.Text2Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Text2Name, "Common.Text2")</label>
+            <label asp-for="Text2">@Label(Model.Fields.Text2Name, "Common.Text2")</label>
             <input asp-for="Text2" class="form-control" />
             <span asp-validation-for="Text2" class="text-danger small"></span>
         </div>
@@ -95,7 +95,7 @@
     @if (Model.Fields.Text3Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Text3Name, "Common.Text3")</label>
+            <label asp-for="Text3">@Label(Model.Fields.Text3Name, "Common.Text3")</label>
             <input asp-for="Text3" class="form-control" />
             <span asp-validation-for="Text3" class="text-danger small"></span>
         </div>
@@ -103,7 +103,7 @@
     @if (Model.Fields.Number1Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Number1Name, "Common.Number1")</label>
+            <label asp-for="Number1">@Label(Model.Fields.Number1Name, "Common.Number1")</label>
             <input asp-for="Number1" class="form-control" />
             <span asp-validation-for="Number1" class="text-danger small"></span>
         </div>
@@ -111,7 +111,7 @@
     @if (Model.Fields.Number2Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Number2Name, "Common.Number2")</label>
+            <label asp-for="Number2">@Label(Model.Fields.Number2Name, "Common.Number2")</label>
             <input asp-for="Number2" class="form-control" />
             <span asp-validation-for="Number2" class="text-danger small"></span>
         </div>
@@ -119,7 +119,7 @@
     @if (Model.Fields.Number3Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Number3Name, "Common.Number3")</label>
+            <label asp-for="Number3">@Label(Model.Fields.Number3Name, "Common.Number3")</label>
             <input asp-for="Number3" class="form-control" />
             <span asp-validation-for="Number3" class="text-danger small"></span>
         </div>
@@ -127,7 +127,7 @@
     @if (Model.Fields.Bool1Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Bool1Name, "Common.Bool1")</label>
+            <label asp-for="Bool1">@Label(Model.Fields.Bool1Name, "Common.Bool1")</label>
             <select asp-for="Bool1" class="form-select">
                 <option value="">@T["Common.EmptyOption"]</option>
                 <option value="true">@T["Common.True"]</option>
@@ -138,7 +138,7 @@
     @if (Model.Fields.Bool2Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Bool2Name, "Common.Bool2")</label>
+            <label asp-for="Bool2">@Label(Model.Fields.Bool2Name, "Common.Bool2")</label>
             <select asp-for="Bool2" class="form-select">
                 <option value="">@T["Common.EmptyOption"]</option>
                 <option value="true">@T["Common.True"]</option>
@@ -149,7 +149,7 @@
     @if (Model.Fields.Bool3Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Bool3Name, "Common.Bool3")</label>
+            <label asp-for="Bool3">@Label(Model.Fields.Bool3Name, "Common.Bool3")</label>
             <select asp-for="Bool3" class="form-select">
                 <option value="">@T["Common.EmptyOption"]</option>
                 <option value="true">@T["Common.True"]</option>
@@ -160,7 +160,7 @@
     @if (Model.Fields.Link1Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Link1Name, "Common.Link1")</label>
+            <label asp-for="Link1">@Label(Model.Fields.Link1Name, "Common.Link1")</label>
             <input asp-for="Link1" class="form-control" />
             <span asp-validation-for="Link1" class="text-danger small"></span>
         </div>
@@ -168,7 +168,7 @@
     @if (Model.Fields.Link2Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Link2Name, "Common.Link2")</label>
+            <label asp-for="Link2">@Label(Model.Fields.Link2Name, "Common.Link2")</label>
             <input asp-for="Link2" class="form-control" />
             <span asp-validation-for="Link2" class="text-danger small"></span>
         </div>
@@ -176,7 +176,7 @@
     @if (Model.Fields.Link3Enabled)
     {
         <div class="col-md-4">
-            <label class="form-label">@Label(Model.Fields.Link3Name, "Common.Link3")</label>
+            <label asp-for="Link3">@Label(Model.Fields.Link3Name, "Common.Link3")</label>
             <input asp-for="Link3" class="form-control" />
             <span asp-validation-for="Link3" class="text-danger small"></span>
         </div>

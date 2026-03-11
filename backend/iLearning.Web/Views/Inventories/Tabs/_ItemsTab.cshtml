@@ -120,7 +120,7 @@
             const rowCbs = rows();
             const checkedCount = rowCbs.filter(x => x.checked).length;
 
-            if (label) label.textContent = selectedPrefix + checkedCount;
+            if (label) label.textContent = `${selectedPrefix} ${checkedCount}`;
             setDeleteEnabled(checkedCount > 0);
 
             if (!all) return;
