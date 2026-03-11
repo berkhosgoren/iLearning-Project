@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using iLearning.Web.Services;
 using iLearning.Web.Models.ViewModels.Home;
-using System.Text.RegularExpressions;
-
+using iLearning.Web;
+using Microsoft.Extensions.Localization;
 
 
 namespace iLearning.Web.Controllers
@@ -13,11 +13,13 @@ namespace iLearning.Web.Controllers
     {
         private readonly AppDbContext _db;
         private readonly IMarkdownService _markdown;
+        private readonly IStringLocalizer<SharedResource> T;
 
-        public HomeController(AppDbContext db, IMarkdownService markdown)
+        public HomeController(AppDbContext db, IMarkdownService markdown, IStringLocalizer<SharedResource> t)
         {
             _db = db;
             _markdown = markdown;
+            T = t;
         }
 
         [HttpGet("")]
@@ -34,8 +36,8 @@ namespace iLearning.Web.Controllers
                 {
                     i.Id,
                     i.Title,
-                    CategoryName = i.Category != null ? i.Category.Name : "Other",
-                    CreatorName = i.Creator != null ? i.Creator.Name : "Unknown",
+                    CategoryName = i.Category != null ? i.Category.Name : T["Common.Other"].Value,
+                    CreatorName = i.Creator != null ? i.Creator.Name : T["Common.Unknown"].Value,
                     i.CreatedAtUtc,
                     i.ImageUrl,
                     i.Description
@@ -74,8 +76,8 @@ namespace iLearning.Web.Controllers
                 {
                     i.Id,
                     i.Title,
-                    CategoryName = i.Category != null ? i.Category.Name : "Other",
-                    CreatorName = i.Creator != null ? i.Creator.Name : "Unknown",
+                    CategoryName = i.Category != null ? i.Category.Name : T["Common.Other"].Value,
+                    CreatorName = i.Creator != null ? i.Creator.Name : T["Common.Unknown"].Value,
                     i.CreatedAtUtc,
                     i.ImageUrl,
                     i.Description,

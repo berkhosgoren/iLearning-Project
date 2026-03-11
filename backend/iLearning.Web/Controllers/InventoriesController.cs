@@ -172,9 +172,9 @@ namespace iLearning.Web.Controllers
                     Description = inventory.Description,
                     DescriptionHtml = _markdown.ToSafeHtml(inventory.Description),
                     ImageUrl = inventory.ImageUrl,
-                    CategoryName = inventory.Category?.Name ?? "Other",
+                    CategoryName = inventory.Category?.Name ?? T["Common.Other"].Value,
                     IsPublic = inventory.IsPublic,
-                    CreatorName = inventory.Creator?.Name ?? "Unknown",
+                    CreatorName = inventory.Creator?.Name ?? T["Common.Unknown"].Value,
                     CreatedAtUtc = inventory.CreatedAtUtc,
                     Tags = inventory.InventoryTags.Select(x => x.Tag.Name).OrderBy(x => x).ToList(),
                     ActiveTab = "settings",
@@ -541,9 +541,9 @@ namespace iLearning.Web.Controllers
                 Description = inv.Description,
                 DescriptionHtml = _markdown.ToSafeHtml(inv.Description),
                 ImageUrl = inv.ImageUrl,
-                CategoryName = inv.Category?.Name ?? "Other",
+                CategoryName = inv.Category?.Name ?? T["Common.Other"].Value,
                 IsPublic = inv.IsPublic,
-                CreatorName = inv.Creator?.Name ?? "Unknown",
+                CreatorName = inv.Creator?.Name ?? T["Common.Unknown"].Value,
                 CreatedAtUtc = inv.CreatedAtUtc,
                 Tags = inv.InventoryTags.Select(x => x.Tag.Name).OrderBy(x => x).ToList(),
                 ActiveTab = activeTab,
@@ -605,7 +605,7 @@ namespace iLearning.Web.Controllers
                     .Select(a => new InventoryAccessRowVm
                     {
                         UserId = a.User != null ? a.User.Id : Guid.Empty,
-                        Name = a.User != null ? a.User.Name : "Unknown",
+                        Name = a.User != null ? a.User.Name : T["Common.Unknown"].Value,
                         Email = a.User != null ? a.User.Email : "",
                         CanWrite = a.CanWrite,
                         CreatedAtUtc = a.CreatedAtUtc
@@ -627,7 +627,7 @@ namespace iLearning.Web.Controllers
                     {
                         Id = c.Id,
                         UserId = c.UserId,
-                        UserName = c.User != null ? c.User.Name : "Unknown",
+                        UserName = c.User != null ? c.User.Name : T["Common.Unknown"].Value,
                         Body = c.Body,
                         CreatedAtUtc = c.CreatedAtUtc,
                         CanDelete = isAdmin || (isAuthenticated && userId.HasValue && (c.UserId == userId.Value || inv.CreatorId == userId.Value))
