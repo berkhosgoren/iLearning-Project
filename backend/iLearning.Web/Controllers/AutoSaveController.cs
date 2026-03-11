@@ -52,6 +52,16 @@ namespace iLearning.Web.Controllers
                 });
             }
 
+            var trimmedTitle = (vm.Title ?? string.Empty).Trim();
+
+            if (string.IsNullOrWhiteSpace(trimmedTitle))
+            {
+                return BadRequest(new
+                {
+                    message = T["Common.Required", T["Inv.Title"]].Value
+                });
+            }
+
             var categoryExists = await _db.Categories.AnyAsync(c => c.Id == vm.CategoryId);
             if (!categoryExists)
             {
@@ -61,7 +71,7 @@ namespace iLearning.Web.Controllers
                 });
             }
 
-            inv.Title = (vm.Title ?? string.Empty).Trim();
+            inv.Title = trimmedTitle;
             inv.Description = string.IsNullOrWhiteSpace(vm.Description) ? null : vm.Description.Trim();
             inv.ImageUrl = string.IsNullOrWhiteSpace(vm.ImageUrl) ? null : vm.ImageUrl.Trim();
             inv.IsPublic = vm.IsPublic;
