@@ -155,7 +155,7 @@ namespace iLearning.Web.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost("owned/delete")]
-        public async Task<IActionResult> DeleteOwned([FromQuery] Guid[] ids)
+        public async Task<IActionResult> DeleteOwned([FromForm] Guid[] ids)
         {
             var userId = _current.GetUserId(User);
             if (!userId.HasValue) return RedirectToAction("Login", "Auth");
