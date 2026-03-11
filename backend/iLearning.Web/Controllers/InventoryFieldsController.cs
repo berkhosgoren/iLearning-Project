@@ -4,7 +4,6 @@ using iLearning.Web.Models.ViewModels.Inventories;
 using iLearning.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
 namespace iLearning.Web.Controllers
@@ -27,7 +26,10 @@ namespace iLearning.Web.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index(Guid inventoryId)
         {
-            var inv = await _db.Inventories.FirstOrDefaultAsync(i => i.Id == inventoryId);
+            var inv = await _db.Inventories
+                .AsNoTracking()
+                .FirstOrDefaultAsync(i => i.Id == inventoryId);
+
             if (inv == null) return NotFound();
 
             if (!CanEdit(inv)) return Forbid();
@@ -159,7 +161,7 @@ namespace iLearning.Web.Controllers
             }
 
             TempData["InventoryMessage"] = T["InventoryFields.Messages.FieldsUpdated"].Value;
-            return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "items" });
+            return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "fields" });
         }
 
         private bool CanEdit(Models.Domain.Inventory inv)
