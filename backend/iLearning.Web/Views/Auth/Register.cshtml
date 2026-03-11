@@ -51,7 +51,7 @@
                             <button type="submit" class="btn btn-outline-danger w-100">@T["Auth.External.Google"]</button>
                         </form>
 
-                        <form asp-action="ExternalLogin" asp-controller="Auth" asp-route-provider="GitHb" method="post">
+                        <form asp-action="ExternalLogin" asp-controller="Auth" asp-route-provider="GitHub" method="post">
                             @Html.AntiForgeryToken()
                             <button type="submit" class="btn btn-outline-secondary w-100">@T["Auth.External.GitHub"]</button>
                         </form>

@@ -300,6 +300,9 @@
   <data name="Auth.External.OrContinueWith" xml:space="preserve">
     <value>Или продолжить через</value>
   </data>
+  <data name="Auth.External.RemoteError" xml:space="preserve">
+    <value>Внешний вход не выполнен. Попробуйте снова.</value>
+  </data>
   <data name="Auth.Login.BackHome" xml:space="preserve">
     <value>На главную</value>
   </data>
@@ -330,7 +333,7 @@
   <data name="Auth.Register.Footer" xml:space="preserve">
     <value> Вход через Google и Facebook добавим позже.</value>
   </data>
-  <data name="Auth.Register.SuccessMessage" xml:space="preserve">
+  <data name="Auth.Register.Success" xml:space="preserve">
     <value>Регистрация прошла успешно. Теперь вы можете войти.</value>
   </data>
   <data name="Auth.Register.Title" xml:space="preserve">

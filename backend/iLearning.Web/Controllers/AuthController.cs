@@ -130,7 +130,7 @@ namespace iLearning.Web.Controllers
             var result = await HttpContext.AuthenticateAsync("External");
             if (!result.Succeeded || result.Principal is null)
             {
-                TempData["Message"] = T["Auth.External.Failed"];
+                TempData["Message"] = T["Auth.External.Failed"].Value;
                 return RedirectToAction(nameof(Login));
             }
 

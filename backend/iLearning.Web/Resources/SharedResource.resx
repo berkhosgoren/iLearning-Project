@@ -330,7 +330,7 @@
   <data name="Auth.Register.Footer" xml:space="preserve">
     <value>Google and Facebook will come after</value>
   </data>
-  <data name="Auth.Register.SuccessMessage" xml:space="preserve">
+  <data name="Auth.Register.Success" xml:space="preserve">
     <value>Registration successful. You can now sign in.</value>
   </data>
   <data name="Auth.Register.Title" xml:space="preserve">
@@ -1271,5 +1271,8 @@
   </data>
   <data name="Theme.Light" xml:space="preserve">
     <value>Light</value>
+  </data>
+  <data name="Auth.External.RemoteError" xml:space="preserve">
+    <value>External sign-in failed. Please try again.</value>
   </data>
 </root>

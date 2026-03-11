@@ -289,13 +289,13 @@ namespace iLearning.Web.Controllers
 
             if (!userId.HasValue || userId.Value == Guid.Empty)
             {
-                TempData["InventoryMessage"] = T["Inv.Err.SelectUser"].Value;
+                TempData["InventoryMessage"] = T["Inv.Access.Err.SelectUser"].Value;
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 
             if (userId.Value == inv.CreatorId)
             {
-                TempData["InventoryMessage"] = T["Inv.Err.OwnerAlreadyHasAccess"].Value;
+                TempData["InventoryMessage"] = T["Inv.Access.Err.OwnerAlreadyHasAccess"].Value;
                 return RedirectToAction(nameof(Details), new { id, tab = "access" });
             }
 

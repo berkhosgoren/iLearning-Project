@@ -173,7 +173,7 @@ namespace iLearning.Web.Controllers
             _db.Inventories.RemoveRange(ownedToDelete);
             await _db.SaveChangesAsync();
 
-            TempData["AccountMessage"] = T["Account.Message.OwnedDeleted", ownedToDelete.Count].Value;
+            TempData["AccountMessage"] = T["Account.Messages.OwnedDeleted", ownedToDelete.Count].Value;
             return RedirectToAction(nameof(Index));
         }
 
