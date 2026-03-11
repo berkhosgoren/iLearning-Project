@@ -444,6 +444,9 @@
   <data name="Common.Link3" xml:space="preserve">
     <value>Ссылка 3</value>
   </data>
+  <data name="Common.MaxLength" xml:space="preserve">
+    <value>Длина поля {0} не должна превышать {1}.</value>
+  </data>
   <data name="Common.Name" xml:space="preserve">
     <value>Имя</value>
   </data>

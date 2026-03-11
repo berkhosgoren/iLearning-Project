@@ -53,12 +53,47 @@ namespace iLearning.Web.Controllers
             }
 
             var trimmedTitle = (vm.Title ?? string.Empty).Trim();
+            var trimmedDescription = string.IsNullOrWhiteSpace(vm.Description) ? null : vm.Description.Trim();
+            var trimmedImageUrl = string.IsNullOrWhiteSpace(vm.ImageUrl) ? null : vm.ImageUrl.Trim();
+            var trimmedTagsCsv = string.IsNullOrWhiteSpace(vm.TagsCsv) ? null : vm.TagsCsv.Trim();
 
             if (string.IsNullOrWhiteSpace(trimmedTitle))
             {
                 return BadRequest(new
                 {
                     message = T["Common.Required", T["Inv.Title"]].Value
+                });
+            }
+
+            if (trimmedTitle.Length > 120)
+            {
+                return BadRequest(new
+                {
+                    message = T["Common.MaxLength", T["Inv.Title"], 120].Value
+                });
+            }
+
+            if (trimmedDescription != null && trimmedDescription.Length > 4000)
+            {
+                return BadRequest(new
+                {
+                    message = T["Common.MaxLength", T["Inv.Description"], 4000].Value
+                });
+            }
+
+            if (trimmedImageUrl != null && trimmedImageUrl.Length > 1000)
+            {
+                return BadRequest(new
+                {
+                    message = T["Common.MaxLength", T["Inv.ImageUrl"], 1000].Value
+                });
+            }
+
+            if (trimmedTagsCsv != null && trimmedTagsCsv.Length > 500)
+            {
+                return BadRequest(new
+                {
+                    message = T["Common.MaxLength", T["Inv.Tags"], 500].Value
                 });
             }
 
@@ -72,8 +107,8 @@ namespace iLearning.Web.Controllers
             }
 
             inv.Title = trimmedTitle;
-            inv.Description = string.IsNullOrWhiteSpace(vm.Description) ? null : vm.Description.Trim();
-            inv.ImageUrl = string.IsNullOrWhiteSpace(vm.ImageUrl) ? null : vm.ImageUrl.Trim();
+            inv.Description = trimmedDescription;
+            inv.ImageUrl = trimmedImageUrl;
             inv.IsPublic = vm.IsPublic;
             inv.CategoryId = vm.CategoryId;
 

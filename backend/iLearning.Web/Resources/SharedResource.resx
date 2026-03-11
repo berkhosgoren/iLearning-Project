@@ -444,6 +444,9 @@
   <data name="Common.Link3" xml:space="preserve">
     <value>Link 3</value>
   </data>
+  <data name="Common.MaxLength" xml:space="preserve">
+    <value>The field {0} must be a string or array type with a maximum length of '{1}'.</value>
+  </data>
   <data name="Common.Name" xml:space="preserve">
     <value>Name</value>
   </data>
