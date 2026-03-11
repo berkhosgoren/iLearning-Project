@@ -8,6 +8,7 @@ namespace iLearning.Web.Models.ViewModels.Inventories
 
         [MaxLength(120)]
         [Display(Name = "Inv.Title")]
+        [Required(ErrorMessage = "Validation.Required")]
         public string Title { get; set; } = string.Empty;
 
         [MaxLength(4000)]

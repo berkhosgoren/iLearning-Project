@@ -1278,4 +1278,13 @@
   <data name="Theme.Light" xml:space="preserve">
     <value>Светлую</value>
   </data>
+  <data name="Validation.MaxLength" xml:space="preserve">
+    <value>Введите не более {0} символов.</value>
+  </data>
+  <data name="Validation.Number" xml:space="preserve">
+    <value>Введите корректное число.</value>
+  </data>
+  <data name="Validation.Required" xml:space="preserve">
+    <value>Поле "{0}" обязательно.</value>
+  </data>
 </root>
