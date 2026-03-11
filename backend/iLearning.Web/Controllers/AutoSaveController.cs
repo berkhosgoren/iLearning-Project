@@ -218,8 +218,18 @@ namespace iLearning.Web.Controllers
             inv.CustomLink3Enabled = vm.CustomLink3Enabled;
             inv.CustomLink3Name = NormalizeFieldName(vm.CustomLink3Enabled, vm.CustomLink3Name);
 
-            inv.Version += 1;
-            await _db.SaveChangesAsync();
+            try
+            {
+                inv.Version += 1;
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, new
+                {
+                    message = T["Common.Errors.CouldNotSave"].Value
+                });
+            }
 
             return Json(new
             {
