@@ -922,7 +922,7 @@ namespace iLearning.Web.Controllers
                 return currentValue;
             }
 
-            vmRemoveModelStateError(key);
+            ClearFieldModelStateError(key);
 
             var cultureText = parsed.ToString(CultureInfo.CurrentCulture);
             ModelState.SetModelValue(key, new ValueProviderResult(cultureText));
@@ -930,7 +930,7 @@ namespace iLearning.Web.Controllers
             return parsed;
         }
 
-        private void vmRemoveModelStateError(string key)
+        private void ClearFieldModelStateError(string key)
         {
             if (ModelState.TryGetValue(key, out var entry)) 
             {

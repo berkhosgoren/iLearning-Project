@@ -10,11 +10,9 @@ namespace iLearning.Web.Models.ViewModels.Items
 
         public int Version { get; set; }
 
-        [Required(ErrorMessage = "Common.Required")]
         [MaxLength(200)]
         public string CustomId { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Common.Required")] 
         [MaxLength(200)]
         public string Title {  get; set; } = string.Empty;
 
