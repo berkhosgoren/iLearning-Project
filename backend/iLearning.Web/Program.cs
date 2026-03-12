@@ -1,5 +1,4 @@
 using iLearning.Web.Data;
-using iLearning.Web.Security;
 using iLearning.Web.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;

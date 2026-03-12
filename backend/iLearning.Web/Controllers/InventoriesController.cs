@@ -7,7 +7,6 @@ using iLearning.Web.Services;
 using iLearning.Web.Models.Domain;
 using iLearning.Web.Models.ViewModels.Items;
 using Microsoft.Extensions.Localization;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace iLearning.Web.Controllers
 {
