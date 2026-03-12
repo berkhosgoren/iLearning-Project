@@ -39,6 +39,14 @@ logs/
 **/.next
 **/.nuxt/
 
+!backend/iLearning.Web/wwwroot/lib/
+!backend/iLearning.Web/wwwroot/lib/bootstrap/
+!backend/iLearning.Web/wwwroot/lib/bootstrap/dist/
+!backend/iLearning.Web/wwwroot/lib/bootstrap/dist/**
+!backend/iLearning.Web/wwwroot/lib/jquery/
+!backend/iLearning.Web/wwwroot/lib/jquery/dist/
+!backend/iLearning.Web/wwwroot/lib/jquery/dist/**
+
 **/.docker/
 **/docker-data/
 **/pgdata/
