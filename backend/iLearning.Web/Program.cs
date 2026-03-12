@@ -129,6 +129,7 @@ localizationOptions.RequestCultureProviders = new List<IRequestCultureProvider>
     new AcceptLanguageHeaderRequestCultureProvider()
 };
 
+app.UseStaticFiles();
 app.UseRouting();
 
 app.UseRequestLocalization(localizationOptions);
@@ -136,11 +137,8 @@ app.UseRequestLocalization(localizationOptions);
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapStaticAssets();
-
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
