@@ -187,7 +187,7 @@
     <value>Админ</value>
   </data>
   <data name="Admin.Users.Col.Blocked" xml:space="preserve">
-    <value> Блок</value>
+    <value>Блок</value>
   </data>
   <data name="Admin.Users.Col.Created" xml:space="preserve">
     <value>Создан</value>
@@ -406,7 +406,7 @@
     <value>Описание</value>
   </data>
   <data name="Common.Direction" xml:space="preserve">
-    <value> Направление</value>
+    <value>Направление</value>
   </data>
   <data name="Common.Email" xml:space="preserve">
     <value>Email</value>
@@ -583,7 +583,7 @@
     <value>Публичные инвентари, отсортированные по недавней активности.</value>
   </data>
   <data name="Home.Popular.Title" xml:space="preserve">
-    <value>опулярные инвентари</value>
+    <value>Популярные инвентари</value>
   </data>
   <data name="Home.PublicInventories.Empty" xml:space="preserve">
     <value>Инвентари не найдены.</value>
@@ -982,7 +982,7 @@
     <value>автор</value>
   </data>
   <data name="InvDetails.Description" xml:space="preserve">
-    <value> Описание</value>
+    <value>Описание</value>
   </data>
   <data name="InvDetails.EditInventory" xml:space="preserve">
     <value>Редактировать инвентарь</value>
@@ -1268,9 +1268,6 @@
   </data>
   <data name="Search.Title" xml:space="preserve">
     <value>Поиск</value>
-  </data>
-  <data name="String1Auth.External.RemoteError" xml:space="preserve">
-    <value>Внешний вход не выполнен. Попробуйте снова.</value>
   </data>
   <data name="Theme.Dark" xml:space="preserve">
     <value>Тёмную</value>

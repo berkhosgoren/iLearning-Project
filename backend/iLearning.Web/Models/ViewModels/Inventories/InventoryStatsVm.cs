@@ -21,7 +21,6 @@ namespace iLearning.Web.Models.ViewModels.Inventories
     {
         public Guid ItemId { get; set; }
 
-        [Display(Name = "Custom ID")]
         public string CustomId { get; set; } = "";
 
         public string Title { get; set; } = "";
