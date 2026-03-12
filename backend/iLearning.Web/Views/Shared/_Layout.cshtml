@@ -38,7 +38,7 @@
                             </li>
                         </ul>
 
-                        <form class="d-flex flex-grow-1" method="get" action="/search" role="search">
+                        <form class="d-flex flex-grow-1" method="get" asp-controller="Search" asp-action="Index" role="search">
                         <input class="form-control me-2" name="q" type="search" placeholder="@T["Nav.SearchPlaceholder"]"
                                     value="@Context.Request.Query["q"]" aria-label="@T["Nav.SearchAria"]">
                         <button class="btn btn-outline-primary" type="submit">@T["Nav.SearchButton"]</button>
@@ -167,8 +167,8 @@
                                     </ul>
                                 </div>
 
-                            <a class="btn btn-outline-secondary" href="/auth/login">@T["Nav.Login"]</a>
-                            <a class="btn btn-primary" href="/auth/register">@T["Nav.Register"]</a>
+                            <a class="btn btn-outline-secondary" asp-controller="Auth" asp-action="Login">@T["Nav.Login"]</a>
+                            <a class="btn btn-primary" asp-controller="Auth" asp-action="Register">@T["Nav.Register"]</a>
                             }
                         </div>
                     </div>

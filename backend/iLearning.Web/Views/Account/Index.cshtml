@@ -85,7 +85,7 @@
                         @if (Model.Owned.Count == 0)
                         {
                             <tr>
-                                <td colspan="5" class="text-muted text-center py-4">@T["Common.NoInventories"]</td>
+                                <td colspan="@(Model.IsAdmin? 6 : 5)" class="text-muted text-center py-4">@T["Common.NoInventories"]</td>
                             </tr>
                         }
                         else
@@ -322,7 +322,6 @@
             const rows = () => Array.from(document.querySelectorAll('.ownedRow'));
             const label = document.getElementById('ownedSelectedLabel');
             const delBtn = document.getElementById('ownedDeleteBtn');
-            const form = document.getElementById('ownedDeleteForm');
 
             const selectedLabel = @Html.Raw(JsonSerializer.Serialize(T["Common.SelectedLabel"].Value));
 
