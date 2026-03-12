@@ -274,7 +274,7 @@
     <value>Доступ запрещён</value>
   </data>
   <data name="Auth.Errors.EmailExists" xml:space="preserve">
-    <value>Этот email уже зарегистрирован.</value>
+    <value>Этот адрес электронной почты уже зарегистрирован.</value>
   </data>
   <data name="Auth.Errors.InvalidCredentials" xml:space="preserve">
     <value>Неверные учетные данные.</value>
@@ -292,10 +292,10 @@
     <value>Продолжить через Google</value>
   </data>
   <data name="Auth.External.MissingEmail" xml:space="preserve">
-    <value>Внешний сервис не передал email аккаунта.</value>
+    <value>Адрес электронной почты внешнего аккаунта не был предоставлен.</value>
   </data>
   <data name="Auth.External.MissingId" xml:space="preserve">
-    <value>Внешний сервис не передал идентификатор аккаунта.</value>
+    <value>Идентификатор внешнего аккаунта не был предоставлен.</value>
   </data>
   <data name="Auth.External.OrContinueWith" xml:space="preserve">
     <value>Или продолжить через</value>
@@ -1279,7 +1279,7 @@
     <value>Введите корректное число.</value>
   </data>
   <data name="Validation.Required" xml:space="preserve">
-    <value>Поле "{0}" обязательно.</value>
+    <value>Поле «{0}» обязательно.</value>
   </data>
   <data name="Validation.MaxLength" xml:space="preserve">
     <value>Введите не более {0} символов.</value>

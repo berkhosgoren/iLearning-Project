@@ -163,7 +163,7 @@
     <value>No admin role changes.</value>
   </data>
   <data name="Admin.Users.AdminRoleNotFound" xml:space="preserve">
-    <value>Admin role not found.</value>
+    <value>Admin Role Not Found.</value>
   </data>
   <data name="Admin.Users.AdminRoleRemoved" xml:space="preserve">
     <value>Removed admin role from {0} user(s). </value>
@@ -274,16 +274,16 @@
     <value>Access Denied</value>
   </data>
   <data name="Auth.Errors.EmailExists" xml:space="preserve">
-    <value>Email is already registered.</value>
+    <value>Email is Already Registered.</value>
   </data>
   <data name="Auth.Errors.InvalidCredentials" xml:space="preserve">
     <value>Invalid credentials.</value>
   </data>
   <data name="Auth.Errors.UserBlocked" xml:space="preserve">
-    <value>User is blocked.</value>
+    <value>User is Blocked.</value>
   </data>
   <data name="Auth.External.Failed" xml:space="preserve">
-    <value>External sign-in could not be completed.</value>
+    <value>External Sign-In Could Not Be Completed.</value>
   </data>
   <data name="Auth.External.GitHub" xml:space="preserve">
     <value>Continue with GitHub</value>
@@ -292,10 +292,10 @@
     <value>Continue with Google</value>
   </data>
   <data name="Auth.External.MissingEmail" xml:space="preserve">
-    <value>External account email was not provided.</value>
+    <value>External Account Email Was Not Provided.</value>
   </data>
   <data name="Auth.External.MissingId" xml:space="preserve">
-    <value>External account id was not provided.</value>
+    <value>External Account ID Was Not Provided.</value>
   </data>
   <data name="Auth.External.OrContinueWith" xml:space="preserve">
     <value>Or continue with</value>
@@ -415,7 +415,7 @@
     <value>Empty Option</value>
   </data>
   <data name="Common.Errors.CouldNotSave" xml:space="preserve">
-    <value>Could not save. Try again.</value>
+    <value>Could Not Save. Try Again.</value>
   </data>
   <data name="Common.False" xml:space="preserve">
     <value>False</value>
@@ -481,7 +481,7 @@
     <value>Public</value>
   </data>
   <data name="Common.Required" xml:space="preserve">
-    <value>The {0} field is required.</value>
+    <value>The {0} Field Is Required.</value>
   </data>
   <data name="Common.Save" xml:space="preserve">
     <value>Save</value>
@@ -637,10 +637,10 @@
     <value>Please select a user from the suggestions.</value>
   </data>
   <data name="Inv.Access.Err.UserBlocked" xml:space="preserve">
-    <value>That user is blocked.</value>
+    <value>That User Is Blocked.</value>
   </data>
   <data name="Inv.Access.Err.UserNotFound" xml:space="preserve">
-    <value>User not found.</value>
+    <value>User Not Found.</value>
   </data>
   <data name="Inv.Access.HelpText" xml:space="preserve">
     <value>Access rows are for non-owners. Owner and admins can always edit.</value>
@@ -661,7 +661,7 @@
     <value>Access updated.</value>
   </data>
   <data name="Inv.Access.NoPermission" xml:space="preserve">
-    <value>You do not have permission to manage access.</value>
+    <value>You Do Not Have Permission To Manage Access.</value>
   </data>
   <data name="Inv.Access.Permission.CanWrite" xml:space="preserve">
     <value>Can Write</value>
@@ -724,7 +724,7 @@
     <value>Padding length for the numeric part (1 to 8). Default is 4.</value>
   </data>
   <data name="Inv.CustomId.DigitsRange" xml:space="preserve">
-    <value>Digits must be between 1 and 8.</value>
+    <value>Digits Must Be Between 1 And 8.</value>
   </data>
   <data name="Inv.CustomId.Enabled" xml:space="preserve">
     <value>Enable custom ID format for items.</value>
@@ -748,7 +748,7 @@
     <value>Next number</value>
   </data>
   <data name="Inv.CustomId.NotAvailable" xml:space="preserve">
-    <value>Custom ID settings are not available.</value>
+    <value>Custom ID Settings Are Not Available.</value>
   </data>
   <data name="Inv.CustomId.Prefix" xml:space="preserve">
     <value>Prefix (optional)</value>
@@ -1168,7 +1168,7 @@
     <value>Custom ID already exists in this inventory.</value>
   </data>
   <data name="Items.Errors.CustomIdFormat" xml:space="preserve">
-    <value>Custom ID must match the inventory custom ID format.</value>
+    <value>Custom ID Must Match The Inventory Custom ID Format.</value>
   </data>
   <data name="Items.Messages.BulkDeleted" xml:space="preserve">
     <value>Deleted {0} item(s).</value>
@@ -1180,7 +1180,7 @@
     <value>Comment deleted.</value>
   </data>
   <data name="Items.Messages.CommentEmpty" xml:space="preserve">
-    <value>Comment cannot be empty.</value>
+    <value>Comment Cannot Be Empty.</value>
   </data>
   <data name="Items.Messages.Created" xml:space="preserve">
     <value>Item created.</value>
@@ -1279,7 +1279,7 @@
     <value>Please enter a valid number.</value>
   </data>
   <data name="Validation.Required" xml:space="preserve">
-    <value>{0} is required.</value>
+    <value>{0} Is Required.</value>
   </data>
   <data name="Validation.MaxLength" xml:space="preserve">
     <value>Please enter no more than {0} characters.</value>
