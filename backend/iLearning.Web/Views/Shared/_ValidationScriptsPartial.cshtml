@@ -18,6 +18,8 @@
 
         jQuery.validator.messages.required = `@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(T["Validation.Required"].Value))`;
         jQuery.validator.messages.number = `@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(T["Validation.Number"].Value))`;
+        jQuery.validator.messages.email = `@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(T["Validation.Email"].Value))`;
         jQuery.validator.messages.maxlength = jQuery.validator.format(`@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(T["Validation.MaxLength"].Value))`);
+        jQuery.validator.messages.minlength = jQuery.validator.format(`@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(T["Validation.MinLength"].Value))`);
     })();
 </script>

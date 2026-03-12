@@ -1287,4 +1287,10 @@
   <data name="Validation.MaxLength" xml:space="preserve">
     <value>Please enter no more than {0} characters.</value>
   </data>
+  <data name="Validation.Email" xml:space="preserve">
+    <value>Please enter a valid email address.</value>
+  </data>
+  <data name="Validation.MinLength" xml:space="preserve">
+    <value>Please enter at least {0} characters.</value>
+  </data>
 </root>

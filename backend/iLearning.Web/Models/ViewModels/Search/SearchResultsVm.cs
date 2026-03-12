@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace iLearning.Web.Models.ViewModels.Search
+﻿namespace iLearning.Web.Models.ViewModels.Search
 {
     public class SearchResultsVm
     {
@@ -19,8 +17,8 @@ namespace iLearning.Web.Models.ViewModels.Search
         public string Title { get; set; } = "";
         public string? Description { get; set; }
 
-        public string CategoryName { get; set; } = "Other";
-        public string CreatorName { get; set; } = "Unknown";
+        public string CategoryName { get; set; } = "";
+        public string CreatorName { get; set; } = "";
         public bool IsPublic { get; set; }
 
         public DateTime CreatedAtUtc { get; set; }

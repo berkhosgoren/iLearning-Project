@@ -6,6 +6,17 @@
     var msg = TempData["InventoryMessage"] as string;
 
     string Label(string? custom, string fallbackKey) => !string.IsNullOrWhiteSpace(custom) ? custom! : T[fallbackKey].Value;
+
+    bool IsSafeAbsoluteHttpUrl(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return false;
+
+        if (!Uri.TryCreate(value, UriKind.Absolute, out var uri))
+            return false;
+
+        return uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps;
+    }
 }
 
 <div class="container py-4">
@@ -169,7 +180,7 @@
                 {
                     <dt class="col-sm-3">@Label(Model.Fields.Link1Name, "Common.Link1")</dt>
                     <dd class="col-sm-9">
-                        @if (!string.IsNullOrWhiteSpace(Model.Link1))
+                        @if (IsSafeAbsoluteHttpUrl(Model.Link1))
                         {
                             <a href="@Model.Link1" target="_blank" rel="noopener noreferrer">@Model.Link1</a>
                         }
@@ -183,7 +194,7 @@
                 {
                     <dt class="col-sm-3">@Label(Model.Fields.Link2Name, "Common.Link2")</dt>
                     <dd class="col-sm-9">
-                        @if (!string.IsNullOrWhiteSpace(Model.Link2))
+                        @if (IsSafeAbsoluteHttpUrl(Model.Link2))
                         {
                             <a href="@Model.Link2" target="_blank" rel="noopener noreferrer">@Model.Link2</a>
                         }
@@ -197,7 +208,7 @@
                 {
                     <dt class="col-sm-3">@Label(Model.Fields.Link3Name, "Common.Link3")</dt>
                     <dd class="col-sm-9">
-                        @if (!string.IsNullOrWhiteSpace(Model.Link3))
+                        @if (IsSafeAbsoluteHttpUrl(Model.Link3))
                         {
                             <a href="@Model.Link3" target="_blank" rel="noopener noreferrer">@Model.Link3</a>
                         }
