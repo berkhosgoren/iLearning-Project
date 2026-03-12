@@ -61,7 +61,7 @@ namespace iLearning.Web.Security
                 outputLength: expectedKey.Length
                 );
 
-            return CryptographicOperations.FixedTimeEquals( actualKey, expectedKey );
+            return CryptographicOperations.FixedTimeEquals(actualKey, expectedKey);
                 
         }
     }

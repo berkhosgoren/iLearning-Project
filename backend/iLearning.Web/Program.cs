@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc.Razor;
 using iLearning.Web;
 
 
