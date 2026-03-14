@@ -1290,4 +1290,7 @@
   <data name="Validation.MinLength" xml:space="preserve">
     <value>Введите не менее {0} символов.</value>
   </data>
+  <data name="Items.Messages.CustomIdRefreshed" xml:space="preserve">
+    <value>Пользовательский ID был обновлён до следующего доступного значения. Проверьте форму и отправьте её снова.</value>
+  </data>
 </root>

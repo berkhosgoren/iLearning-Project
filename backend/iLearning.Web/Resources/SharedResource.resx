@@ -1290,4 +1290,7 @@
   <data name="Validation.MinLength" xml:space="preserve">
     <value>Please enter at least {0} characters.</value>
   </data>
+  <data name="Items.Messages.CustomIdRefreshed" xml:space="preserve">
+    <value>Custom ID was refreshed to the next available value. Please review and submit again.</value>
+  </data>
 </root>

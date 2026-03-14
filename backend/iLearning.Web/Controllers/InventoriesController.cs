@@ -472,10 +472,16 @@ namespace iLearning.Web.Controllers
             var next = vm.NextNumber;
             if (next < 1) next = 1;
 
+            var reconciledNext = next;
+            if (vm.Enabled)
+            {
+                reconciledNext = await GetSafeNextCustomIdNumberAsync(id, prefix, digits, next);
+            }
+
             inv.ItemCustomIdEnabled = vm.Enabled;
             inv.ItemCustomIdPrefix = string.IsNullOrWhiteSpace(prefix) ? null : prefix;
             inv.ItemCustomIdDigits = digits;
-            inv.ItemCustomIdNextNumber = next;
+            inv.ItemCustomIdNextNumber = reconciledNext;
 
             inv.Version += 1;
             await _db.SaveChangesAsync();
@@ -793,6 +799,67 @@ namespace iLearning.Web.Controllers
 
             var numeric = number.ToString().PadLeft(digits, '0');
             return string.IsNullOrWhiteSpace(p) ? numeric : $"{p}-{numeric}";
+        }
+
+        private async Task<int> GetSafeNextCustomIdNumberAsync(Guid inventoryId, string? prefix, int digits, int proposedNext)
+        {
+            if (proposedNext < 1) proposedNext = 1;
+            if (digits < 1) digits = 1;
+            if (digits > 8) digits = 8;
+
+            var customIds = await _db.Items
+                .AsNoTracking()
+                .Where(x => x.InventoryId == inventoryId)
+                .Select(x => x.CustomId)
+                .ToListAsync();
+
+            var maxUsedNumber = 0;
+
+            foreach (var customId in customIds)
+            {
+                if (!TryExtractMatchingCustomIdNumber(customId, prefix, digits, out var number))
+                    continue;
+
+                if (number > maxUsedNumber)
+                    maxUsedNumber = number;
+            }
+
+            var minSafeNext = maxUsedNumber + 1;
+            return Math.Max(proposedNext, minSafeNext);
+        }
+
+        private static bool TryExtractMatchingCustomIdNumber(string? customId, string? prefix, int digits, out int number)
+        {
+            number = 0;
+
+            var value = (customId ?? "").Trim();
+            if (string.IsNullOrWhiteSpace(value)) 
+                return false;
+
+            var normalizedPrefix = (prefix ?? "").Trim();
+
+            string numericPart;
+
+            if (string.IsNullOrWhiteSpace(normalizedPrefix))
+            {
+                numericPart = value;
+            }
+            else
+            {
+                var expectedStart = normalizedPrefix + "-";
+                if (!value.StartsWith(expectedStart, StringComparison.OrdinalIgnoreCase))
+                    return false;
+
+                numericPart = value.Substring(expectedStart.Length);
+            }
+
+            if (numericPart.Length != digits)
+                return false;
+
+            if (!numericPart.All(char.IsDigit))
+                return false;
+
+            return int.TryParse(numericPart, out number);
         }
     }
 }

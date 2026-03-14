@@ -19,6 +19,11 @@
                 @Html.AntiForgeryToken()
                 <input type="hidden" asp-for="InventoryId" />
 
+                @if (ViewData["CustomIdRefreshMessage"] is string customIdRefreshMessage && !string.IsNullOrWhiteSpace(customIdRefreshMessage))
+                    {
+                        <div class="alert alert-info mb-2">@customIdRefreshMessage</div>
+                    }
+
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
 
                 <partial name="_UpsertForm" model="Model" />

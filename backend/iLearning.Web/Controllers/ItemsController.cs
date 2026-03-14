@@ -122,8 +122,7 @@ namespace iLearning.Web.Controllers
 
             if (customIdExists)
             {
-                ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
-                vm.IsCreateMode = true;
+                await CreateCustomIdAfterConflictAsync(inventoryId, inv, vm);    
                 return View(vm); 
             }
 
@@ -171,8 +170,7 @@ namespace iLearning.Web.Controllers
             }
             catch (DbUpdateException)
             {
-                ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
-                vm.IsCreateMode = true;
+                await CreateCustomIdAfterConflictAsync(inventoryId, inv, vm);
                 return View(vm);
             }
 
@@ -573,6 +571,7 @@ namespace iLearning.Web.Controllers
             try
             {
                 await _db.SaveChangesAsync();
+                await TryAdvanceInventoryCustomIdAsync(inventoryId, vm.CustomId);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -899,6 +898,34 @@ namespace iLearning.Web.Controllers
             }
 
             return System.Text.RegularExpressions.Regex.IsMatch(value, expected);                         
+        }
+
+        private async Task CreateCustomIdAfterConflictAsync(Guid inventoryId, Inventory inv, ItemUpsertVm vm)
+        {
+            vm.IsCreateMode = true;
+
+            if (!inv.ItemCustomIdEnabled)
+            {
+                ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
+                return;
+            }
+
+            var refreshedCustomId = await BuildSuggestedCustomIdAsync(inventoryId);
+            vm.SuggestedCustomId = refreshedCustomId;
+
+            ModelState.Remove(nameof(vm.CustomId));
+
+            if (string.IsNullOrWhiteSpace(refreshedCustomId))
+            {
+                vm.CustomId = string.Empty;
+                ModelState.AddModelError(nameof(vm.CustomId), T["Items.Errors.CustomIdExists"]);
+                return;
+            }
+
+            vm.CustomId = refreshedCustomId;
+            ModelState.SetModelValue(nameof(vm.CustomId), new ValueProviderResult(vm.CustomId));
+
+            ViewData["CustomIdRefreshMessage"] = T["Items.Messages.CustomIdRefreshed"].Value;
         }
 
         private void NormalizeDecimalInputs(ItemUpsertVm vm)
