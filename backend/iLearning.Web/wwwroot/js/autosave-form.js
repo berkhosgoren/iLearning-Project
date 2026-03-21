@@ -152,22 +152,6 @@
             }
         });
 
-        form.addEventListener('submit', function (e) {
-            const submitter = e.submitter;
-
-            if (submitter && submitter.hasAttribute('data-autosave-ignore')) {
-                manualSubmitInProgress = true;
-
-                if (timer) {
-                    clearTimeout(timer);
-                    timer = null;
-                }
-
-                hasPending = false;
-                return;
-            }
-        });
-
         lastPayload = buildPayloadKey(serializeForm());
         setStatus('ready');
     }

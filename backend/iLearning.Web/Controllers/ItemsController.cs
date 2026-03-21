@@ -127,7 +127,7 @@ namespace iLearning.Web.Controllers
             }
 
             var userId = _current.GetUserId(User);
-            if (!userId.HasValue) return RedirectToAction("login", "Auth");
+            if (!userId.HasValue) return RedirectToAction("Login", "Auth");
 
             var item = new Item
             {
@@ -301,7 +301,7 @@ namespace iLearning.Web.Controllers
             if (!canRead) return Forbid();
 
             var userId = _current.GetUserId(User);
-            if (!userId.HasValue) return RedirectToAction("login", "Auth");
+            if (!userId.HasValue) return RedirectToAction("Login", "Auth");
 
             var itemExists = await _db.Items
                 .AsNoTracking()
@@ -342,7 +342,7 @@ namespace iLearning.Web.Controllers
             if (!canRead) return Forbid();
 
             var userId = _current.GetUserId(User);
-            if (!userId.HasValue) return RedirectToAction("login", "Auth");
+            if (!userId.HasValue) return RedirectToAction("Login", "Auth");
 
             var text = (body ?? "").Trim();
             if (string.IsNullOrWhiteSpace(text))
@@ -390,7 +390,7 @@ namespace iLearning.Web.Controllers
             var isAdmin = _current.IsAdmin(User);
 
             if (!isAuthenticated || !userId.HasValue)
-                return RedirectToAction("login", "Auth");
+                return RedirectToAction("Login", "Auth");
 
             var canRead = inv.IsPublic || isAdmin || inv.CreatorId == userId.Value 
                 || await _db.InventoryAccesses.AsNoTracking().AnyAsync(a => a.InventoryId == inventoryId && a.UserId == userId.Value);
@@ -538,7 +538,7 @@ namespace iLearning.Web.Controllers
             }
 
             var userId = _current.GetUserId(User);
-            if (!userId.HasValue) return RedirectToAction("login", "Auth");
+            if (!userId.HasValue) return RedirectToAction("Login", "Auth");
 
             item.CustomId = vm.CustomId;
             item.Title = vm.Title;
@@ -647,39 +647,6 @@ namespace iLearning.Web.Controllers
 
             TempData["InventoryMessage"] = T["Items.Messages.BulkDeleted", itemsToDelete.Count].Value;
             return RedirectToAction("Details", "Inventories", new { id = inventoryId, tab = "items" });
-        }
-
-        [HttpGet("suggest-customid")]
-        public async Task<IActionResult> SuggestCustomId(Guid inventoryId)
-        {
-            var canWrite = await CanWriteInventoryAsync(inventoryId);
-            if (!canWrite) return Forbid();
-
-            var cfg = await _db.Inventories
-                .AsNoTracking()
-                .Where(i => i.Id == inventoryId)
-                .Select(i => new
-                {
-                    i.ItemCustomIdEnabled,
-                    Prefix = i.ItemCustomIdPrefix,
-                    Digits = i.ItemCustomIdDigits,
-                    NextNumber = i.ItemCustomIdNextNumber
-                })
-                .FirstOrDefaultAsync();
-
-            if (cfg == null) return NotFound();
-
-            if (!cfg.ItemCustomIdEnabled)
-                return Json(new { suggested = "" });
-
-            var prefix = (cfg.Prefix ?? "").Trim();
-            var digits = cfg.Digits < 1 ? 1 : (cfg.Digits > 8 ? 8 : cfg.Digits);
-            var next = cfg.NextNumber < 1 ? 1 : cfg.NextNumber;
-
-            var numeric = next.ToString().PadLeft(digits, '0');
-            var suggested = string.IsNullOrWhiteSpace(prefix) ? numeric : $"{prefix}-{numeric}";
-
-            return Json(new { suggested });
         }
 
         private async Task<bool> CanWriteInventoryAsync(Guid inventoryId)
