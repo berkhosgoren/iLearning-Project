@@ -31,7 +31,7 @@ namespace iLearning.Web.Controllers
             if (!canRead) return Forbid();
 
             var userId = _current.GetUserId(User);
-            if (!userId.HasValue) return RedirectToAction("login", "Auth");
+            if (!userId.HasValue) return RedirectToAction("Login", "Auth");
 
             var text = (body ?? "").Trim();
             if (string.IsNullOrWhiteSpace(text))
@@ -73,7 +73,7 @@ namespace iLearning.Web.Controllers
             var isAdmin = _current.IsAdmin(User);
 
             if (!isAuthenticated || !userId.HasValue)
-                return RedirectToAction("login", "Auth");
+                return RedirectToAction("Login", "Auth");
 
             var canRead = inv.IsPublic || isAdmin || inv.CreatorId == userId.Value 
                 || await _db.InventoryAccesses.AsNoTracking().AnyAsync(a => a.InventoryId == inventoryId && a.UserId == userId.Value);
