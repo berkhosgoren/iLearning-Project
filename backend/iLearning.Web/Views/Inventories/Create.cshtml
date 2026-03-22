@@ -13,7 +13,7 @@
 
     <div class="card">
         <div class="card-body">
-            <form method="post" asp-action="Create">
+            <form method="post" asp-action="Create" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 

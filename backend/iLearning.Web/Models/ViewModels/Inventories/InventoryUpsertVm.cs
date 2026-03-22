@@ -18,6 +18,8 @@ namespace iLearning.Web.Models.ViewModels.Inventories
         [MaxLength(1000)]
         [Display(Name = "Inv.ImageUrl")]
         public string? ImageUrl { get; set; }
+        [Display(Name = "Inv.ImageUpload")]
+        public IFormFile? ImageFile { get; set; }
 
         [Display(Name = "Inv.Category")]
         public int CategoryId { get; set; }

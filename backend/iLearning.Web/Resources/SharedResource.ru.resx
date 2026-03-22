@@ -1341,4 +1341,25 @@
   <data name="InventoryStats.Csv.Rank" xml:space="preserve">
     <value>Место</value>
   </data>
+  <data name="Inv.ImageUpload" xml:space="preserve">
+    <value>Файл изображения</value>
+  </data>
+  <data name="Inv.Form.ImageUploadHint" xml:space="preserve">
+    <value>Выберите файл изображения для загрузки в облако. Поддерживаются: JPG, PNG, GIF, WEBP. Максимум 5 МБ.</value>
+  </data>
+  <data name="Inv.Form.ImageUploadSaveOnlyHint" xml:space="preserve">
+    <value>Файл изображения загружается только при нажатии кнопки «Сохранить». Автосохранение не отправляет файлы.</value>
+  </data>
+  <data name="Inv.Form.CurrentImage" xml:space="preserve">
+    <value>Текущее изображение</value>
+  </data>
+  <data name="Inv.ImageUpload.InvalidType" xml:space="preserve">
+    <value>Пожалуйста, выберите корректный файл изображения.</value>
+  </data>
+  <data name="Inv.ImageUpload.TooLarge" xml:space="preserve">
+    <value>Файл изображения слишком большой. Максимально допустимый размер: {0} МБ.</value>
+  </data>
+  <data name="Inv.ImageUpload.UploadFailed" xml:space="preserve">
+    <value>Не удалось загрузить изображение. Попробуйте ещё раз</value>
+  </data>
 </root>

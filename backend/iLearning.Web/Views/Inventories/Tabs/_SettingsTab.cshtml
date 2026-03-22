@@ -24,7 +24,7 @@ else
     </div>
 
     <form method="post" asp-controller="Inventories" asp-action="Edit" asp-route-id="@Model.Id"
-          id="inventorySettingsForm" data-autosave="true">
+          id="inventorySettingsForm" data-autosave="true" enctype="multipart/form-data">
         @Html.AntiForgeryToken()
 
         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
@@ -33,6 +33,10 @@ else
         <input type="hidden" name="Version" value="@Model.SettingsVm.Version" />
 
         <partial name="~/Views/Inventories/_UpsertForm.cshtml" model="Model.SettingsVm" />
+
+        <div class="form-text mb-3">
+            @T["Inv.Form.ImageUploadSaveOnlyHint"]
+        </div>
 
         <div class="d-flex gap-2 mt-4">
             <button type="submit" class="btn btn-primary" data-autosave-ignore="true">@T["Inv.Edit.Save"]</button>

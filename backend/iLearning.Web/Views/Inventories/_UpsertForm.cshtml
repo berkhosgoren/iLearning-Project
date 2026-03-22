@@ -19,11 +19,18 @@
 </div>
 
 <div class="mb-3">
-    <label asp-for="ImageUrl" class="form-label"></label>
-    <input asp-for="ImageUrl" class="form-control" />
-    <div class="form-text">@T["Inv.Form.ImageHint"]</div>
-    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+    <label asp-for="ImageFile" class="form-label"></label>
+    <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" data-autosave-ignore-field="true" />
+    <div class="form-text">@T["Inv.Form.ImageUploadHint"]</div>
 </div>
+
+@if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+{
+    <div class="mb-3">
+        <div class="form-text mb-2">@T["Inv.Form.CurrentImage"]</div>
+        <img src ="@Model.ImageUrl" alt="@Model.Title" class="img-fluid rounded border" style="max-height: 240px;" />
+    </div>
+}
 
 <div class="row g-3">
     <div class="col-md-6">

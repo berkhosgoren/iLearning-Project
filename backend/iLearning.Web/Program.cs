@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Localization;
 using iLearning.Web;
 using Microsoft.AspNetCore.HttpOverrides;
 using iLearning.Web.Services.Email;
+using iLearning.Web.Services.Images;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,8 +47,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<CurrentUserService>();
 builder.Services.AddScoped<DbSeeder>();
 builder.Services.AddScoped<IMarkdownService, MarkdownService>();
+
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
 builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+
+builder.Services.Configure<CloudinaryOptions>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddScoped<IInventoryImageService, CloudinaryInventoryImageService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

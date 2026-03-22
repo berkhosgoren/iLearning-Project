@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace iLearning.Web.Models.ViewModels.Inventories
+﻿namespace iLearning.Web.Models.ViewModels.Inventories
 {
     public class InventoryStatsVm
     {

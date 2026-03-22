@@ -7,6 +7,7 @@ using iLearning.Web.Services;
 using iLearning.Web.Models.Domain;
 using iLearning.Web.Models.ViewModels.Items;
 using Microsoft.Extensions.Localization;
+using iLearning.Web.Services.Images;
 
 namespace iLearning.Web.Controllers
 {
@@ -17,13 +18,26 @@ namespace iLearning.Web.Controllers
         private readonly CurrentUserService _currentUser;
         private readonly IMarkdownService _markdown;
         private readonly IStringLocalizer<SharedResource> T;
+        private readonly IInventoryImageService _inventoryImageService;
 
-        public InventoriesController(AppDbContext db, CurrentUserService currentUser, IMarkdownService markdown, IStringLocalizer<SharedResource> t)
+        private const long MaxImageFileBytes = 5 * 1024 * 1024;
+
+        private static readonly HashSet<string> AllowedImageExtensions = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".gif",
+            ".webp"
+        };
+
+        public InventoriesController(AppDbContext db, CurrentUserService currentUser, IMarkdownService markdown, IStringLocalizer<SharedResource> t, IInventoryImageService inventoryImageService)
         {
             _db = db; 
             _currentUser = currentUser;
             _markdown = markdown;
             T = t;
+            _inventoryImageService = inventoryImageService;
         }
 
 
@@ -53,10 +67,16 @@ namespace iLearning.Web.Controllers
             await LoadCategoriesAsync();
 
             vm.Title = (vm.Title ?? "").Trim();
+            vm.ImageUrl = NormalizeImageUrl(vm.ImageUrl);
 
             if (string.IsNullOrWhiteSpace(vm.Title))
             {
                 ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Inv.Title"]].Value);
+            }
+
+            if (!ValidateImageFile(vm.ImageFile))
+            {
+                return View(vm);
             }
 
             if (!ModelState.IsValid)
@@ -73,11 +93,15 @@ namespace iLearning.Web.Controllers
                 return View(vm);
             }
 
+            var imageUrl = await ResolveInventoryImageUrlAsync(vm);
+            if (!ModelState.IsValid)
+                return View(vm);
+
             var inv = new Inventory
             {
                 Title = vm.Title.Trim(),
                 Description = string.IsNullOrWhiteSpace(vm.Description) ? null : vm.Description.Trim(),
-                ImageUrl = string.IsNullOrWhiteSpace(vm.ImageUrl) ? null : vm.ImageUrl.Trim(),
+                ImageUrl = imageUrl,
                 IsPublic = vm.IsPublic,
                 CreatorId = userId.Value,
                 CategoryId = vm.CategoryId,
@@ -151,6 +175,7 @@ namespace iLearning.Web.Controllers
                 return BadRequest();
 
             vm.Title = (vm.Title ?? "").Trim();
+            vm.ImageUrl = NormalizeImageUrl(vm.ImageUrl);
 
             var inv = await _db.Inventories
                 .Include(i => i.Category)
@@ -191,6 +216,12 @@ namespace iLearning.Web.Controllers
                 ModelState.AddModelError(nameof(vm.Title), T["Common.Required", T["Inv.Title"]].Value);
             }
 
+            if (!ValidateImageFile(vm.ImageFile))
+            {
+                var invalidImageVm = BuildDetailsVmForSettings(inv, vm);
+                return View("Details", invalidImageVm);
+            }
+
             if (!ModelState.IsValid)
             {
                 var invalidVm = BuildDetailsVmForSettings(inv, vm);
@@ -216,9 +247,16 @@ namespace iLearning.Web.Controllers
                 return View("Details", invalidCategoryVm);
             }
 
+            var imageUrl = await ResolveInventoryImageUrlAsync(vm);
+            if (!ModelState.IsValid)
+            {
+                var invalidImageVm = BuildDetailsVmForSettings(inv, vm);
+                return View("Details", invalidImageVm);
+            }
+
             inv.Title = vm.Title;
             inv.Description = string.IsNullOrWhiteSpace(vm.Description) ? null : vm.Description.Trim();
-            inv.ImageUrl = string.IsNullOrWhiteSpace(vm.ImageUrl) ? null : vm.ImageUrl.Trim();
+            inv.ImageUrl = imageUrl;
             inv.IsPublic = vm.IsPublic;
             inv.CategoryId = vm.CategoryId;
 
@@ -861,5 +899,55 @@ namespace iLearning.Web.Controllers
 
             return int.TryParse(numericPart, out number);
         }
+
+        private bool ValidateImageFile(IFormFile? file)
+        {
+            if (file == null || file.Length == 0)
+                return true;
+
+            var extension = Path.GetExtension(file.FileName);
+            if (string.IsNullOrWhiteSpace(extension) || !AllowedImageExtensions.Contains(extension))
+            {
+                ModelState.AddModelError(nameof(InventoryUpsertVm.ImageFile), T["Inv.ImageUpload.InvalidType"].Value);
+                return false;
+            }
+
+            if (file.ContentType == null || !file.ContentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError(nameof(InventoryUpsertVm.ImageFile), T["Inv.ImageUpload.InvalidType"].Value);
+                return false;
+            }
+
+            if (file.Length > MaxImageFileBytes)
+            {
+                ModelState.AddModelError(nameof(InventoryUpsertVm.ImageFile), T["Inv.ImageUpload.TooLarge", 5].Value);
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task<string?> ResolveInventoryImageUrlAsync(InventoryUpsertVm vm)
+        {
+            if (vm.ImageFile == null || vm.ImageFile.Length == 0)
+                return string.IsNullOrWhiteSpace(vm.ImageUrl) ? null : vm.ImageUrl.Trim();
+
+            try
+            {
+                return await _inventoryImageService.UploadInventoryImageAsync(vm.ImageFile, HttpContext.RequestAborted);
+            }
+            catch
+            {
+                ModelState.AddModelError(nameof(InventoryUpsertVm.ImageFile), T["Inv.ImageUpload.UploadFailed"].Value);
+                return null;
+            }
+        }
+
+        private static string? NormalizeImageUrl(string? imageUrl)
+        {
+            var trimmed = (imageUrl ?? string.Empty).Trim();
+            return string.IsNullOrWhiteSpace(trimmed) ? null : trimmed;
+        }
+
     }
 }

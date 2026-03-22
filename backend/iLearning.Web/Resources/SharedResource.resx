@@ -1341,4 +1341,25 @@
   <data name="InventoryStats.Csv.Rank" xml:space="preserve">
     <value>Rank</value>
   </data>
+  <data name="Inv.ImageUpload" xml:space="preserve">
+    <value>Image File</value>
+  </data>
+  <data name="Inv.Form.ImageUploadHint" xml:space="preserve">
+    <value>Select an image file to upload to cloud storage. Supported: JPG, PNG, GIF, WEBP. Max 5 MB.</value>
+  </data>
+  <data name="Inv.Form.ImageUploadSaveOnlyHint" xml:space="preserve">
+    <value>Image file changes are uploaded only when you click Save. Autosave skips file uploads.</value>
+  </data>
+  <data name="Inv.Form.CurrentImage" xml:space="preserve">
+    <value>Current image</value>
+  </data>
+  <data name="Inv.ImageUpload.InvalidType" xml:space="preserve">
+    <value>Please select a valid image file.</value>
+  </data>
+  <data name="Inv.ImageUpload.TooLarge" xml:space="preserve">
+    <value>Image file is too large. Maximum allowed size is {0} MB.</value>
+  </data>
+  <data name="Inv.ImageUpload.UploadFailed" xml:space="preserve">
+    <value>Image upload failed. Please try again.</value>
+  </data>
 </root>
