@@ -23,6 +23,12 @@ namespace iLearning.Web.Models.Domain
         [MaxLength(250)]
         public string? ExternalProviderUserId { get; set; }
 
+        [MaxLength(200)]
+        public string? EmailConfirmationToken { get; set; }
+        public DateTime? EmailConfirmationTokenExpiresAtUtc { get; set; }
+        public DateTime? EmailConfirmedAtUtc { get; set; }
+        public bool IsEmailConfirmed => EmailConfirmedAtUtc.HasValue;
+
         public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();

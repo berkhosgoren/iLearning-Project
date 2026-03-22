@@ -41,7 +41,10 @@ namespace iLearning.Web.Data
                     Name = adminName,
                     Email = adminEmail,
                     PasswordHash = PasswordHasher.Hash(adminPassword),
-                    IsBlocked = false
+                    IsBlocked = false,
+                    EmailConfirmedAtUtc = DateTime.UtcNow,
+                    EmailConfirmationToken = null,
+                    EmailConfirmationTokenExpiresAtUtc = null
                 };
 
                 _db.Users.Add(admin);

@@ -1293,4 +1293,31 @@
   <data name="Items.Messages.CustomIdRefreshed" xml:space="preserve">
     <value>Пользовательский ID был обновлён до следующего доступного значения. Проверьте форму и отправьте её снова.</value>
   </data>
+  <data name="Auth.Register.CheckEmail" xml:space="preserve">
+    <value>Регистрация завершена. Пожалуйста, проверьте электронную почту и подтвердите аккаунт.</value>
+  </data>
+  <data name="Auth.EmailConfirm.Subject" xml:space="preserve">
+    <value>Подтверждение электронной почты</value>
+  </data>
+  <data name="Auth.EmailConfirm.Body" xml:space="preserve">
+    <value>Здравствуйте, {0}! Пожалуйста, подтвердите электронную почту, перейдя по ссылке: {1}</value>
+  </data>
+  <data name="Auth.EmailConfirm.Success" xml:space="preserve">
+    <value>Электронная почта подтверждена. Теперь вы можете войти.</value>
+  </data>
+  <data name="Auth.EmailConfirm.InvalidToken" xml:space="preserve">
+    <value>Недействительный токен подтверждения.</value>
+  </data>
+  <data name="Auth.EmailConfirm.Expired" xml:space="preserve">
+    <value>Срок действия ссылки подтверждения истёк.</value>
+  </data>
+  <data name="Auth.EmailConfirm.AlreadyConfirmed" xml:space="preserve">
+    <value>Электронная почта уже подтверждена.</value>
+  </data>
+  <data name="Auth.EmailConfirm.Required" xml:space="preserve">
+    <value>Пожалуйста, подтвердите электронную почту перед входом.</value>
+  </data>
+  <data name="Auth.EmailConfirm.SendFailed" xml:space="preserve">
+    <value>Аккаунт создан, но письмо с подтверждением не удалось отправить.</value>
+  </data>
 </root>

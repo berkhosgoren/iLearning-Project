@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using iLearning.Web.Services.Email;
+using System.Security.Cryptography;
 
 
 namespace iLearning.Web.Controllers
@@ -17,11 +19,13 @@ namespace iLearning.Web.Controllers
     {
         private readonly AppDbContext _db;
         private readonly IStringLocalizer<SharedResource> T;
+        private readonly IEmailSender _emailSender;
 
-        public AuthController(AppDbContext db, IStringLocalizer<SharedResource> t)
+        public AuthController(AppDbContext db, IStringLocalizer<SharedResource> t, IEmailSender emailSender)
         {
             _db = db;
             T = t;
+            _emailSender = emailSender;
         }
 
         [HttpGet("login")]
@@ -55,6 +59,16 @@ namespace iLearning.Web.Controllers
             {
                 ModelState.AddModelError("", T["Auth.Errors.UserBlocked"]);
                 return View(vm); 
+            }
+
+            var requiresEmailConfirmation = !string.IsNullOrWhiteSpace(user.PasswordHash) &&
+                                            !user.IsEmailConfirmed &&
+                                            !string.IsNullOrWhiteSpace(user.EmailConfirmationToken);
+
+            if (requiresEmailConfirmation)
+            {
+                ModelState.AddModelError("", T["Auth.EmailConfirm.Required"]);
+                return View(vm);
             }
 
             await SignInUserAsync(user, vm.RememberMe);
@@ -91,13 +105,31 @@ namespace iLearning.Web.Controllers
                 Name = name,
                 Email = email,
                 PasswordHash = PasswordHasher.Hash(password),
-                IsBlocked = false
+                IsBlocked = false,
+                EmailConfirmationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(32)),
+                EmailConfirmationTokenExpiresAtUtc = DateTime.UtcNow.AddHours(24),
+                EmailConfirmedAtUtc = null
             };
 
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
 
-            TempData["Message"] = T["Auth.Register.Success"].Value;
+            var confirmLink = Url.Action(nameof(ConfirmEmail), "Auth", new { token = user.EmailConfirmationToken }, Request.Scheme, Request.Host.Value);
+
+            if (!string.IsNullOrWhiteSpace(confirmLink))
+            {
+                try
+                {
+                    await _emailSender.SendAsync(user.Email, T["Auth.EmailConfirm.Subject"], string.Format(T["Auth.EmailConfirm.Body"], user.Name, confirmLink));
+                }
+                catch
+                {
+                    TempData["Message"] = T["Auth.EmailConfirm.SendFailed"].Value;
+                    return RedirectToAction(nameof(Login));
+                }
+            }
+
+            TempData["Message"] = T["Auth.Register.CheckEmail"].Value;
             return RedirectToAction(nameof(Login));
         }
 
@@ -184,6 +216,9 @@ namespace iLearning.Web.Controllers
                         PasswordHash = null,
                         ExternalProvider = provider,
                         ExternalProviderUserId = externalUserId,
+                        EmailConfirmedAtUtc = DateTime.UtcNow,
+                        EmailConfirmationToken = null,
+                        EmailConfirmationTokenExpiresAtUtc = null
                     };
 
                     _db.Users.Add(user);
@@ -228,6 +263,54 @@ namespace iLearning.Web.Controllers
         public IActionResult Denied()
         {
             return View();
+        }
+
+        [HttpGet("confirm")]
+        public async Task<IActionResult> ConfirmEmail(string? token)
+        {
+            token = (token ?? "").Trim();
+
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                TempData["Message"] = T["Auth.EmailConfirm.InvalidToken"].Value;
+                return RedirectToAction(nameof(Login));
+            }
+
+            var user = await _db.Users.FirstOrDefaultAsync(u => u.EmailConfirmationToken == token);
+
+            if (user is null)
+            {
+                TempData["Message"] = T["Auth.EmailConfirm.InvalidToken"].Value;
+                return RedirectToAction(nameof(Login));
+            }
+
+            if (user.IsBlocked)
+            {
+                TempData["Message"] = T["Auth.Errors.UserBlocked"].Value;
+                return RedirectToAction(nameof(Login));
+            }
+
+            if (user.IsEmailConfirmed)
+            {
+                TempData["Message"] = T["Auth.EmailConfirm.AlreadyConfirmed"].Value;
+                return RedirectToAction(nameof(Login));
+            }
+
+            if (user.EmailConfirmationTokenExpiresAtUtc.HasValue && 
+                user.EmailConfirmationTokenExpiresAtUtc.Value < DateTime.UtcNow)
+            {
+                TempData["Message"] = T["Auth.EmailConfirm.Expired"].Value;
+                return RedirectToAction(nameof(Login));
+            }
+
+            user.EmailConfirmedAtUtc = DateTime.UtcNow;
+            user.EmailConfirmationToken = null;
+            user.EmailConfirmationTokenExpiresAtUtc = null;
+
+            await _db.SaveChangesAsync();
+
+            TempData["Message"] = T["Auth.EmailConfirm.Success"].Value;
+            return RedirectToAction(nameof(Login));
         }
 
         private async Task SignInUserAsync(AppUser user, bool isPersistent)
