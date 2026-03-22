@@ -5,6 +5,8 @@
         public Guid InventoryId { get; set; }
 
         public string InventoryTitle { get; set; } = "";
+        public string InventoryCategoryName { get; set; } = "";
+        public string InventoryOwnerName { get; set; } = "";
         public bool IsPublic { get; set; }
 
         public bool CanEdit { get; set; }

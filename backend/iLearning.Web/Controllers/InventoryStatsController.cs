@@ -59,8 +59,17 @@ namespace iLearning.Web.Controllers
 
             var inv = await _db.Inventories
                 .AsNoTracking()
-                .Select(i => new { i.Id, i.Title, i.CreatorId, i.IsPublic })
-                .FirstOrDefaultAsync(i => i.Id == inventoryId);
+                .Where(i => i.Id == inventoryId)
+                .Select(i => new
+                {
+                    i.Id,
+                    i.Title,
+                    i.CreatorId,
+                    i.IsPublic,
+                    CategoryName = i.Category != null ? i.Category.Name : string.Empty,
+                    OwnerName = i.Creator.Name
+                })
+                .FirstOrDefaultAsync();
 
             if (inv == null) return null;
 
@@ -126,6 +135,8 @@ namespace iLearning.Web.Controllers
             {
                 InventoryId = inv.Id,
                 InventoryTitle = inv.Title,
+                InventoryCategoryName = inv.CategoryName ?? string.Empty,
+                InventoryOwnerName = inv.OwnerName ?? string.Empty,
                 IsPublic = inv.IsPublic,
                 CanEdit = canEdit,
                 CanWrite = canEdit,
@@ -178,6 +189,9 @@ namespace iLearning.Web.Controllers
 
             AppendRow(T["InventoryStats.InventoryStats"].Value, vm.InventoryTitle);
             AppendRow(T["InventoryStats.Csv.GeneratedAt"].Value, DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss 'UTC'"));
+            AppendRow(T["InventoryStats.Csv.InventoryId"].Value, vm.InventoryId.ToString());
+            AppendRow(T["Common.Category"].Value, vm.InventoryCategoryName);
+            AppendRow(T["Common.Owner"].Value, vm.InventoryOwnerName);
             AppendRow(T["Common.Visibility"].Value, vm.IsPublic ? T["Common.Public"].Value : T["Common.Private"].Value);
             AppendRow();
 
@@ -191,10 +205,13 @@ namespace iLearning.Web.Controllers
             AppendRow();
 
             AppendRow(T["InventoryStats.TopItemsByLikes"].Value);
-            AppendRow(T["Common.CustomId"].Value, T["Common.Title"].Value, T["Common.Likes"].Value, T["Common.Comments"].Value);
-            foreach (var item in vm.Stats.TopItemsByLikes)
+            AppendRow(T["InventoryStats.Csv.Rank"].Value, T["Common.CustomId"].Value, T["Common.Title"].Value, T["Common.Likes"].Value, T["Common.Comments"].Value);
+            
+            for (var i = 0; i < vm.Stats.TopItemsByLikes.Count; i++)
             {
+                var item = vm.Stats.TopItemsByLikes[i];
                 AppendRow(
+                    (i + 1).ToString(),
                     item.CustomId,
                     item.Title,
                     item.LikesCount.ToString(),
@@ -204,10 +221,13 @@ namespace iLearning.Web.Controllers
             AppendRow();
 
             AppendRow(T["InventoryStats.TopItemsByComments"].Value);
-            AppendRow(T["Common.CustomId"].Value, T["Common.Title"].Value, T["Common.Likes"].Value, T["Common.Comments"].Value);
-            foreach (var item in vm.Stats.TopItemsByComments)
+            AppendRow(T["InventoryStats.Csv.Rank"].Value, T["Common.CustomId"].Value, T["Common.Title"].Value, T["Common.Likes"].Value, T["Common.Comments"].Value);
+
+            for (var i = 0; i < vm.Stats.TopItemsByComments.Count; i++)
             {
+                var item = vm.Stats.TopItemsByComments[i];
                 AppendRow(
+                    (i + 1).ToString(),
                     item.CustomId,
                     item.Title,
                     item.LikesCount.ToString(),

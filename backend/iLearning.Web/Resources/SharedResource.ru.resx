@@ -1335,4 +1335,10 @@
   <data name="InventoryStats.Csv.Value" xml:space="preserve">
     <value>Значение</value>
   </data>
+  <data name="InventoryStats.Csv.InventoryId" xml:space="preserve">
+    <value>ID инвентаря</value>
+  </data>
+  <data name="InventoryStats.Csv.Rank" xml:space="preserve">
+    <value>Место</value>
+  </data>
 </root>

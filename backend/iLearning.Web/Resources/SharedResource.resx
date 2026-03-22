@@ -1335,4 +1335,10 @@
   <data name="InventoryStats.Csv.Value" xml:space="preserve">
     <value>Value</value>
   </data>
+  <data name="InventoryStats.Csv.InventoryId" xml:space="preserve">
+    <value>Inventory ID</value>
+  </data>
+  <data name="InventoryStats.Csv.Rank" xml:space="preserve">
+    <value>Rank</value>
+  </data>
 </root>
