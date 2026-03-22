@@ -8,6 +8,7 @@ using iLearning.Web;
 using Microsoft.AspNetCore.HttpOverrides;
 using iLearning.Web.Services.Email;
 using iLearning.Web.Services.Images;
+using iLearning.Web.Services.Salesforce;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +54,9 @@ builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
 
 builder.Services.Configure<CloudinaryOptions>(builder.Configuration.GetSection("Cloudinary"));
 builder.Services.AddScoped<IInventoryImageService, CloudinaryInventoryImageService>();
+
+builder.Services.Configure<SalesforceOptions>(builder.Configuration.GetSection("Salesforce"));
+builder.Services.AddScoped<ISalesforceCrmService, SalesforceCrmService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
