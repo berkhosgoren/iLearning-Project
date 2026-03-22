@@ -22,6 +22,7 @@
     <label asp-for="ImageFile" class="form-label"></label>
     <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" data-autosave-ignore-field="true" />
     <div class="form-text">@T["Inv.Form.ImageUploadHint"]</div>
+    <span asp-validation-for="ImageFile" class="text-danger"></span>
 </div>
 
 @if (!string.IsNullOrWhiteSpace(Model.ImageUrl))

@@ -52,6 +52,12 @@
         function serializeForm() {
             const fd = new FormData(form);
 
+            form.querySelectorAll('[data-autosave-ignore-field="true"]').forEach(function (el) {
+                if (el.name) {
+                    fd.delete(el.name);
+                }
+            });
+
             if (options.mapFields && Array.isArray(options.mapFields)) {
                 options.mapFields.forEach(function (m) {
                     const current = fd.get(m.from);
@@ -138,6 +144,8 @@
             const el = e.target;
             if (!el || manualSubmitInProgress) return;
 
+            if (el.hasAttribute('data-autosave-ignore-field')) return;
+
             if (el.matches('input, textarea, select')) {
                 scheduleSave();
             }
@@ -146,6 +154,8 @@
         form.addEventListener('change', function (e) {
             const el = e.target;
             if (!el || manualSubmitInProgress) return;
+
+            if (el.hasAttribute('data-autosave-ignore-field')) return;
 
             if (el.matches('input[type="checkbox"], input[type="radio"], select')) {
                 scheduleSave();
