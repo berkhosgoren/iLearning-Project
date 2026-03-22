@@ -1320,4 +1320,19 @@
   <data name="Auth.EmailConfirm.SendFailed" xml:space="preserve">
     <value>Аккаунт создан, но письмо с подтверждением не удалось отправить.</value>
   </data>
+  <data name="InventoryStats.ExportCsv" xml:space="preserve">
+    <value>Экспорт CSV</value>
+  </data>
+  <data name="InventoryStats.Csv.GeneratedAt" xml:space="preserve">
+    <value>Сформировано</value>
+  </data>
+  <data name="InventoryStats.Csv.Summary" xml:space="preserve">
+    <value>Сводка</value>
+  </data>
+  <data name="InventoryStats.Csv.Metric" xml:space="preserve">
+    <value>Метрика</value>
+  </data>
+  <data name="InventoryStats.Csv.Value" xml:space="preserve">
+    <value>Значение</value>
+  </data>
 </root>

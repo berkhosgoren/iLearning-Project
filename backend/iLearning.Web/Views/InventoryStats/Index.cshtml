@@ -23,6 +23,10 @@
         </div>
 
         <div class="d-flex gap-2">
+            <a class="btn btn-outline-primary" asp-controller="InventoryStats" asp-action="ExportCsv" asp-route-inventoryId="@Model.InventoryId">
+                @T["InventoryStats.ExportCsv"]
+            </a>
+
             <a class="btn btn-outline-secondary" asp-controller="Inventories" asp-action="Details" 
                asp-route-id="@Model.InventoryId" asp-route-tab="Items">
                 @T["Common.BackToInventory"]
