@@ -1,8 +1,8 @@
 ﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Logging;
 
 namespace iLearning.Web.Services.Salesforce
 {
@@ -10,11 +10,13 @@ namespace iLearning.Web.Services.Salesforce
     {
         private readonly HttpClient _http;
         private readonly SalesforceOptions _options;
+        private readonly ILogger<SalesforceCrmService> _logger;
 
-        public SalesforceCrmService(HttpClient http, IOptions<SalesforceOptions> options)
+        public SalesforceCrmService(HttpClient http, IOptions<SalesforceOptions> options, ILogger<SalesforceCrmService> logger)
         {
             _http = http;
             _options = options.Value;
+            _logger = logger;
         }
 
         public async Task<SalesforceCreateResult> CreateAccountWithContactAsync(SalesforceCreateRequest request, CancellationToken cancellationToken = default)
@@ -24,13 +26,43 @@ namespace iLearning.Web.Services.Salesforce
             _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
 
             var accountId = await CreateAccountAsync(token.InstanceUrl, request, cancellationToken);
-            var contactId = await CreateContactAsync(token.InstanceUrl, accountId, request, cancellationToken);
 
-            return new SalesforceCreateResult
+            try
             {
-                AccountId = accountId,
-                ContactId = contactId
-            };
+                var contactId = await CreateContactAsync(token.InstanceUrl, accountId, request, cancellationToken);
+
+                return new SalesforceCreateResult
+                {
+                    AccountId = accountId,
+                    ContactId = contactId
+                };
+            }
+            catch
+            {
+                try
+                {
+                    await DeleteSObjectAsync(token.InstanceUrl, "Account", accountId, cancellationToken);
+                }
+                catch (Exception cleanupEx)
+                {
+                    _logger.LogWarning(cleanupEx, "Salesforce cleanup failed after Contact creation failure. AccountId = {AccountId}", accountId);
+                }
+
+                throw;
+            }        
+        }
+
+        private async Task DeleteSObjectAsync(string instanceUrl, string objectName, string id, CancellationToken cancellationToken)
+        {
+            var url = $"{BuildSObjectUrl(instanceUrl, objectName)}/{id}";
+
+            using var response = await _http.DeleteAsync(url, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync(cancellationToken);
+                throw new InvalidOperationException($"Salesforce {objectName} cleanup failed: {body}");
+            }
         }
 
         private async Task<SalesforceTokenResponse> GetAccessTokenAsync(CancellationToken cancellationToken)

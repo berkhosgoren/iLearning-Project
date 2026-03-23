@@ -6,6 +6,7 @@ using iLearning.Web.Data;
 using iLearning.Web.Models.ViewModels.Salesforce;
 using iLearning.Web.Services;
 using iLearning.Web.Services.Salesforce;
+using Microsoft.Extensions.Logging;
 
 namespace iLearning.Web.Controllers
 {
@@ -17,13 +18,15 @@ namespace iLearning.Web.Controllers
         private readonly CurrentUserService _current;
         private readonly ISalesforceCrmService _salesforce;
         private readonly IStringLocalizer<SharedResource> T;
+        private readonly ILogger<SalesforceController> _logger;
 
-        public SalesforceController(AppDbContext db, CurrentUserService current, ISalesforceCrmService salesforce, IStringLocalizer<SharedResource> t)
+        public SalesforceController(AppDbContext db, CurrentUserService current, ISalesforceCrmService salesforce, IStringLocalizer<SharedResource> t, ILogger<SalesforceController> logger)
         {
             _db = db;
             _current = current;
             _salesforce = salesforce;
             T = t;
+            _logger = logger;
         }
 
         [HttpGet("")]
@@ -103,7 +106,8 @@ namespace iLearning.Web.Controllers
             }
             catch (Exception ex) 
             {
-                ModelState.AddModelError(string.Empty, T["Salesforce.Errors.ExportFailed"].Value + " " + ex.Message);
+                _logger.LogError(ex, "Salesforce export failed for user {UserId}", userId.Value);
+                ModelState.AddModelError(string.Empty, T["Salesforce.Errors.ExportFailed"].Value);
                 return View(vm);
             }
 
