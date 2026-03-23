@@ -1362,4 +1362,52 @@
   <data name="Inv.ImageUpload.UploadFailed" xml:space="preserve">
     <value>Не удалось загрузить изображение. Попробуйте ещё раз</value>
   </data>
+  <data name="Account.Actions.ExportToSalesforce" xml:space="preserve">
+    <value>Экспорт в Salesforce</value>
+  </data>
+  <data name="Salesforce.PageTitle" xml:space="preserve">
+    <value>Интеграция с Salesforce</value>
+  </data>
+  <data name="Salesforce.Heading" xml:space="preserve">
+    <value>Создание Account и Contact в Salesforce</value>
+  </data>
+  <data name="Salesforce.Help" xml:space="preserve">
+    <value>Заполните CRM-данные ниже, чтобы создать Account в Salesforce и связанный Contact.</value>
+  </data>
+  <data name="Salesforce.AccountName" xml:space="preserve">
+    <value>Название Account</value>
+  </data>
+  <data name="Salesforce.FirstName" xml:space="preserve">
+    <value>Имя</value>
+  </data>
+  <data name="Salesforce.LastName" xml:space="preserve">
+    <value>Фамилия</value>
+  </data>
+  <data name="Salesforce.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Salesforce.Phone" xml:space="preserve">
+    <value>Телефон</value>
+  </data>
+  <data name="Salesforce.Title" xml:space="preserve">
+    <value>Должность</value>
+  </data>
+  <data name="Salesforce.Website" xml:space="preserve">
+    <value>Веб-сайт</value>
+  </data>
+  <data name="Salesforce.Description" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="Salesforce.Submit" xml:space="preserve">
+    <value>Создать в Salesforce</value>
+  </data>
+  <data name="Salesforce.Success" xml:space="preserve">
+    <value>Account и Contact в Salesforce успешно созданы.</value>
+  </data>
+  <data name="Salesforce.Errors.ExportFailed" xml:space="preserve">
+    <value>Не удалось выполнить экспорт в Salesforce.</value>
+  </data>
+  <data name="Salesforce.Errors.MissingUserEmail" xml:space="preserve">
+    <value>У текущего пользователя отсутствует email, поэтому экспорт в Salesforce невозможен.</value>
+  </data>
 </root>

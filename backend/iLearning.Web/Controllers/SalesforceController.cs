@@ -68,6 +68,12 @@ namespace iLearning.Web.Controllers
             if (user == null)
                 return NotFound();
 
+            if (string.IsNullOrWhiteSpace(user.Email))
+            {
+                ModelState.AddModelError(string.Empty, T["Salesforce.Errors.MissingUserEmail"].Value);
+                return View(vm);
+            }
+
             vm.Email = user.Email;
 
             vm.AccountName = (vm.AccountName ?? string.Empty).Trim();

@@ -1362,4 +1362,52 @@
   <data name="Inv.ImageUpload.UploadFailed" xml:space="preserve">
     <value>Image upload failed. Please try again.</value>
   </data>
+  <data name="Account.Actions.ExportToSalesforce" xml:space="preserve">
+    <value>Export to Salesforce</value>
+  </data>
+  <data name="Salesforce.PageTitle" xml:space="preserve">
+    <value>Salesforce Integration</value>
+  </data>
+  <data name="Salesforce.Heading" xml:space="preserve">
+    <value>Create Account and Contact in Salesforce</value>
+  </data>
+  <data name="Salesforce.Help" xml:space="preserve">
+    <value>Fill in the CRM information below to create a Salesforce Account with a linked Contact.</value>
+  </data>
+  <data name="Salesforce.AccountName" xml:space="preserve">
+    <value>Account Name</value>
+  </data>
+  <data name="Salesforce.FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="Salesforce.LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="Salesforce.Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Salesforce.Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="Salesforce.Title" xml:space="preserve">
+    <value>Job Title</value>
+  </data>
+  <data name="Salesforce.Website" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="Salesforce.Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Salesforce.Submit" xml:space="preserve">
+    <value>Create in Salesforce</value>
+  </data>
+  <data name="Salesforce.Success" xml:space="preserve">
+    <value>Salesforce Account and Contact were created successfully.</value>
+  </data>
+  <data name="Salesforce.Errors.ExportFailed" xml:space="preserve">
+    <value>Salesforce export failed.</value>
+  </data>
+  <data name="Salesforce.Errors.MissingUserEmail" xml:space="preserve">
+    <value>The current user does not have an email address, so Salesforce export cannot be completed.</value>
+  </data>
 </root>
