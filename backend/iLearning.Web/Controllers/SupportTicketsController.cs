@@ -32,7 +32,7 @@ namespace iLearning.Web.Controllers
             _logger = logger;
         }
 
-        [HttpGet("")]
+        [HttpGet("create")]
         public async Task<IActionResult> Create(string? returnUrl, Guid? inventoryId)
         {
             var userId = _current.GetUserId(User);

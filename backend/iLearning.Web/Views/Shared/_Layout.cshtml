@@ -13,7 +13,7 @@
     var routeController = ViewContext.RouteData.Values["controller"]?.ToString();
     Guid? currentInventoryId = null;
 
-    if (string.Equals(routeController, "Inventores", StringComparison.OrdinalIgnoreCase) &&
+    if (string.Equals(routeController, "Inventories", StringComparison.OrdinalIgnoreCase) &&
         Guid.TryParse(ViewContext.RouteData.Values["id"]?.ToString(), out var invIdFromId))
     {
         currentInventoryId = invIdFromId;
