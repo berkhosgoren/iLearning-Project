@@ -13,6 +13,10 @@
     
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
         <h2 class="mb-0">@T["Account.Title"]</h2>
+
+        <a class="btn btn-outline-primary" asp-controller="Salesforce" asp-action="Index">
+            @T["Account.Actions.ExportToSalesforce"]
+        </a>
     </div>
 
     @if (!string.IsNullOrWhiteSpace(msg))
