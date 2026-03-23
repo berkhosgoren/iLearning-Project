@@ -193,6 +193,17 @@
         </header>
 
         <main role="main" class="flex-fill">
+            @{
+                var supportMessage = TempData["SupportMessage"] as string;
+            }
+
+            @if (!string.IsNullOrWhiteSpace(supportMessage))
+            {
+                <div class="container pt-3">
+                    <div class="alert alert-success mb-0">@supportMessage</div>
+                </div>
+            }
+            
             @RenderBody()
         </main>
 

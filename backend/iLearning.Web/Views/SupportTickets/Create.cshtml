@@ -3,7 +3,6 @@
 
 @{
     ViewData["Title"] = T["Support.PageTitle"];
-    var msg = TempData["SupportMessage"] as string;
 }
 
 <div class="container py-4" style="max-width: 860px;">
@@ -15,11 +14,6 @@
 
         <a class="btn btn-outline-secondary" href="@Model.ReturnUrl">@T["Common.Back"]</a>
     </div>
-
-    @if (!string.IsNullOrWhiteSpace(msg))
-    {
-        <div class="alert alert-success">@msg</div>
-    }
 
     <div class="card">
         <div class="card-body">

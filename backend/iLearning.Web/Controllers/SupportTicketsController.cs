@@ -120,7 +120,7 @@ namespace iLearning.Web.Controllers
                 Inventory = inventoryTitle,
                 Link = currentPageUrl,
                 AdminEmails = adminEmails,
-                CreatedAtUtc = DateTime.UtcNow
+                CreatedAtUtc = DateTime.UtcNow.ToString("dd-MM-yyyy HH:mm:ss 'UTC'")
             };
 
             var fileName = $"support-ticket-{DateTime.UtcNow:yyyyMMdd-HHmmss}-{Guid.NewGuid():N}.json";
@@ -145,7 +145,7 @@ namespace iLearning.Web.Controllers
             }
 
             TempData["SupportMessage"] = T["Support.Success"].Value;
-            return RedirectToAction(nameof(Create), new { returnUrl = safeReturnUrl, inventoryId = vm.InventoryId });
+            return Redirect(safeReturnUrl);
         }
 
         private async Task<List<string>> GetAdminEmailsAsync()
@@ -228,7 +228,7 @@ namespace iLearning.Web.Controllers
             public List<string> AdminEmails { get; set; } = new();
 
             [JsonPropertyName("Created at UTC")]
-            public DateTime CreatedAtUtc { get; set; }
+            public string CreatedAtUtc { get; set; } = string.Empty;
         }
     }
 }
