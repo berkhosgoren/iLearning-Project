@@ -107,7 +107,7 @@ namespace iLearning.Web.Controllers
                 return View(vm);
             }
 
-            TempData["AccountMessage"] = T["SalesForce.Success"].Value;
+            TempData["AccountMessage"] = T["Salesforce.Success"].Value;
             return RedirectToAction("Index", "Account");
         }
 

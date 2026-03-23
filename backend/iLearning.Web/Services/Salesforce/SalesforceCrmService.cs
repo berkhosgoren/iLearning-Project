@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.Extensions.Options;
 
 namespace iLearning.Web.Services.Salesforce
@@ -54,8 +55,11 @@ namespace iLearning.Web.Services.Salesforce
                 PropertyNameCaseInsensitive = true,
             });
 
-            if (token == null || string.IsNullOrWhiteSpace(token.AccessToken) || string.IsNullOrWhiteSpace(token.InstanceUrl))
+            if (token == null || string.IsNullOrWhiteSpace(token.AccessToken))
                 throw new InvalidOperationException("Salesforce token response is incomplete.");
+
+            if (string.IsNullOrWhiteSpace(token.InstanceUrl))
+                token.InstanceUrl = _options.LoginUrl.TrimEnd('/');
 
             return token;
         }
@@ -102,7 +106,7 @@ namespace iLearning.Web.Services.Salesforce
                 Title = string.IsNullOrWhiteSpace(request.Title) ? null : request.Title.Trim()
             };
 
-            using var response = await _http.PatchAsJsonAsync(url, payload, cancellationToken);
+            using var response = await _http.PostAsJsonAsync(url, payload, cancellationToken);
             var body = await response.Content.ReadAsStringAsync(cancellationToken);
 
             if (!response.IsSuccessStatusCode)
@@ -126,8 +130,12 @@ namespace iLearning.Web.Services.Salesforce
 
         private class SalesforceTokenResponse
         {
+            [JsonPropertyName("access_token")]
             public string AccessToken { get; set; } = string.Empty;
+            [JsonPropertyName("instance_url")]
             public string InstanceUrl { get; set; } = string.Empty;
+            [JsonPropertyName("token_type")]
+            public string TokenType { get; set; } = string.Empty;
         }
 
         private class SalesforceCreateSObjectResponse
