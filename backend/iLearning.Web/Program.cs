@@ -56,7 +56,7 @@ builder.Services.Configure<CloudinaryOptions>(builder.Configuration.GetSection("
 builder.Services.AddScoped<IInventoryImageService, CloudinaryInventoryImageService>();
 
 builder.Services.Configure<SalesforceOptions>(builder.Configuration.GetSection("Salesforce"));
-builder.Services.AddScoped<ISalesforceCrmService, SalesforceCrmService>();
+builder.Services.AddHttpClient<ISalesforceCrmService, SalesforceCrmService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
