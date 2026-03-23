@@ -179,6 +179,11 @@ namespace iLearning.Web.Controllers
                 return Url.Action("Index", "Home") ?? "/";
             }
 
+            if (returnUrl.StartsWith("/support", StringComparison.OrdinalIgnoreCase))
+            {
+                return Url.Action("Index", "Home") ?? "/";
+            }
+
             return returnUrl;
         }
 
