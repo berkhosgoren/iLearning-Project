@@ -1410,4 +1410,64 @@
   <data name="Salesforce.Errors.MissingUserEmail" xml:space="preserve">
     <value>The current user does not have an email address, so Salesforce export cannot be completed.</value>
   </data>
+  <data name="Support.PageTitle" xml:space="preserve">
+    <value>Create Support Ticket</value>
+  </data>
+  <data name="Support.Heading" xml:space="preserve">
+    <value>Create Support Ticket</value>
+  </data>
+  <data name="Support.Help" xml:space="preserve">
+    <value>Submit a support request. The application will generate a JSON file and upload it to Dropbox.</value>
+  </data>
+  <data name="Support.FooterLink" xml:space="preserve">
+    <value>Create Support Ticket</value>
+  </data>
+  <data name="Support.Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="Support.Priority" xml:space="preserve">
+    <value>Priority</value>
+  </data>
+  <data name="Support.Priority.High" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="Support.Priority.Average" xml:space="preserve">
+    <value>Average</value>
+  </data>
+  <data name="Support.Priority.Low" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="Support.ReportedBy" xml:space="preserve">
+    <value>Reported by</value>
+  </data>
+  <data name="Support.ReportedByEmail" xml:space="preserve">
+    <value>Reported by email</value>
+  </data>
+  <data name="Support.Inventory" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="Support.Link" xml:space="preserve">
+    <value>Link</value>
+  </data>
+  <data name="Support.AdminEmails" xml:space="preserve">
+    <value>Admin Emails</value>
+  </data>
+  <data name="Support.Submit" xml:space="preserve">
+    <value>Upload Ticket to Dropbox</value>
+  </data>
+  <data name="Support.Success" xml:space="preserve">
+    <value>Support ticket JSON was uploaded to Dropbox successfully.</value>
+  </data>
+  <data name="Support.Errors.UploadFailed" xml:space="preserve">
+    <value>Support ticket upload failed</value>
+  </data>
+  <data name="Support.Errors.MissingUserEmail" xml:space="preserve">
+    <value>The current user does not have an email address, so the support ticket cannot be created.</value>
+  </data>
+  <data name="Support.Errors.NoAdminEmails" xml:space="preserve">
+    <value>No admin email addresses were found, so the support ticket cannot be created.</value>
+  </data>
+  <data name="Common.NotApplicable" xml:space="preserve">
+    <value>Not Applicable</value>
+  </data>
 </root>

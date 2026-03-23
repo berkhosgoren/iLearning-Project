@@ -9,6 +9,19 @@
 
     var lang = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
     var returnUrl = Context.Request.Path + Context.Request.QueryString;
+
+    var routeController = ViewContext.RouteData.Values["controller"]?.ToString();
+    Guid? currentInventoryId = null;
+
+    if (string.Equals(routeController, "Inventores", StringComparison.OrdinalIgnoreCase) &&
+        Guid.TryParse(ViewContext.RouteData.Values["id"]?.ToString(), out var invIdFromId))
+    {
+        currentInventoryId = invIdFromId;
+    }
+    else if (Guid.TryParse(ViewContext.RouteData.Values["inventoryId"]?.ToString(), out var invIdFromRoute))
+    {
+        currentInventoryId = invIdFromRoute;
+    }
 }
 
 <!DOCTYPE html>
@@ -179,6 +192,20 @@
         <main role="main">
             @RenderBody()
         </main>
+
+        <footer class="border-top mt-4 py-3 bg-body-tertiary">
+            <div class="container d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div class="text-muted small">@T["App.Title"]</div>
+
+                @if (User?.Identity?.IsAuthenticated == true)
+                {
+                   <a class="small text-decoration-none" asp-controller="SupportTickets" asp-action="Create"
+                       asp-route-returnUrl="@returnUrl" asp-route-inventoryId="@(currentInventoryId?.ToString())">
+                       @T["Support.FooterLink"]
+                   </a>
+                }
+            </div>
+        </footer>
 
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

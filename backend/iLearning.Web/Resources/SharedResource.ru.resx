@@ -1410,4 +1410,64 @@
   <data name="Salesforce.Errors.MissingUserEmail" xml:space="preserve">
     <value>У текущего пользователя отсутствует email, поэтому экспорт в Salesforce невозможен.</value>
   </data>
+  <data name="Support.PageTitle" xml:space="preserve">
+    <value>Создание заявки в поддержку</value>
+  </data>
+  <data name="Support.Heading" xml:space="preserve">
+    <value>Создание заявки в поддержку</value>
+  </data>
+  <data name="Support.Help" xml:space="preserve">
+    <value>Отправьте запрос в поддержку. Приложение создаст JSON-файл и загрузит его в Dropbox.</value>
+  </data>
+  <data name="Support.FooterLink" xml:space="preserve">
+    <value>Создать заявку в поддержку</value>
+  </data>
+  <data name="Support.Summary" xml:space="preserve">
+    <value>Краткое описание</value>
+  </data>
+  <data name="Support.Priority" xml:space="preserve">
+    <value>Приоритет</value>
+  </data>
+  <data name="Support.Priority.High" xml:space="preserve">
+    <value>Высокий</value>
+  </data>
+  <data name="Support.Priority.Average" xml:space="preserve">
+    <value>Средний</value>
+  </data>
+  <data name="Support.Priority.Low" xml:space="preserve">
+    <value>Низкий</value>
+  </data>
+  <data name="Support.ReportedBy" xml:space="preserve">
+    <value>Сообщил</value>
+  </data>
+  <data name="Support.ReportedByEmail" xml:space="preserve">
+    <value>Email автора</value>
+  </data>
+  <data name="Support.Inventory" xml:space="preserve">
+    <value>Инвентарь</value>
+  </data>
+  <data name="Support.Link" xml:space="preserve">
+    <value>Ссылка</value>
+  </data>
+  <data name="Support.AdminEmails" xml:space="preserve">
+    <value>Email администраторов</value>
+  </data>
+  <data name="Support.Submit" xml:space="preserve">
+    <value>Загрузить заявку в Dropbox</value>
+  </data>
+  <data name="Support.Success" xml:space="preserve">
+    <value>JSON-файл заявки успешно загружен в Dropbox.</value>
+  </data>
+  <data name="Support.Errors.UploadFailed" xml:space="preserve">
+    <value>Не удалось загрузить заявку в Dropbox.</value>
+  </data>
+  <data name="Support.Errors.MissingUserEmail" xml:space="preserve">
+    <value>У текущего пользователя отсутствует email, поэтому заявку нельзя создать.</value>
+  </data>
+  <data name="Support.Errors.NoAdminEmails" xml:space="preserve">
+    <value>Не найдены email-адреса администраторов, поэтому заявку нельзя создать.</value>
+  </data>
+  <data name="Common.NotApplicable" xml:space="preserve">
+    <value>Неприменимо</value>
+  </data>
 </root>
