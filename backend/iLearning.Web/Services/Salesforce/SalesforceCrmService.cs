@@ -10,10 +10,10 @@ namespace iLearning.Web.Services.Salesforce
         private readonly HttpClient _http;
         private readonly SalesforceOptions _options;
 
-        public SalesforceCrmService(HttpClient http, SalesforceOptions options)
+        public SalesforceCrmService(HttpClient http, IOptions<SalesforceOptions> options)
         {
             _http = http;
-            _options = options;
+            _options = options.Value;
         }
 
         public async Task<SalesforceCreateResult> CreateAccountWithContactAsync(SalesforceCreateRequest request, CancellationToken cancellationToken = default)
