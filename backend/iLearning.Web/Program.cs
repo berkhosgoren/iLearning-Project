@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using iLearning.Web.Services.Email;
 using iLearning.Web.Services.Images;
 using iLearning.Web.Services.Salesforce;
+using iLearning.Web.Services.Dropbox;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -57,6 +58,9 @@ builder.Services.AddScoped<IInventoryImageService, CloudinaryInventoryImageServi
 
 builder.Services.Configure<SalesforceOptions>(builder.Configuration.GetSection("Salesforce"));
 builder.Services.AddHttpClient<ISalesforceCrmService, SalesforceCrmService>();
+
+builder.Services.Configure<DropboxOptions>(builder.Configuration.GetSection("Dropbox"));
+builder.Services.AddHttpClient<IDropboxTicketUploadService, DropboxTicketUploadService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
