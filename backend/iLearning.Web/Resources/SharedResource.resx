@@ -1473,4 +1473,31 @@
   <data name="Support.FooterPrompt" xml:space="preserve">
     <value>Need Help?</value>
   </data>
+  <data name="Odoo.Token.SectionTitle" xml:space="preserve">
+    <value>Odoo API Token</value>
+  </data>
+  <data name="Odoo.Token.Help" xml:space="preserve">
+    <value>Generate a token for Odoo import. The token grants access only to this inventory's aggregated export.</value>
+  </data>
+  <data name="Odoo.Token.Generated" xml:space="preserve">
+    <value>Odoo API token generated successfully.</value>
+  </data>
+  <data name="Odoo.Token.GeneratedAt" xml:space="preserve">
+    <value>Generated at:</value>
+  </data>
+  <data name="Odoo.Token.Generate" xml:space="preserve">
+    <value>Generate API Token</value>
+  </data>
+  <data name="Odoo.Token.Regenerate" xml:space="preserve">
+    <value>Regenerate API Token</value>
+  </data>
+  <data name="Odoo.Token.Value" xml:space="preserve">
+    <value>API Token</value>
+  </data>
+  <data name="Odoo.Token.CopyHint" xml:space="preserve">
+    <value>Copy this token or use the export URL below inside Odoo.</value>
+  </data>
+  <data name="Odoo.Token.Url" xml:space="preserve">
+    <value>Export URL</value>
+  </data>
 </root>

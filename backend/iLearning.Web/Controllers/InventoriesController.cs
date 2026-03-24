@@ -208,8 +208,6 @@ namespace iLearning.Web.Controllers
                     CanWrite = true,
                     IsAuthenticated = _currentUser.IsAuthenticated(User),
                     SettingsVm = settingsVm,
-                    HasOdooApiToken = !string.IsNullOrWhiteSpace(inventory.OdooApiToken),
-                    OdooApiTokenGeneratedAtUtc = inventory.OdooApiTokenGeneratedAtUtc
                 };
             }
 
@@ -598,9 +596,7 @@ namespace iLearning.Web.Controllers
                 ActiveTab = activeTab,
                 CanEdit = canEdit,
                 CanWrite = canWrite,
-                IsAuthenticated = isAuthenticated,
-                HasOdooApiToken = !string.IsNullOrWhiteSpace(inv.OdooApiToken),
-                OdooApiTokenGeneratedAtUtc = inv.OdooApiTokenGeneratedAtUtc
+                IsAuthenticated = isAuthenticated,             
             };
 
             if (activeTab == "items")

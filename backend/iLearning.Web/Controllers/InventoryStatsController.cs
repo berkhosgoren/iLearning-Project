@@ -66,8 +66,10 @@ namespace iLearning.Web.Controllers
                     i.Title,
                     i.CreatorId,
                     i.IsPublic,
+                    i.OdooApiToken,
+                    i.OdooApiTokenGeneratedAtUtc,
                     CategoryName = i.Category != null ? i.Category.Name : string.Empty,
-                    OwnerName = i.Creator.Name
+                    OwnerName = i.Creator.Name,
                 })
                 .FirstOrDefaultAsync();
 
@@ -140,6 +142,8 @@ namespace iLearning.Web.Controllers
                 IsPublic = inv.IsPublic,
                 CanEdit = canEdit,
                 CanWrite = canEdit,
+                HasOdooApiToken = !string.IsNullOrWhiteSpace(inv.OdooApiToken),
+                OdooApiTokenGeneratedAtUtc = inv.OdooApiTokenGeneratedAtUtc,
 
                 Stats = new InventoryStatsVm
                 {
@@ -150,7 +154,7 @@ namespace iLearning.Web.Controllers
                     LastItemCreatedAtUtc = lastItemCreatedAtUtc,
                     LastItemUpdatedAtUtc = lastItemUpdatedAtUtc,
                     TopItemsByLikes = topByLikes,
-                    TopItemsByComments = topByComments
+                    TopItemsByComments = topByComments,
                 }
             };
         }

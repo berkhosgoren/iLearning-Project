@@ -1473,4 +1473,31 @@
   <data name="Support.FooterPrompt" xml:space="preserve">
     <value>Нужна помощь?</value>
   </data>
+  <data name="Odoo.Token.SectionTitle" xml:space="preserve">
+    <value>API-токен Odoo</value>
+  </data>
+  <data name="Odoo.Token.Help" xml:space="preserve">
+    <value>Сгенерируйте токен для импорта в Odoo. Токен даёт доступ только к агрегированному экспорту этого инвентаря.</value>
+  </data>
+  <data name="Odoo.Token.Generated" xml:space="preserve">
+    <value>API-токен Odoo успешно сгенерирован.</value>
+  </data>
+  <data name="Odoo.Token.GeneratedAt" xml:space="preserve">
+    <value>Сгенерирован:</value>
+  </data>
+  <data name="Odoo.Token.Generate" xml:space="preserve">
+    <value>Сгенерировать API-токен</value>
+  </data>
+  <data name="Odoo.Token.Regenerate" xml:space="preserve">
+    <value>Перегенерировать API-токен</value>
+  </data>
+  <data name="Odoo.Token.Value" xml:space="preserve">
+    <value>API-токен</value>
+  </data>
+  <data name="Odoo.Token.CopyHint" xml:space="preserve">
+    <value>Скопируйте этот токен или используйте URL экспорта ниже внутри Odoo.</value>
+  </data>
+  <data name="Odoo.Token.Url" xml:space="preserve">
+    <value>URL экспорта</value>
+  </data>
 </root>

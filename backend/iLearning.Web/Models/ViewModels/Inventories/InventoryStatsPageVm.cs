@@ -12,6 +12,10 @@
         public bool CanEdit { get; set; }
         public bool CanWrite { get; set; }
 
+        public bool HasOdooApiToken { get; set; }
+        public DateTime? OdooApiTokenGeneratedAtUtc { get; set; }
+
+
         public InventoryStatsVm Stats { get; set; } = new();
     }
 }

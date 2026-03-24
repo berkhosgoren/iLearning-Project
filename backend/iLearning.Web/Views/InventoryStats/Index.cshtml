@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = string.Format(T["InventoryStats.PageTitleFormat"], Model.InventoryTitle);
+    var odooToken = TempData["OdooApiToken"] as string;
 }
 
 <div class="container py-4">
@@ -31,6 +32,50 @@
                asp-route-id="@Model.InventoryId" asp-route-tab="Items">
                 @T["Common.BackToInventory"]
             </a>
+        </div>
+    </div>
+
+    
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div>
+                    <div class="fw-semibold">@T["Odoo.Token.SectionTitle"]</div>
+                    <div class="text-muted small">@T["Odoo.Token.Help"]</div>
+
+                    @if (Model.HasOdooApiToken && Model.OdooApiTokenGeneratedAtUtc.HasValue)
+                    {
+                        <div class="text-muted small mt-2">
+                            @T["Odoo.Token.GeneratedAt"] @Model.OdooApiTokenGeneratedAtUtc.Value.ToString("dd-MM-yyyy HH:mm:ss 'UTC'")
+                        </div>
+                    }
+                </div>
+
+                <form method="post" asp-controller="Odoo" asp-action="GenerateToken" asp-route-inventoryId="@Model.InventoryId" class="m-0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-primary btn-sm">
+                        @(Model.HasOdooApiToken? T["Odoo.Token.Regenerate"] : T["Odoo.Token.Generate"])
+                    </button>
+                </form>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(odooToken))
+            {
+                <div class="mt-3">
+                    <label class="form-label">@T["Odoo.Token.Value"]</label>
+                    <input class="form-control" value="@odooToken" readonly />
+
+                    <div class="form-text mt-2">
+                        @T["Odoo.Token.CopyHint"]
+                    </div>
+
+                    <div class="mt-2">
+                        <label class="form-label">@T["Odoo.Token.Url"]</label>
+                        <input class="form-control"
+                               value="@($"{Context.Request.Scheme}://{Context.Request.Host}/integrations/odoo/inventory?token={odooToken}")" readonly />
+                    </div>
+                </div>
+            }
         </div>
     </div>
 
