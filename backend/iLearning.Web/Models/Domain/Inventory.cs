@@ -36,6 +36,12 @@ namespace iLearning.Web.Models.Domain
         public int ItemCustomIdDigits { get; set; } = 4;
         public int ItemCustomIdNextNumber { get; set; } = 1;
 
+
+        [MaxLength(100)]
+        public string? OdooApiToken { get; set; }
+        public DateTime? OdooApiTokenGeneratedAtUtc { get; set; }
+
+
         public bool CustomString1Enabled { get; set; }
         [MaxLength(100)] public string? CustomString1Name {  get; set; }
 
