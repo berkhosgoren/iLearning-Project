@@ -49,6 +49,10 @@ namespace iLearning.Web.Models.ViewModels.Inventories
         public InventoryUpsertVm? SettingsVm { get; set; }
 
         public InventoryCustomIdVm? CustomIdVm { get; set; }
+
+
+        public bool HasOdooApiToken { get; set; }
+        public DateTime? OdooApiTokenGeneratedAtUtc { get; set; }
     }
 
     public class InventoryAccessRowVm
