@@ -48,7 +48,7 @@ namespace iLearning.Web.Controllers
             await _db.SaveChangesAsync();
 
             TempData["OdooApiToken"] = token;
-            TempData["InventoryMessage"] = T["Odoo.Token.Generated"].Value;
+            TempData["StatsMessage"] = T["Odoo.Token.Generated"].Value;
 
             return Redirect($"/inventories/{inventoryId}/stats");
         }
