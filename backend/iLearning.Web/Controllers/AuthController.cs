@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using iLearning.Web.Services.Email;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
+
 
 
 namespace iLearning.Web.Controllers
@@ -20,12 +22,15 @@ namespace iLearning.Web.Controllers
         private readonly AppDbContext _db;
         private readonly IStringLocalizer<SharedResource> T;
         private readonly IEmailSender _emailSender;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(AppDbContext db, IStringLocalizer<SharedResource> t, IEmailSender emailSender)
+
+        public AuthController(AppDbContext db, IStringLocalizer<SharedResource> t, IEmailSender emailSender, IConfiguration configuration)
         {
             _db = db;
             T = t;
             _emailSender = emailSender;
+            _configuration = configuration;
         }
 
         [HttpGet("login")]
@@ -100,19 +105,30 @@ namespace iLearning.Web.Controllers
                 return View(vm);
             }
 
+            var requireEmailConfirmation = _configuration.GetValue<bool?>("Auth:RequireEmailConfirmation") ?? true;
+            var confirmationToken = requireEmailConfirmation
+                ? Convert.ToHexString(RandomNumberGenerator.GetBytes(32))
+                : null;
+
             var user = new AppUser
             {
                 Name = name,
                 Email = email,
                 PasswordHash = PasswordHasher.Hash(password),
                 IsBlocked = false,
-                EmailConfirmationToken = Convert.ToHexString(RandomNumberGenerator.GetBytes(32)),
-                EmailConfirmationTokenExpiresAtUtc = DateTime.UtcNow.AddHours(24),
-                EmailConfirmedAtUtc = null
+                EmailConfirmationToken = confirmationToken,
+                EmailConfirmationTokenExpiresAtUtc = requireEmailConfirmation ? DateTime.UtcNow.AddHours(24) : null,
+                EmailConfirmedAtUtc = requireEmailConfirmation ? null : DateTime.UtcNow
             };
 
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
+
+            if (!requireEmailConfirmation)
+            {
+                TempData["Message"] = "Account created. You can sign in now.";
+                return RedirectToAction(nameof(Login));
+            }
 
             var confirmLink = Url.Action(nameof(ConfirmEmail), "Auth", new { token = user.EmailConfirmationToken }, Request.Scheme, Request.Host.Value);
 
@@ -120,7 +136,10 @@ namespace iLearning.Web.Controllers
             {
                 try
                 {
-                    await _emailSender.SendAsync(user.Email, T["Auth.EmailConfirm.Subject"], string.Format(T["Auth.EmailConfirm.Body"], user.Name, confirmLink));
+                    await _emailSender.SendAsync(
+                        user.Email,
+                        T["Auth.EmailConfirm.Subject"],
+                        string.Format(T["Auth.EmailConfirm.Body"], user.Name, confirmLink));
                 }
                 catch
                 {
@@ -128,7 +147,7 @@ namespace iLearning.Web.Controllers
                     await _db.SaveChangesAsync();
 
                     TempData["Message"] = T["Auth.EmailConfirm.SendFailed"].Value;
-                    return RedirectToAction(nameof(Login));
+                    return RedirectToAction(nameof(Register));
                 }
             }
 
