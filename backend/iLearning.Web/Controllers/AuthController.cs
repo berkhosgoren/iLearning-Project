@@ -126,7 +126,7 @@ namespace iLearning.Web.Controllers
 
             if (!requireEmailConfirmation)
             {
-                TempData["Message"] = "Account created. You can sign in now.";
+                TempData["Message"] = T["Auth.Register.Success"].Value;
                 return RedirectToAction(nameof(Login));
             }
 
