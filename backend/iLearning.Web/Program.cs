@@ -10,6 +10,7 @@ using iLearning.Web.Services.Email;
 using iLearning.Web.Services.Images;
 using iLearning.Web.Services.Salesforce;
 using iLearning.Web.Services.Dropbox;
+using iLearning.Web.Services.ResendEmailforRailway;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,7 +52,18 @@ builder.Services.AddScoped<DbSeeder>();
 builder.Services.AddScoped<IMarkdownService, MarkdownService>();
 
 builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection("Smtp"));
-builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+builder.Services.Configure<ResendOptions>(builder.Configuration.GetSection("Resend"));
+
+var emailProvider = builder.Configuration["Email:Provider"] ?? "Smtp";
+
+if (string.Equals(emailProvider, "Resend", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddHttpClient<IEmailSender, ResendEmailSender>();
+}
+else
+{
+    builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+}
 
 builder.Services.Configure<CloudinaryOptions>(builder.Configuration.GetSection("Cloudinary"));
 builder.Services.AddScoped<IInventoryImageService, CloudinaryInventoryImageService>();
