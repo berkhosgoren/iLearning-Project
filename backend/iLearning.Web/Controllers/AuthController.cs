@@ -124,6 +124,9 @@ namespace iLearning.Web.Controllers
                 }
                 catch
                 {
+                    _db.Users.Remove(user);
+                    await _db.SaveChangesAsync();
+
                     TempData["Message"] = T["Auth.EmailConfirm.SendFailed"].Value;
                     return RedirectToAction(nameof(Login));
                 }

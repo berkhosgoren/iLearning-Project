@@ -25,6 +25,7 @@ namespace iLearning.Web.Services.Email
             using var client = new SmtpClient(_opt.Host, _opt.Port);
             client.EnableSsl = true;
             client.Credentials = new NetworkCredential(_opt.Username, _opt.Password);
+            client.Timeout = 10000;
 
             await client.SendMailAsync(msg);
         }
